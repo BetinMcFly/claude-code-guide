@@ -9,5 +9,8 @@
 firebase-debug.log
 firebase-debug.*.log
 
+# Configuracion local de Claude Code
+.claude/
+
 # Sistema
 .DS_Store

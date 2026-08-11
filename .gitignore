@@ -1,0 +1,13 @@
+# Swap y respaldos de editores
+*.swp
+*.swo
+*~
+.*.swp
+
+# Cache de despliegue de Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+
+# Sistema
+.DS_Store

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía práctica de Claude Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --base:#E9EBE6;
+  --base-2:#DFE3DC;
+  --ink:#14201C;
+  --ink-soft:#4A5A54;
+  --pine:#0E5347;
+  --pine-light:#1A7A69;
+  --mustard:#B8930F;
+  --mustard-bg:#F2E9C8;
+  --clay:#6B5B7B;
+  --rule:#C6CCC4;
+  --paper:#F4F5F2;
+  --shadow:rgba(20,32,28,.08);
+  --display:'Bricolage Grotesque',system-ui,sans-serif;
+  --body:'Source Serif 4',Georgia,serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--base);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- LAYOUT ---------- */
+.shell{display:grid;grid-template-columns:210px minmax(0,1fr);max-width:1180px;margin:0 auto;gap:0}
+.rail{position:sticky;top:0;height:100vh;padding:40px 0 40px 28px;border-right:1px solid var(--rule);display:flex;flex-direction:column}
+.main{padding:0 0 120px 56px;min-width:0}
+
+/* ---------- RAIL ---------- */
+.rail-mark{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--pine);margin-bottom:38px;line-height:1.5}
+.rail-mark b{display:block;font-weight:600;color:var(--ink)}
+.rail-nav{display:flex;flex-direction:column;gap:1px;flex:1;overflow-y:auto}
+.rail-nav a{
+  font-family:var(--mono);font-size:11px;letter-spacing:.02em;
+  color:var(--ink-soft);text-decoration:none;padding:7px 12px 7px 0;
+  display:flex;gap:9px;align-items:baseline;border-left:2px solid transparent;
+  padding-left:11px;margin-left:-13px;transition:color .18s,border-color .18s;
+}
+.rail-nav a span{color:var(--rule);font-size:10px;min-width:14px}
+.rail-nav a:hover{color:var(--ink)}
+.rail-nav a.on{color:var(--pine);border-left-color:var(--pine);font-weight:600}
+.rail-nav a.on span{color:var(--pine)}
+.rail-foot{font-family:var(--mono);font-size:9.5px;color:var(--ink-soft);letter-spacing:.04em;padding-top:20px;border-top:1px solid var(--rule);line-height:1.7}
+
+/* ---------- HERO ---------- */
+.hero{padding:96px 0 72px;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--pine);margin-bottom:26px}
+.hero h1{
+  font-family:var(--display);font-weight:800;font-size:clamp(2.9rem,7vw,5.1rem);
+  line-height:.94;letter-spacing:-.035em;max-width:14ch;margin-bottom:30px;
+}
+.hero h1 em{font-style:normal;color:var(--pine)}
+.lede{font-size:1.22rem;line-height:1.55;max-width:52ch;color:var(--ink-soft)}
+.lede strong{color:var(--ink);font-weight:600}
+
+.hero-stats{display:flex;gap:0;margin-top:52px;border-top:1px solid var(--rule);max-width:640px}
+.hero-stats div{flex:1;padding:18px 20px 0 0;border-right:1px solid var(--rule)}
+.hero-stats div:last-child{border-right:0}
+.hero-stats b{display:block;font-family:var(--display);font-size:2rem;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--pine)}
+.hero-stats span{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-top:7px;line-height:1.5}
+
+/* ---------- SECTIONS ---------- */
+section{padding:78px 0;border-bottom:1px solid var(--rule);scroll-margin-top:20px}
+section:last-of-type{border-bottom:0}
+.sec-head{display:flex;gap:18px;align-items:baseline;margin-bottom:14px}
+.sec-num{font-family:var(--mono);font-size:11px;color:var(--mustard);letter-spacing:.1em;font-weight:600;padding-top:9px}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,3.6vw,2.7rem);letter-spacing:-.03em;line-height:1.05;max-width:20ch}
+.sec-sub{font-size:1.05rem;color:var(--ink-soft);max-width:60ch;margin:0 0 40px 0;padding-left:29px}
+h3{font-family:var(--display);font-weight:600;font-size:1.28rem;letter-spacing:-.015em;margin:38px 0 12px}
+h4{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--pine);margin:30px 0 12px;font-weight:600}
+p{max-width:64ch;margin-bottom:16px}
+p strong{font-weight:600}
+a{color:var(--pine)}
+
+/* ---------- LEVELS ---------- */
+.levels{display:flex;flex-direction:column;gap:2px}
+.lvl{background:var(--paper);border-left:3px solid var(--rule);padding:22px 26px}
+.lvl.l1{border-left-color:var(--pine)}
+.lvl.l2{border-left-color:var(--mustard)}
+.lvl.l3{border-left-color:var(--clay)}
+.lvl-top{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;margin-bottom:14px}
+.lvl-tag{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;padding:3px 8px;border-radius:2px}
+.l1 .lvl-tag{background:var(--pine);color:var(--paper)}
+.l2 .lvl-tag{background:var(--mustard);color:#2A2003}
+.l3 .lvl-tag{background:var(--clay);color:var(--paper)}
+.lvl-top h3{margin:0;font-size:1.15rem}
+.lvl-when{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);letter-spacing:.03em}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:var(--mono);font-size:11.5px;background:var(--base-2);padding:6px 11px;border-radius:2px;letter-spacing:-.01em}
+.chip b{font-weight:600}
+.chip i{font-style:normal;color:var(--ink-soft);font-size:10.5px}
+
+/* ---------- CALLOUT ---------- */
+.callout{background:var(--mustard-bg);border-left:3px solid var(--mustard);padding:20px 24px;margin:28px 0;max-width:66ch}
+.callout p{margin:0;font-size:.97rem}
+.callout p+p{margin-top:10px}
+.callout b{font-weight:600}
+
+.note{border-left:3px solid var(--pine);background:var(--paper);padding:20px 24px;margin:28px 0;max-width:66ch}
+.note p{margin:0;font-size:.97rem}
+.note p+p{margin-top:10px}
+
+/* ---------- SWITCHER (signature) ---------- */
+.switch{display:flex;gap:0;border:1px solid var(--ink);margin-bottom:6px;max-width:560px}
+.switch button{
+  flex:1;font-family:var(--display);font-weight:600;font-size:.98rem;letter-spacing:-.01em;
+  background:transparent;color:var(--ink);border:0;padding:15px 18px;cursor:pointer;
+  text-align:left;transition:background .18s,color .18s;line-height:1.3;
+}
+.switch button+button{border-left:1px solid var(--ink)}
+.switch button small{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.62;margin-top:5px;font-weight:400}
+.switch button[aria-selected="true"]{background:var(--ink);color:var(--base)}
+
+.flow{margin-top:34px}
+.flow[hidden]{display:none}
+.phase{margin-bottom:4px;background:var(--paper);border:1px solid var(--rule);border-left:3px solid var(--pine)}
+.phase.p-design{border-left-color:var(--clay)}
+.phase.p-work{border-left-color:var(--mustard)}
+.phase.p-opt{border-left-color:var(--ink-soft)}
+.phase-head{padding:16px 24px 14px;border-bottom:1px solid var(--rule)}
+.phase-head b{font-family:var(--display);font-weight:600;font-size:1.06rem;letter-spacing:-.015em;display:block}
+.phase-head span{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-top:4px}
+.steps{list-style:none;counter-reset:s}
+.steps li{
+  counter-increment:s;padding:13px 24px 13px 58px;position:relative;
+  border-bottom:1px solid var(--base-2);font-size:.96rem;line-height:1.5;
+}
+.steps li:last-child{border-bottom:0}
+.steps li::before{
+  content:counter(s,decimal-leading-zero);position:absolute;left:24px;top:14px;
+  font-family:var(--mono);font-size:10.5px;color:var(--mustard);font-weight:600;
+}
+.steps li b{font-weight:600;display:block}
+.steps li i{font-style:normal;color:var(--ink-soft);font-size:.9rem;display:block;margin-top:2px}
+.steps code{font-family:var(--mono);font-size:.86em;background:var(--base-2);padding:1px 5px;border-radius:2px}
+.loop{padding:11px 24px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--pine);background:var(--base-2);text-transform:uppercase;font-weight:600}
+
+/* ---------- CODE ---------- */
+.cmd{position:relative;margin:18px 0;max-width:70ch}
+.cmd-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px;display:block}
+pre{
+  background:var(--ink);color:#DCE5E1;font-family:var(--mono);font-size:13px;line-height:1.62;
+  padding:20px 58px 20px 22px;overflow-x:auto;border-radius:2px;
+}
+pre .c{color:#7E9B92}
+pre .k{color:#D9C26B}
+.copy{
+  position:absolute;top:32px;right:10px;background:#2A3B35;color:#A9C0B8;border:0;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;
+  padding:6px 9px;cursor:pointer;border-radius:2px;transition:background .18s,color .18s;
+}
+.copy:hover{background:var(--pine-light);color:#fff}
+.copy.done{background:var(--mustard);color:#2A2003}
+
+/* ---------- COMPARE ---------- */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:30px 0}
+.comp{background:var(--paper);padding:24px;border-top:3px solid var(--pine)}
+.comp.b{border-top-color:var(--clay)}
+.comp h3{margin:0 0 4px;font-family:var(--mono);font-size:1rem;font-weight:600;letter-spacing:0}
+.comp .comp-sub{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);margin-bottom:18px;letter-spacing:.02em}
+.comp ul{list-style:none}
+.comp li{font-size:.93rem;padding:8px 0 8px 17px;position:relative;border-bottom:1px solid var(--base-2);line-height:1.45}
+.comp li:last-child{border-bottom:0}
+.comp li::before{content:'';position:absolute;left:0;top:15px;width:6px;height:1px;background:var(--pine)}
+.comp.b li::before{background:var(--clay)}
+
+/* ---------- SIGNALS TABLE ---------- */
+.signals{width:100%;border-collapse:collapse;margin:26px 0;font-size:.94rem}
+.signals th{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  text-align:left;padding:0 16px 10px 0;color:var(--pine);border-bottom:1px solid var(--ink);font-weight:600;
+}
+.signals td{padding:14px 16px 14px 0;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.45}
+.signals td:first-child{font-family:var(--mono);font-weight:600;font-size:.88rem;white-space:nowrap;color:var(--ink)}
+.signals tr:last-child td{border-bottom:0}
+
+/* ---------- ANATOMY ---------- */
+.anat{background:var(--paper);border:1px solid var(--rule);margin:26px 0;max-width:72ch;display:grid;grid-template-columns:150px 1fr}
+.anat dt{font-family:var(--mono);font-size:11.5px;font-weight:600;padding:15px 18px;background:var(--base-2);color:var(--pine);border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;align-items:flex-start}
+.anat dd{padding:15px 20px;font-size:.94rem;line-height:1.5;border-bottom:1px solid var(--rule);margin:0}
+.anat dt:last-of-type{border-bottom:0}
+.anat dd:last-of-type{border-bottom:0}
+
+/* ---------- FOOT ---------- */
+footer{padding:60px 0 0;font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.02em;line-height:1.8}
+footer b{color:var(--ink);font-weight:600}
+
+/* ---------- MOBILE ---------- */
+@media(max-width:900px){
+  body{font-size:16px}
+  .shell{grid-template-columns:1fr}
+  .rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--rule);padding:26px 22px 20px}
+  .rail-mark{margin-bottom:18px}
+  .rail-nav{flex-direction:row;overflow-x:auto;gap:2px;padding-bottom:6px}
+  .rail-nav a{border-left:0;border-bottom:2px solid transparent;margin-left:0;padding:6px 12px 8px 0;white-space:nowrap}
+  .rail-nav a.on{border-left:0;border-bottom-color:var(--pine)}
+  .rail-nav a span{display:none}
+  .rail-foot{display:none}
+  .main{padding:0 22px 80px}
+  .hero{padding:56px 0 46px}
+  .hero-stats{flex-direction:column;max-width:none}
+  .hero-stats div{border-right:0;border-bottom:1px solid var(--rule);padding:14px 0}
+  .hero-stats div:last-child{border-bottom:0}
+  section{padding:52px 0}
+  .sec-sub{padding-left:0}
+  .sec-head{gap:12px}
+  .compare{grid-template-columns:1fr}
+  .anat{grid-template-columns:1fr}
+  .anat dt{border-right:0}
+  .switch{flex-direction:column}
+  .switch button+button{border-left:0;border-top:1px solid var(--ink)}
+  pre{font-size:12px;padding:18px 50px 18px 16px}
+  .steps li{padding-left:50px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+:focus-visible{outline:2px solid var(--pine);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+<nav class="rail">
+  <div class="rail-mark">Guía de campo<b>Claude Code</b></div>
+  <div class="rail-nav" id="nav">
+    <a href="#jerarquia"><span>01</span>Jerarquía</a>
+    <a href="#planmode"><span>02</span>Plan Mode</a>
+    <a href="#flujos"><span>03</span>Flujos</a>
+    <a href="#claudemd"><span>04</span>CLAUDE.md</a>
+    <a href="#prompts"><span>05</span>Prompts</a>
+    <a href="#contexto"><span>06</span>Contexto</a>
+    <a href="#skills"><span>07</span>Skills</a>
+    <a href="#senales"><span>08</span>Señales</a>
+  </div>
+  <div class="rail-foot">Verifica los<br>comandos contra<br>la doc oficial</div>
+</nav>
+
+<main class="main">
+
+<header class="hero">
+  <div class="eyebrow">Guía práctica · Desarrollo agéntico</div>
+  <h1>Empieza con lo mínimo. <em>Agrega cuando duela.</em></h1>
+  <p class="lede">Claude Code parece intimidante porque todo el contenido disponible mezcla lo básico con técnicas avanzadas. La realidad: <strong>necesitas cuatro cosas para arrancar</strong>. Todo lo demás — skills, agentes, specs — llega solo cuando el proyecto lo pide.</p>
+  <div class="hero-stats">
+    <div><b>4</b><span>Conceptos para el día uno</span></div>
+    <div><b>2</b><span>Flujos según tu proyecto</span></div>
+    <div><b>1</b><span>Archivo que lo ancla todo</span></div>
+  </div>
+</header>
+
+<!-- 01 -->
+<section id="jerarquia">
+  <div class="sec-head"><div class="sec-num">01</div><h2>La jerarquía que nadie te explica</h2></div>
+  <p class="sec-sub">El error más común es querer arquitectar todo desde el principio. Estos tres niveles no son opcionales entre sí — son secuenciales.</p>
+
+  <div class="levels">
+    <div class="lvl l1">
+      <div class="lvl-top"><span class="lvl-tag">Nivel 1</span><h3>Lo esencial</h3><span class="lvl-when">Día uno</span></div>
+      <div class="chips">
+        <span class="chip"><b>CLAUDE.md</b> <i>contexto del proyecto</i></span>
+        <span class="chip"><b>/init</b> <i>lo genera por ti</i></span>
+        <span class="chip"><b>Plan Mode</b> <i>Shift+Tab × 2</i></span>
+        <span class="chip"><b>Auto memory</b> <i>aprende solo</i></span>
+      </div>
+    </div>
+    <div class="lvl l2">
+      <div class="lvl-top"><span class="lvl-tag">Nivel 2</span><h3>Productividad</h3><span class="lvl-when">Cuando repitas trabajo</span></div>
+      <div class="chips">
+        <span class="chip"><b>Skills</b> <i>workflows reutilizables</i></span>
+        <span class="chip"><b>Hooks</b> <i>automatizaciones</i></span>
+        <span class="chip"><b>MCP servers</b> <i>conexiones externas</i></span>
+      </div>
+    </div>
+    <div class="lvl l3">
+      <div class="lvl-top"><span class="lvl-tag">Nivel 3</span><h3>Arquitectura</h3><span class="lvl-when">Proyectos grandes</span></div>
+      <div class="chips">
+        <span class="chip"><b>Subagents</b> <i>agentes delegados</i></span>
+        <span class="chip"><b>Specs / SDD</b> <i>diseño antes de código</i></span>
+        <span class="chip"><b>Agent teams</b> <i>trabajo paralelo</i></span>
+        <span class="chip"><b>Worktrees</b> <i>aislamiento</i></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><b>La pregunta que más se repite:</b> ¿hay que crear los agentes antes de escribir código?</p>
+    <p>No. Los subagents, skills y specs son optimizaciones que aparecen cuando el proyecto ya existe y detectas fricción. Crearlos antes es arquitectura especulativa.</p>
+  </div>
+</section>
+
+<!-- 02 -->
+<section id="planmode">
+  <div class="sec-head"><div class="sec-num">02</div><h2>Plan Mode primero, siempre</h2></div>
+  <p class="sec-sub">Es la diferencia entre pedirle a alguien que no toque tu comida y guardar la comida en una vitrina cerrada. Uno es una solicitud, el otro es una restricción mecánica.</p>
+
+  <p>En modo normal Claude Code lee tu prompt y actúa de inmediato: edita archivos, corre comandos, modifica cosas. Plan Mode le quita las herramientas de escritura. Conserva lectura completa — puede leer archivos, buscar en el código, investigar en la web — pero no puede escribir, editar ni ejecutar nada hasta que apruebes.</p>
+
+  <p>Escribir <em>«no modifiques nada»</em> en un prompt es una sugerencia que se puede ignorar. Plan Mode no.</p>
+
+  <div class="cmd">
+    <span class="cmd-label">Activar</span>
+    <pre><span class="c"># En la terminal, dos veces:</span>
+Shift + Tab
+
+<span class="c"># Primera pulsación → Auto-Accept</span>
+<span class="c"># Segunda pulsación → Plan Mode</span>
+<span class="c"># Verás en la barra de estado:</span>
+⏸ plan mode on</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <h3>Cómo sales de Plan Mode</h3>
+  <p>No tienes que cambiar de modo manualmente. Cuando apruebas un plan, Claude sale de Plan Mode automáticamente y empieza a ejecutar. La aprobación <em>es</em> el cambio de modo.</p>
+
+  <dl class="anat">
+    <dt>«ajusta esto…»</dt><dd>Le das feedback y regenera el plan. Sigues en Plan Mode. Puedes quitar pasos, reordenarlos o agregar restricciones.</dd>
+    <dt>«yes»</dt><dd>Sale de Plan Mode y ejecuta el plan exactamente como lo aprobaste.</dd>
+    <dt>Shift + Tab</dt><dd>Salir sin aprobar nada, por ejemplo si la conversación se desvió y prefieres empezar de nuevo.</dd>
+  </dl>
+
+  <div class="note">
+    <p><b>Cuándo saltártelo:</b> ediciones de un solo archivo o preguntas de solo lectura. <b>Cuándo es obligatorio:</b> cualquier cambio que toque tres o más archivos, cambios de esquema de datos, o código sensible a seguridad.</p>
+  </div>
+</section>
+
+<!-- 03 -->
+<section id="flujos">
+  <div class="sec-head"><div class="sec-num">03</div><h2>Dos flujos, según tu punto de partida</h2></div>
+  <p class="sec-sub">El patrón es el mismo — explorar, planear, implementar, commitear — pero el arranque cambia según si ya hay código que entender.</p>
+
+  <div class="switch" role="tablist">
+    <button role="tab" aria-selected="true" aria-controls="flow-a" id="tab-a">Proyecto existente<small>Escenario A</small></button>
+    <button role="tab" aria-selected="false" aria-controls="flow-b" id="tab-b">Proyecto nuevo<small>Escenario B</small></button>
+  </div>
+
+  <!-- FLOW A -->
+  <div class="flow" id="flow-a" role="tabpanel" aria-labelledby="tab-a">
+    <div class="phase">
+      <div class="phase-head"><b>Setup inicial</b><span>Una sola vez</span></div>
+      <ol class="steps">
+        <li><b>Abrir la sesión</b><i><code>cd ~/mi-proyecto && claude</code></i></li>
+        <li><b>Activar Plan Mode</b><i>Shift+Tab × 2. Antes de cualquier prompt.</i></li>
+        <li><b>Explorar</b><i>«¿Qué hace este proyecto? Describe estructura, stack, entry points y cómo correr los tests.»</i></li>
+        <li><b>Generar contexto</b><i><code>/init</code> escanea el repo y genera el CLAUDE.md</i></li>
+        <li><b>Editar CLAUDE.md</b><i>Agrega lo que el código no dice: convenciones del equipo, gotchas, decisiones tomadas.</i></li>
+      </ol>
+    </div>
+    <div class="phase p-work">
+      <div class="phase-head"><b>Ciclo de trabajo</b><span>Se repite por cada feature</span></div>
+      <ol class="steps">
+        <li><b>Pedir el cambio</b><i>«Implementa [feature] según el CLAUDE.md»</i></li>
+        <li><b>Revisar el plan</b><i>Verifica archivos tocados, dependencias, que respete tus gotchas.</i></li>
+        <li><b>Aprobar y ejecutar</b><i>«yes» — Claude sale de Plan Mode e implementa.</i></li>
+        <li><b>Commitear</b><i>«commit my changes with a descriptive message»</i></li>
+      </ol>
+      <div class="loop">↺ Volver al paso 1 con el siguiente feature</div>
+    </div>
+    <div class="phase p-opt">
+      <div class="phase-head"><b>Optimización</b><span>Solo cuando aparezca la señal — ver sección 08</span></div>
+      <ol class="steps">
+        <li><b>Skills</b><i>Repites el mismo prompt tres o más veces.</i></li>
+        <li><b>Subagents</b><i>Una tarea necesita contexto aislado y reglas propias.</i></li>
+        <li><b>Specs (SDD)</b><i>Un feature toca tres o más archivos.</i></li>
+        <li><b>Hooks, MCP, agent teams</b><i>Automatización, datos externos o trabajo paralelo.</i></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- FLOW B -->
+  <div class="flow" id="flow-b" role="tabpanel" aria-labelledby="tab-b" hidden>
+    <div class="phase p-design">
+      <div class="phase-head"><b>Diseño</b><span>Antes de escribir una línea</span></div>
+      <ol class="steps">
+        <li><b>Crear el directorio</b><i><code>mkdir mi-proyecto && cd mi-proyecto && claude</code></i></li>
+        <li><b>Activar Plan Mode</b><i>Shift+Tab × 2. Evita que Claude cree archivos a media conversación.</i></li>
+        <li><b>Pedir la entrevista</b><i>«Quiero construir [X]. Antes de escribir código, entrevístame: pregúntame sobre requisitos, stack, casos borde y decisiones de diseño.»</i></li>
+        <li><b>Responder</b><i>Stack, requisitos, edge cases, restricciones. Aquí es donde salen las preguntas que no habías considerado.</i></li>
+      </ol>
+    </div>
+    <div class="phase">
+      <div class="phase-head"><b>Scaffolding</b><span>Aprobar el plan y ejecutar</span></div>
+      <ol class="steps">
+        <li><b>Pedir la estructura</b><i>«Crea la estructura, CLAUDE.md, README y git init. No implementes lógica todavía.»</i></li>
+        <li><b>Revisar CLAUDE.md</b><i>Verifica que refleje las decisiones de la entrevista.</i></li>
+        <li><b>Primer commit</b><i>«commit inicial con estructura base»</i></li>
+      </ol>
+    </div>
+    <div class="phase p-work">
+      <div class="phase-head"><b>Ciclo de trabajo</b><span>Se repite por cada feature</span></div>
+      <ol class="steps">
+        <li><b>Pedir el feature</b><i>«Implementa [módulo] según el CLAUDE.md»</i></li>
+        <li><b>Revisar y aprobar</b><i>Un feature a la vez, siempre revisando el plan.</i></li>
+        <li><b>Commitear</b><i>«commit» y al siguiente.</i></li>
+      </ol>
+      <div class="loop">↺ Volver al paso 1 con el siguiente feature</div>
+    </div>
+    <div class="phase p-opt">
+      <div class="phase-head"><b>Optimización</b><span>Solo cuando aparezca la señal — ver sección 08</span></div>
+      <ol class="steps">
+        <li><b>Skills</b><i>Repites el mismo prompt tres o más veces.</i></li>
+        <li><b>Subagents</b><i>Una tarea necesita contexto aislado y reglas propias.</i></li>
+        <li><b>Specs (SDD)</b><i>Un feature toca tres o más archivos.</i></li>
+        <li><b>Hooks, MCP, agent teams</b><i>Automatización, datos externos o trabajo paralelo.</i></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 04 -->
+<section id="claudemd">
+  <div class="sec-head"><div class="sec-num">04</div><h2>El archivo que ancla todo</h2></div>
+  <p class="sec-sub">Claude Code lee el CLAUDE.md al inicio de cada sesión. Sobrevive a /clear, se recarga desde disco, y es lo único que persiste sin que hagas nada.</p>
+
+  <p>En Claude Code el contexto pesa más que el prompt. Un buen CLAUDE.md con Plan Mode activo produce mejores resultados que el prompt más ingenioso sin contexto.</p>
+
+  <h4>Las secciones que importan</h4>
+  <dl class="anat">
+    <dt>Qué es esto</dt><dd>Dos o tres líneas. Qué problema resuelve el proyecto y para quién.</dd>
+    <dt>Stack técnico</dt><dd>Lenguaje, framework, librerías, base de datos, deploy, tests, linter. Con versiones cuando importen.</dd>
+    <dt>Estructura</dt><dd>Árbol de directorios con un comentario por módulo. Esto le dice a Claude dónde va cada cosa.</dd>
+    <dt>Convenciones</dt><dd>Type hints, idioma de los nombres, manejo de errores, dónde van los tests. Lo que un dev nuevo necesitaría saber.</dd>
+    <dt>Comandos</dt><dd>Cómo correr, testear, lintear. Claude los ejecuta directamente.</dd>
+    <dt>Decisiones de diseño</dt><dd>Numeradas, con el <em>porqué</em>. Evita que Claude proponga algo que ya descartaste.</dd>
+    <dt>Gotchas</dt><dd>Rate limits, secretos, trampas conocidas. La sección que más valor entrega con el tiempo.</dd>
+    <dt>Fases</dt><dd>Checklist de qué está hecho y qué falta. Le da a Claude sentido de progreso.</dd>
+  </dl>
+
+  <div class="cmd">
+    <span class="cmd-label">Esqueleto mínimo</span>
+    <pre><span class="k"># Nombre del proyecto</span>
+
+<span class="k">## Qué es este proyecto</span>
+Una o dos líneas: qué resuelve y para quién.
+
+<span class="k">## Stack técnico</span>
+- Lenguaje, framework, DB, deploy, tests, linter
+
+<span class="k">## Estructura del proyecto</span>
+src/
+├── modulo_a/    <span class="c"># responsabilidad</span>
+└── modulo_b/    <span class="c"># responsabilidad</span>
+
+<span class="k">## Convenciones de código</span>
+- Reglas concretas, no principios abstractos
+
+<span class="k">## Comandos</span>
+- Correr: `comando`
+- Tests: `comando`
+
+<span class="k">## Decisiones de diseño</span>
+1. Decidimos X en lugar de Y porque Z
+
+<span class="k">## Gotchas</span>
+- Trampas conocidas, rate limits, secretos
+
+<span class="k">## Fases</span>
+- [ ] Pendiente
+- [x] Hecho</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <div class="callout">
+    <p><b>Regla de oro para las convenciones:</b> escribe reglas verificables, no principios. «Type hints en todas las funciones públicas» sirve. «Código limpio» no sirve.</p>
+  </div>
+</section>
+
+<!-- 05 -->
+<section id="prompts">
+  <div class="sec-head"><div class="sec-num">05</div><h2>Prompts que funcionan</h2></div>
+  <p class="sec-sub">Copiables tal cual. Todos asumen Plan Mode activo y CLAUDE.md en la raíz.</p>
+
+  <div class="cmd">
+    <span class="cmd-label">Explorar un repo desconocido</span>
+    <pre>¿Qué hace este proyecto? Describe la estructura, lenguaje,
+framework, entry points y cómo correr los tests.
+No modifiques nada.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <div class="cmd">
+    <span class="cmd-label">Entrevista para un proyecto nuevo</span>
+    <pre>Quiero construir [descripción del proyecto].
+Antes de escribir código, entrevístame: pregúntame sobre
+los requisitos, stack tecnológico preferido, casos borde
+y decisiones de diseño que debería considerar.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <div class="cmd">
+    <span class="cmd-label">Scaffolding</span>
+    <pre>Scaffoldea el proyecto según la estructura definida en el
+CLAUDE.md. Crea todos los directorios, archivos con docstrings
+que describan su responsabilidad, el archivo de dependencias,
+.gitignore y .env.example. No implementes lógica todavía.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <div class="cmd">
+    <span class="cmd-label">Implementar un módulo</span>
+    <pre>Implementa [ruta/al/archivo] según el CLAUDE.md.
+Incluye los modelos que necesite en [ruta/schemas].
+Agrega tests en tests/ siguiendo las convenciones del proyecto.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <div class="cmd">
+    <span class="cmd-label">Feature grande — plan escrito primero</span>
+    <pre>Escribe un plan.md con los pasos para implementar [feature].
+Divídelo en secciones que se puedan ejecutar en sesiones
+separadas. No implementes nada todavía.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <h4>Qué revisar antes de aprobar un plan</h4>
+  <p>Tres verificaciones que evitan la mayoría de los problemas: que los archivos que va a tocar sean los que esperabas, que las dependencias estén completas, y que respete los gotchas del CLAUDE.md — sobre todo que los secretos no terminen en el repositorio.</p>
+</section>
+
+<!-- 06 -->
+<section id="contexto">
+  <div class="sec-head"><div class="sec-num">06</div><h2>Cuando Claude empieza a fallar</h2></div>
+  <p class="sec-sub">Repite enfoques que ya descartaste. Olvida restricciones que mencionaste al inicio. Las respuestas se ponen vagas. Eso es saturación de contexto, y se arregla con dos comandos.</p>
+
+  <p>Cada archivo leído, cada test corrido y cada intento fallido consume espacio. Conforme se llena, la atención del modelo se reparte entre más contenido y la información temprana pierde peso. No es que el modelo empeore — es que el contexto se ensució.</p>
+
+  <div class="compare">
+    <div class="comp">
+      <h3>/compact</h3>
+      <div class="comp-sub">Resume y continúa la misma sesión</div>
+      <ul>
+        <li>Quieres continuar lo que estabas haciendo</li>
+        <li>Después de un debug largo que sí funcionó</li>
+        <li>Entre pasos del mismo feature</li>
+        <li>Claude se pone lento o vago pero va bien encaminado</li>
+      </ul>
+    </div>
+    <div class="comp b">
+      <h3>/clear</h3>
+      <div class="comp-sub">Borra todo, sesión nueva</div>
+      <ul>
+        <li>Cambias a una tarea sin relación con la anterior</li>
+        <li>Claude repite el mismo error dos o más veces</li>
+        <li>El contexto quedó contaminado con suposiciones falsas</li>
+        <li>Terminaste un feature y vas al siguiente</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">
+    <p><b>Compacta antes de que sea urgente.</b> La compactación automática se dispara cuando el contexto ya casi está lleno — pero en ese punto el modelo ya opera degradado y el resumen sale peor. Compactar manualmente, con espacio todavía disponible, produce mejores resúmenes.</p>
+  </div>
+
+  <div class="cmd">
+    <span class="cmd-label">Variantes útiles</span>
+    <pre><span class="c"># Ver qué está llenando tu contexto antes de decidir</span>
+/context
+
+<span class="c"># Resumir conservando solo lo que importa</span>
+/compact enfócate en el bug de autenticación
+
+<span class="c"># Sesión nueva con nombre para encontrarla después</span>
+/clear nombre-del-feature
+
+<span class="c"># Recuperar una sesión anterior</span>
+/resume</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <p>Un detalle que cambia el ritmo de trabajo: el CLAUDE.md se recarga desde disco en cada sesión nueva. Usar <code>/clear</code> entre features no te cuesta las decisiones del proyecto — solo la conversación.</p>
+</section>
+
+<!-- 07 -->
+<section id="skills">
+  <div class="sec-head"><div class="sec-num">07</div><h2>Skills: workflows que no vuelves a explicar</h2></div>
+  <p class="sec-sub">Un skill es una carpeta con un archivo SKILL.md adentro. Eso es toda la mecánica.</p>
+
+  <p>Claude lee la descripción de cada skill al inicio de la sesión y activa la que coincida con tu petición. El resto del archivo solo se carga cuando se dispara — por eso puedes tener muchos sin saturar el contexto.</p>
+
+  <div class="cmd">
+    <span class="cmd-label">Dónde va</span>
+    <pre>.claude/skills/mi-skill/SKILL.md    <span class="c"># solo este proyecto</span>
+~/.claude/skills/mi-skill/SKILL.md  <span class="c"># todos tus proyectos</span></pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <div class="cmd">
+    <span class="cmd-label">Anatomía completa</span>
+    <pre><span class="c">---</span>
+<span class="k">name:</span> revisar-seguridad
+<span class="k">description:</span> >
+  Úsalo cuando el usuario quiera revisar código por
+  vulnerabilidades. Dispara con: "revisa la seguridad",
+  "busca vulnerabilidades", "audita este endpoint",
+  "esto es seguro?", "checa por inyección SQL".
+<span class="k">user-invocable:</span> true
+<span class="k">argument-hint:</span> &lt;ruta o módulo a revisar&gt;
+<span class="c">---</span>
+
+<span class="k"># Revisión de seguridad</span>
+
+<span class="k">## Paso 1 — Alcance</span>
+- Lee los archivos indicados
+- Identifica entradas de usuario y accesos a datos
+
+<span class="k">## Paso 2 — Revisar</span>
+Contra esta lista, en orden:
+- Inyección (SQL, comandos, plantillas)
+- Autenticación y autorización rota
+- Secretos en el código o en logs
+- Validación de entrada faltante
+- Dependencias con CVEs conocidos
+
+<span class="k">## Paso 3 — Reportar</span>
+Por cada hallazgo: severidad, ubicación exacta,
+por qué es explotable, y el fix concreto.
+
+<span class="k">## Reglas</span>
+- NO arreglar nada sin aprobación
+- Ordenar hallazgos por severidad, no por archivo
+- Si no hay hallazgos, decirlo — no inventar</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <div class="callout">
+    <p><b>El campo <code>description</code> es el 80% del trabajo.</b> Es lo único que Claude lee para decidir si activa el skill. Escribe ahí las frases exactas que dirías en voz alta, no una descripción formal. Si no coincide con cómo hablas, el skill nunca se dispara.</p>
+  </div>
+
+  <h4>Skill, comando o subagente</h4>
+  <dl class="anat">
+    <dt>Skill</dt><dd>Un workflow que quieres que Claude siga igual cada vez. Se activa solo o con slash si pones <code>user-invocable: true</code>.</dd>
+    <dt>Hook</dt><dd>Un script que corre automáticamente antes o después de una acción. No es conversacional — es plomería.</dd>
+    <dt>Subagente</dt><dd>Un asistente con su propio contexto y herramientas limitadas. Úsalo cuando la tarea generaría mucho ruido en tu sesión principal.</dd>
+  </dl>
+
+  <p>Un skill debe tener un solo trabajo bien definido. «Revisar seguridad» es un buen skill. «Ayudar con calidad de código» es demasiado amplio y nunca se activa de forma confiable.</p>
+</section>
+
+<!-- 08 -->
+<section id="senales">
+  <div class="sec-head"><div class="sec-num">08</div><h2>Cuándo agregar cada pieza</h2></div>
+  <p class="sec-sub">No por calendario. Por síntoma.</p>
+
+  <table class="signals">
+    <thead><tr><th>Herramienta</th><th>La señal que te dice que ya toca</th></tr></thead>
+    <tbody>
+      <tr><td>Skill</td><td>Escribiste el mismo prompt por tercera vez. Guárdalo como workflow en lugar de re-explicarlo.</td></tr>
+      <tr><td>Hook</td><td>Quieres que algo pase automáticamente después de cada edición — lint, format, tests.</td></tr>
+      <tr><td>Subagente</td><td>Una tarea recurrente necesita reglas propias y contexto aislado, o genera tanto ruido que ensucia tu sesión.</td></tr>
+      <tr><td>Spec / SDD</td><td>Un feature toca tres o más archivos. Escribe el documento de diseño antes de implementar.</td></tr>
+      <tr><td>MCP server</td><td>Necesitas datos que viven fuera del repo — tickets, documentos, calendario, CRM.</td></tr>
+      <tr><td>Agent team</td><td>El proyecto es grande y hay partes genuinamente independientes que pueden avanzar en paralelo.</td></tr>
+      <tr><td>Worktree</td><td>Necesitas que varias sesiones trabajen sin pisarse en el mismo repositorio.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <p><b>El principio que conecta todo:</b> la Fase de optimización no es prerequisito de nada. Es consecuencia de haber trabajado lo suficiente en las fases anteriores como para saber qué te está costando tiempo.</p>
+  </div>
+
+  <h3>El ciclo completo, en una línea</h3>
+  <div class="cmd">
+    <pre>Plan Mode → contexto en CLAUDE.md → pedir → revisar plan →
+aprobar → ejecutar → commit → /clear → repetir</pre>
+    <button class="copy">Copiar</button>
+  </div>
+</section>
+
+<footer>
+  <b>Guía de campo · Claude Code</b><br>
+  Agosto 2026 · Verifica comandos y banderas contra la documentación oficial, que cambia rápido.
+</footer>
+
+</main>
+</div>
+
+<script>
+// Scenario switcher
+const tabs=[document.getElementById('tab-a'),document.getElementById('tab-b')];
+const panels=[document.getElementById('flow-a'),document.getElementById('flow-b')];
+tabs.forEach((t,i)=>t.addEventListener('click',()=>{
+  tabs.forEach((x,j)=>{x.setAttribute('aria-selected',i===j);panels[j].hidden=i!==j});
+}));
+
+// Copy buttons
+document.querySelectorAll('.copy').forEach(btn=>{
+  btn.addEventListener('click',async()=>{
+    const pre=btn.parentElement.querySelector('pre');
+    try{
+      await navigator.clipboard.writeText(pre.innerText);
+      btn.textContent='Copiado';btn.classList.add('done');
+      setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('done')},1600);
+    }catch(e){
+      btn.textContent='Selecciona y copia';
+      setTimeout(()=>{btn.textContent='Copiar'},2000);
+    }
+  });
+});
+
+// Scroll spy
+const links=[...document.querySelectorAll('.rail-nav a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+const spy=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const i=secs.indexOf(e.target);
+      links.forEach((l,j)=>l.classList.toggle('on',i===j));
+    }
+  });
+},{rootMargin:'-15% 0px -70% 0px'});
+secs.forEach(s=>s&&spy.observe(s));
+</script>
+</body>
+</html>
+

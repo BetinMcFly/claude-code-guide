@@ -45,7 +45,7 @@ Ambos workflows filtran por rutas, así que tocar solo documentación no dispara
 
 ### Despliegue manual
 
-Sigue funcionando y es útil para probar sin hacer commit. El CLI de Firebase es un binario standalone; **no hay Node ni npm instalados en esta máquina**:
+Sigue funcionando y es útil para probar sin hacer commit. El CLI de Firebase es un binario standalone en `~/.local/bin`:
 
 ```bash
 ~/.local/bin/firebase deploy --only hosting                        # a producción
@@ -56,6 +56,19 @@ Sigue funcionando y es útil para probar sin hacer commit. El CLI de Firebase es
 
 `firebase hosting:rollback` **no existe** en el CLI instalado (v15.26). Las vías reales son la consola de Firebase (Hosting → historial de versiones), `firebase hosting:clone <sitio>:<canal> <sitio>:live`, o revertir en git y volver a desplegar.
 
+## Comprobar el resultado visualmente
+
+Hay Chromium con Playwright instalado, así que **no hay excusa para verificar la maquetación calculando**. El guion vive fuera del repositorio, para no meter `node_modules` en un proyecto que no tiene build:
+
+```bash
+source ~/.local/share/capturas/entorno.sh   # PATH, LD_LIBRARY_PATH y FONTCONFIG_PATH
+node ~/.local/share/capturas/capturar.js <url> <carpeta-salida>
+```
+
+Captura a 320, 360, 390, 820 y 1280px en tema claro y oscuro, y reporta el desbordamiento horizontal de cada combinación. Funciona igual con un `file://` al archivo local, sin necesidad de desplegar.
+
+**Espera siempre a `document.fonts.ready` antes de medir nada.** Esta máquina no traía ninguna fuente; se instalaron 316 en `~/.local/share/fonts`. Antes de eso, una comprobación de desbordamiento pasaba en verde y era falsa: sin fuentes el texto no ocupa ancho, así que nada desbordaba. Un chequeo que pasa por el motivo equivocado es peor que no tenerlo.
+
 ## Al editar el HTML
 
 **Los diagramas duplican texto que también está en el HTML.** Las tres figuras SVG llevan sus rótulos escritos dentro del `<svg>`, incluido un `<desc>` que enumera los mismos elementos para lectores de pantalla. Si cambias los chips de niveles de la sección 01 sin tocar la figura 1, el error queda duplicado en vez de corregido.
@@ -64,7 +77,19 @@ Sigue funcionando y es útil para probar sin hacer commit. El CLI de Firebase es
 
 **Reutiliza las clases que ya existen** en vez de añadir CSS: `.lvl`/`.chip` para niveles, `.phase`/`.steps` para flujos (variantes `.p-design`, `.p-work`, `.p-opt`), `.cmd`/`pre`/`.copy` para bloques de código, `.callout` y `.note` para avisos, `.anat` para listas de definiciones, `.signals` para la tabla, `.fig` para figuras.
 
-**El menú lateral y los ids de sección deben coincidir.** Las ocho secciones son `jerarquia`, `planmode`, `flujos`, `claudemd`, `prompts`, `contexto`, `skills`, `senales`. El JS de scroll-spy los recorre; `validar.sh` detecta las discrepancias.
+**El menú lateral y los ids de sección deben coincidir.** Las nueve secciones son `jerarquia`, `planmode`, `flujos`, `claudemd`, `prompts`, `contexto`, `skills`, `senales`, `comandos`. El JS de scroll-spy los recorre; `validar.sh` detecta las discrepancias.
+
+## Trampas del CSS, todas descubiertas rompiendo algo
+
+**No uses `--ink` como fondo.** Se invierte con el tema, así que un fondo oscuro con texto claro construido sobre él queda claro sobre claro en modo oscuro. Para eso están `--code-bg`, `--code-fg` y `--fig-inv-bg`, que se mantienen oscuros en ambos temas. Lo mismo con `--mustard`: como texto no llega al contraste mínimo en tema claro, para eso existe `--mustard-text`.
+
+**Dentro de los SVG, los colores van en clases, nunca en atributos.** Un `fill="#6B5B7B"` escrito en el marcado **gana a cualquier regla CSS** y no se adapta al tema. Las clases disponibles son `.t-tag-2`, `.t-tag-3`, `.t-alt`, `.box-alt`, `.box-fill`, `.zone-pine`, `.mk` y `.mk-alt`.
+
+**Todo ítem de grid o flex necesita `min-width:0` si su contenido no puede encoger.** Por defecto un ítem no baja de su contenido mínimo. El `.rail` no lo tenía y su tira de navegación, con los enlaces en `nowrap`, forzaba 666px en un viewport de 360: la página entera se desplazaba en horizontal. Aplica igual a `.cmd-row`, que usa `minmax(0,1fr)` por el mismo motivo.
+
+**El texto de un SVG escala con su `viewBox`.** Con 700 unidades comprimidas en un móvil, un texto de 11 unidades se renderiza a menos de 5px reales. Por eso las figuras viven en `.fig-scroll`, que en pantalla estrecha las mantiene a 640px mínimos y se navegan desplazando. Ese contenedor lleva `overflow-y:hidden` a propósito: con solo `overflow-x`, el eje vertical pasa a `auto` y el scroller de dos ejes atrapa el gesto táctil.
+
+**Acota los selectores de descendiente.** `.cmd-row code` alcanzaba también a los `<code>` en línea de las descripciones; ahora es `.cmd-row > code`.
 
 ## Exactitud del contenido
 

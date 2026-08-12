@@ -7,6 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script>
+// Antes de pintar, o al cargar en oscuro habría un destello blanco.
+try{
+  var t = localStorage.getItem('tema');
+  if(t === 'oscuro' || t === 'claro') document.documentElement.dataset.tema = t;
+}catch(e){}
+</script>
 <style>
 :root{
   --base:#E9EBE6;
@@ -17,13 +24,89 @@
   --pine-light:#1A7A69;
   --mustard:#B8930F;
   --mustard-bg:#F2E9C8;
+  --mustard-text:#7A6007;
   --clay:#6B5B7B;
   --rule:#C6CCC4;
   --paper:#F4F5F2;
   --shadow:rgba(20,32,28,.08);
+
+  /* Los bloques de código son oscuros en ambos temas: no derivan de --ink,
+     que se invierte. Si dependieran de él quedarían claro sobre claro. */
+  --code-bg:#14201C;
+  --code-fg:#DCE5E1;
+  --code-comment:#7E9B92;
+  --code-key:#D9C26B;
+  --copy-bg:#2A3B35;
+  --copy-fg:#A9C0B8;
+
+  /* Colores de los diagramas. Antes estaban fijos dentro del SVG, incluso
+     como atributos fill= que ganaban al CSS. */
+  --fig-band-1:#D6E3DE;
+  --fig-band-2:#F2E9C8;
+  --fig-band-3:#E3DDE8;
+  --fig-inv-bg:#14201C;
+  --fig-inv-fg:#DCE5E1;
+  --fig-arrow:#4A5A54;
+  --fig-arrow-alt:#6B5B7B;
+  --fig-tag-3:#6B5B7B;
+  --fig-tag-2:#8A6D08;
+
   --display:'Bricolage Grotesque',system-ui,sans-serif;
   --body:'Source Serif 4',Georgia,serif;
   --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+
+/* Paleta oscura. Se aplica por preferencia del sistema mientras no haya
+   elección explícita, y por data-tema cuando la hay. */
+@media(prefers-color-scheme:dark){
+  :root:not([data-tema="claro"]){
+    --base:#111815;
+    --base-2:#1B2320;
+    --ink:#E3EAE6;
+    --ink-soft:#A2B3AC;
+    --pine:#67C6AA;
+    --pine-light:#8CDCC3;
+    --mustard:#D9B441;
+    --mustard-bg:#2C2612;
+    --mustard-text:#D9B441;
+    --clay:#B29ECA;
+    --rule:#2C3833;
+    --paper:#171F1C;
+    --shadow:rgba(0,0,0,.4);
+    --fig-band-1:#1C332C;
+    --fig-band-2:#33290F;
+    --fig-band-3:#2A2333;
+    --fig-inv-bg:#050807;
+    --fig-inv-fg:#DCE5E1;
+    --fig-arrow:#A2B3AC;
+    --fig-arrow-alt:#B29ECA;
+    --fig-tag-3:#B29ECA;
+    --fig-tag-2:#D9B441;
+  }
+}
+:root[data-tema="oscuro"]{
+  --base:#111815;
+  --base-2:#1B2320;
+  --ink:#E3EAE6;
+  --ink-soft:#A2B3AC;
+  --pine:#67C6AA;
+  --pine-light:#8CDCC3;
+  --mustard:#D9B441;
+  --mustard-bg:#2C2612;
+  --mustard-text:#D9B441;
+  --clay:#B29ECA;
+  --rule:#2C3833;
+  --paper:#171F1C;
+  --shadow:rgba(0,0,0,.4);
+  --fig-band-1:#1C332C;
+  --fig-band-2:#33290F;
+  --fig-band-3:#2A2333;
+  --fig-inv-bg:#050807;
+  --fig-inv-fg:#DCE5E1;
+  --fig-arrow:#A2B3AC;
+  --fig-arrow-alt:#B29ECA;
+  --fig-tag-3:#B29ECA;
+  --fig-tag-2:#D9B441;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -79,7 +162,7 @@ body{
 section{padding:78px 0;border-bottom:1px solid var(--rule);scroll-margin-top:20px}
 section:last-of-type{border-bottom:0}
 .sec-head{display:flex;gap:18px;align-items:baseline;margin-bottom:14px}
-.sec-num{font-family:var(--mono);font-size:11px;color:var(--mustard);letter-spacing:.1em;font-weight:600;padding-top:9px}
+.sec-num{font-family:var(--mono);font-size:11px;color:var(--mustard-text);letter-spacing:.1em;font-weight:600;padding-top:9px}
 h2{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,3.6vw,2.7rem);letter-spacing:-.03em;line-height:1.05;max-width:20ch}
 .sec-sub{font-size:1.05rem;color:var(--ink-soft);max-width:60ch;margin:0 0 40px 0;padding-left:29px}
 h3{font-family:var(--display);font-weight:600;font-size:1.28rem;letter-spacing:-.015em;margin:38px 0 12px}
@@ -112,10 +195,10 @@ a{color:var(--pine)}
 .fig figcaption{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:12px;padding-top:10px;border-top:1px solid var(--rule)}
 .fig .box{fill:var(--paper);stroke:var(--rule);stroke-width:1}
 .fig .box-pine{fill:var(--paper);stroke:var(--pine);stroke-width:1.5}
-.fig .box-ink{fill:var(--ink);stroke:none}
-.fig .band-1{fill:#D6E3DE;stroke:var(--pine);stroke-width:1.5}
-.fig .band-2{fill:#F2E9C8;stroke:var(--mustard);stroke-width:1.5}
-.fig .band-3{fill:#E3DDE8;stroke:var(--clay);stroke-width:1.5}
+.fig .box-ink{fill:var(--fig-inv-bg);stroke:none}
+.fig .band-1{fill:var(--fig-band-1);stroke:var(--pine);stroke-width:1.5}
+.fig .band-2{fill:var(--fig-band-2);stroke:var(--mustard);stroke-width:1.5}
+.fig .band-3{fill:var(--fig-band-3);stroke:var(--clay);stroke-width:1.5}
 .fig .zone{fill:none;stroke:var(--rule);stroke-width:1;stroke-dasharray:4 4}
 .fig .ln{stroke:var(--ink-soft);stroke-width:1.4;fill:none}
 .fig .ln-dash{stroke:var(--clay);stroke-width:1.4;fill:none;stroke-dasharray:5 4}
@@ -123,8 +206,40 @@ a{color:var(--pine)}
 .fig .t-b{font-family:var(--mono);font-size:11px;fill:var(--ink)}
 .fig .t-s{font-family:var(--mono);font-size:9.5px;fill:var(--ink-soft)}
 .fig .t-tag{font-family:var(--mono);font-size:9px;letter-spacing:.12em;fill:var(--pine);font-weight:600}
-.fig .t-inv{font-family:var(--mono);font-size:11px;fill:#DCE5E1}
-.fig .t-inv-h{font-family:var(--display);font-weight:600;font-size:13px;fill:#F4F5F2}
+.fig .t-inv{font-family:var(--mono);font-size:11px;fill:var(--fig-inv-fg)}
+.fig .t-inv-h{font-family:var(--display);font-weight:600;font-size:13px;fill:var(--fig-inv-fg)}
+.fig .t-tag-2{fill:var(--fig-tag-2)}
+.fig .t-tag-3{fill:var(--fig-tag-3)}
+.fig .t-alt{fill:var(--clay)}
+.fig .box-alt{stroke:var(--clay)}
+.fig .box-fill{fill:var(--fig-band-1)}
+.fig .zone-pine{stroke:var(--pine)}
+.fig .mk{stroke:var(--fig-arrow)}
+.fig .mk-alt{stroke:var(--fig-arrow-alt)}
+
+/* ---------- TECLAS ---------- */
+kbd{
+  font-family:var(--mono);font-size:.82em;line-height:1;white-space:nowrap;
+  background:var(--base-2);color:var(--ink);border:1px solid var(--rule);
+  border-bottom-width:2px;border-radius:3px;padding:3px 6px;display:inline-block;
+}
+
+/* ---------- PROGRESO Y VOLVER ARRIBA ---------- */
+#progreso{
+  position:fixed;top:0;left:0;height:2px;width:0;background:var(--pine);
+  z-index:60;transition:width .1s linear;
+}
+#arriba{
+  position:fixed;bottom:22px;right:22px;z-index:55;
+  width:42px;height:42px;border-radius:50%;cursor:pointer;
+  background:var(--ink);color:var(--base);border:0;
+  font-size:17px;line-height:1;
+  opacity:0;visibility:hidden;transform:translateY(8px);
+  transition:opacity .2s,transform .2s,visibility .2s;
+  box-shadow:0 2px 10px var(--shadow);
+}
+#arriba.on{opacity:1;visibility:visible;transform:none}
+#arriba:hover{background:var(--pine)}
 @media(max-width:900px){.fig .t-b{font-size:12px}.fig .t-s{font-size:11px}.fig .t-h{font-size:15px}.fig .t-inv{font-size:12px}}
 
 /* ---------- CALLOUT ---------- */
@@ -165,7 +280,7 @@ a{color:var(--pine)}
 .steps li:last-child{border-bottom:0}
 .steps li::before{
   content:counter(s,decimal-leading-zero);position:absolute;left:24px;top:14px;
-  font-family:var(--mono);font-size:10.5px;color:var(--mustard);font-weight:600;
+  font-family:var(--mono);font-size:10.5px;color:var(--mustard-text);font-weight:600;
 }
 .steps li b{font-weight:600;display:block}
 .steps li i{font-style:normal;color:var(--ink-soft);font-size:.9rem;display:block;margin-top:2px}
@@ -176,13 +291,13 @@ a{color:var(--pine)}
 .cmd{position:relative;margin:18px 0;max-width:70ch}
 .cmd-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px;display:block}
 pre{
-  background:var(--ink);color:#DCE5E1;font-family:var(--mono);font-size:13px;line-height:1.62;
+  background:var(--code-bg);color:var(--code-fg);font-family:var(--mono);font-size:13px;line-height:1.62;
   padding:20px 58px 20px 22px;overflow-x:auto;border-radius:2px;
 }
-pre .c{color:#7E9B92}
-pre .k{color:#D9C26B}
+pre .c{color:var(--code-comment)}
+pre .k{color:var(--code-key)}
 .copy{
-  position:absolute;top:32px;right:10px;background:#2A3B35;color:#A9C0B8;border:0;
+  position:absolute;top:32px;right:10px;background:var(--copy-bg);color:var(--copy-fg);border:0;
   font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;
   padding:6px 9px;cursor:pointer;border-radius:2px;transition:background .18s,color .18s;
 }
@@ -218,6 +333,72 @@ pre .k{color:#D9C26B}
 .anat dt:last-of-type{border-bottom:0}
 .anat dd:last-of-type{border-bottom:0}
 
+/* ---------- INTERRUPTOR DE TEMA ---------- */
+.tema{display:flex;gap:0;border:1px solid var(--rule);margin-bottom:14px;border-radius:2px;overflow:hidden}
+.tema button{
+  flex:1;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;
+  background:transparent;color:var(--ink-soft);border:0;padding:6px 2px;cursor:pointer;
+  transition:background .18s,color .18s;
+}
+.tema button+button{border-left:1px solid var(--rule)}
+.tema button[aria-pressed="true"]{background:var(--ink);color:var(--base);font-weight:600}
+
+/* ---------- BUSCADOR DE COMANDOS ---------- */
+.buscador{position:relative;max-width:520px;margin-bottom:12px}
+.buscador input{
+  width:100%;font-family:var(--mono);font-size:14px;color:var(--ink);
+  background:var(--paper);border:1px solid var(--ink);border-radius:2px;
+  padding:13px 15px 13px 38px;
+}
+.buscador input::placeholder{color:var(--ink-soft)}
+.buscador::before{
+  content:'⌕';position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  font-size:17px;color:var(--ink-soft);pointer-events:none;
+}
+.filtros{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.filtros button{
+  font-family:var(--mono);font-size:11px;letter-spacing:.02em;cursor:pointer;
+  background:var(--base-2);color:var(--ink-soft);border:1px solid transparent;
+  padding:6px 12px;border-radius:2px;transition:background .18s,color .18s,border-color .18s;
+}
+.filtros button:hover{border-color:var(--rule)}
+.filtros button[aria-pressed="true"]{background:var(--pine);color:var(--paper);font-weight:600}
+:root[data-tema="oscuro"] .filtros button[aria-pressed="true"],
+:root[data-tema="oscuro"] .tema button[aria-pressed="true"]{color:#0C1512}
+@media(prefers-color-scheme:dark){
+  :root:not([data-tema="claro"]) .filtros button[aria-pressed="true"],
+  :root:not([data-tema="claro"]) .tema button[aria-pressed="true"]{color:#0C1512}
+}
+.cuenta{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);margin-bottom:18px;letter-spacing:.02em}
+
+.cmds{display:flex;flex-direction:column;gap:1px;margin-bottom:8px}
+.cmd-row{
+  display:grid;grid-template-columns:minmax(0,20ch) minmax(0,1fr) auto;
+  gap:14px;align-items:baseline;background:var(--paper);
+  padding:12px 14px;border-left:2px solid transparent;
+}
+.cmd-row:hover{border-left-color:var(--pine);background:var(--base-2)}
+.cmd-row[hidden]{display:none}
+.cmd-row code{
+  font-family:var(--mono);font-size:13px;font-weight:600;color:var(--pine);
+  white-space:nowrap;overflow-x:auto;display:block;
+}
+.cmd-row code i{font-style:normal;font-weight:400;color:var(--ink-soft)}
+.cmd-row p{margin:0;font-size:.92rem;line-height:1.4;max-width:none}
+.cmd-copy{
+  font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  background:transparent;color:var(--ink-soft);border:1px solid var(--rule);
+  padding:5px 8px;border-radius:2px;cursor:pointer;transition:background .18s,color .18s;
+}
+.cmd-copy:hover{background:var(--pine);color:var(--paper);border-color:var(--pine)}
+.cmd-copy.done{background:var(--mustard);color:#2A2003;border-color:var(--mustard)}
+.vacio{padding:26px 14px;font-family:var(--mono);font-size:12px;color:var(--ink-soft);background:var(--paper)}
+.vacio[hidden]{display:none}
+
+.atajos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;margin:26px 0}
+.atajos div{background:var(--paper);padding:13px 16px;display:flex;gap:12px;align-items:baseline;font-size:.92rem}
+.atajos kbd{flex-shrink:0}
+
 /* ---------- FOOT ---------- */
 footer{padding:60px 0 0;font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.02em;line-height:1.8}
 footer b{color:var(--ink);font-weight:600}
@@ -248,12 +429,25 @@ footer b{color:var(--ink);font-weight:600}
   .switch button+button{border-left:0;border-top:1px solid var(--ink)}
   pre{font-size:12px;padding:18px 50px 18px 16px}
   .steps li{padding-left:50px}
+  .tema{max-width:280px;margin:14px 0 0}
+  /* En una columna el comando y su descripción no caben lado a lado. */
+  .cmd-row{grid-template-columns:1fr auto;gap:4px 12px}
+  .cmd-row code{grid-column:1}
+  .cmd-row p{grid-column:1/-1}
+  .cmd-copy{grid-row:1;grid-column:2}
+  #arriba{bottom:16px;right:16px;width:38px;height:38px}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+.visually-hidden{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
 :focus-visible{outline:2px solid var(--pine);outline-offset:2px}
 </style>
 </head>
 <body>
+
+<div id="progreso" role="presentation"></div>
 
 <div class="shell">
 
@@ -268,6 +462,12 @@ footer b{color:var(--ink);font-weight:600}
     <a href="#contexto"><span>06</span>Contexto</a>
     <a href="#skills"><span>07</span>Skills</a>
     <a href="#senales"><span>08</span>Señales</a>
+    <a href="#comandos"><span>09</span>Comandos</a>
+  </div>
+  <div class="tema" role="group" aria-label="Tema de color">
+    <button type="button" data-tema-btn="sistema" aria-pressed="true">Auto</button>
+    <button type="button" data-tema-btn="claro" aria-pressed="false">Claro</button>
+    <button type="button" data-tema-btn="oscuro" aria-pressed="false">Oscuro</button>
   </div>
   <div class="rail-foot">Verifica los<br>comandos contra<br>la doc oficial</div>
 </nav>
@@ -295,18 +495,18 @@ footer b{color:var(--ink);font-weight:600}
   <svg viewBox="0 0 700 330" role="img" aria-labelledby="f1t f1d">
     <title id="f1t">Jerarquía de tres niveles de Claude Code</title>
     <desc id="f1d">Nivel 1 es la base con CLAUDE.md, /init, Plan Mode y auto memory. Nivel 2 agrega Skills, Hooks y MCP. Nivel 3 agrega Subagents, Plugins, Agent teams (experimental) y Worktrees.</desc>
-    <defs><marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#4A5A54" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker><marker id="arc1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#6B5B7B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+    <defs><marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M1 1L9 5L1 9" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker><marker id="arc1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-alt" d="M1 1L9 5L1 9" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
     <line x1="22" y1="300" x2="22" y2="30" class="ln" marker-end="url(#ar1)"/>
     <text class="t-s" x="16" y="175" text-anchor="middle" transform="rotate(-90 16 175)">madurez del proyecto</text>
 
     <rect class="band-3" x="188" y="26" width="500" height="78" rx="3"/>
-    <text class="t-tag" x="204" y="48" fill="#6B5B7B">NIVEL 3 · ARQUITECTURA</text>
+    <text class="t-tag t-tag-3" x="204" y="48">NIVEL 3 · ARQUITECTURA</text>
     <text class="t-b" x="204" y="70">Subagents · Plugins</text>
     <text class="t-b" x="204" y="88">Worktrees · Agent teams (exp.)</text>
     <text class="t-s" x="672" y="48" text-anchor="end">proyectos grandes</text>
 
     <rect class="band-2" x="120" y="118" width="568" height="78" rx="3"/>
-    <text class="t-tag" x="136" y="140" fill="#8A6D08">NIVEL 2 · PRODUCTIVIDAD</text>
+    <text class="t-tag t-tag-2" x="136" y="140">NIVEL 2 · PRODUCTIVIDAD</text>
     <text class="t-b" x="136" y="162">Skills · Hooks</text>
     <text class="t-b" x="136" y="180">MCP servers</text>
     <text class="t-s" x="672" y="140" text-anchor="end">cuando repitas trabajo</text>
@@ -328,7 +528,7 @@ footer b{color:var(--ink);font-weight:600}
       <div class="chips">
         <span class="chip"><b>CLAUDE.md</b> <i>contexto del proyecto</i></span>
         <span class="chip"><b>/init</b> <i>lo genera por ti</i></span>
-        <span class="chip"><b>Plan Mode</b> <i>Shift+Tab × 2</i></span>
+        <span class="chip"><b>Plan Mode</b> <i><kbd>Shift+Tab</kbd> × 2</i></span>
         <span class="chip"><b>Auto memory</b> <i>aprende solo</i></span>
       </div>
     </div>
@@ -383,7 +583,7 @@ Shift + Tab
   <svg viewBox="0 0 700 400" role="img" aria-labelledby="f2t f2d">
     <title id="f2t">Ciclo de vida de Plan Mode</title>
     <desc id="f2d">Dentro de Plan Mode, Claude lee y propone un plan. Si das feedback, regresa a proponer. Si apruebas con yes, sale automáticamente y ejecuta.</desc>
-    <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#4A5A54" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker><marker id="arc2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#6B5B7B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+    <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M1 1L9 5L1 9" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker><marker id="arc2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-alt" d="M1 1L9 5L1 9" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
     <rect class="zone" x="12" y="14" width="676" height="228" rx="6"/>
     <text class="t-tag" x="30" y="40">PLAN MODE ACTIVO · SOLO LECTURA</text>
 
@@ -407,18 +607,18 @@ Shift + Tab
     <text class="t-s" x="376" y="234" text-anchor="middle">tú decides</text>
 
     <path d="M196 171 L120 171 L120 268" class="ln-dash" marker-end="url(#arc2)"/>
-    <rect class="box" x="42" y="268" width="180" height="46" rx="3" stroke="#6B5B7B"/>
-    <text class="t-b" x="132" y="290" text-anchor="middle" fill="#6B5B7B">"ajusta esto…"</text>
+    <rect class="box box-alt" x="42" y="268" width="180" height="46" rx="3"/>
+    <text class="t-b t-alt" x="132" y="290" text-anchor="middle">"ajusta esto…"</text>
     <text class="t-s" x="132" y="305" text-anchor="middle">sigues en Plan Mode</text>
 
     <line x1="376" y1="242" x2="376" y2="268" class="ln" marker-end="url(#ar2)"/>
-    <rect class="box-pine" x="286" y="268" width="180" height="46" rx="3" fill="#D6E3DE"/>
+    <rect class="box-pine box-fill" x="286" y="268" width="180" height="46" rx="3"/>
     <text class="t-b" x="376" y="290" text-anchor="middle">"yes"</text>
     <text class="t-s" x="376" y="305" text-anchor="middle">sale automáticamente</text>
 
     <line x1="376" y1="314" x2="376" y2="340" class="ln" marker-end="url(#ar2)"/>
 
-    <rect class="zone" x="12" y="340" width="676" height="50" rx="6" stroke="#0E5347"/>
+    <rect class="zone zone-pine" x="12" y="340" width="676" height="50" rx="6"/>
     <text class="t-tag" x="30" y="362">EJECUCIÓN</text>
     <text class="t-b" x="30" y="380">Crea archivos · corre comandos · verifica</text>
     <text class="t-s" x="670" y="371" text-anchor="end">no cambias de modo a mano</text>
@@ -432,7 +632,7 @@ Shift + Tab
   <dl class="anat">
     <dt>«ajusta esto…»</dt><dd>Le das feedback y regenera el plan. Sigues en Plan Mode. Puedes quitar pasos, reordenarlos o agregar restricciones.</dd>
     <dt>«yes»</dt><dd>Sale de Plan Mode y ejecuta el plan exactamente como lo aprobaste.</dd>
-    <dt>Shift + Tab</dt><dd>Salir sin aprobar nada, por ejemplo si la conversación se desvió y prefieres empezar de nuevo.</dd>
+    <dt><kbd>Shift + Tab</kbd></dt><dd>Salir sin aprobar nada, por ejemplo si la conversación se desvió y prefieres empezar de nuevo.</dd>
   </dl>
 
   <div class="note">
@@ -456,7 +656,7 @@ Shift + Tab
       <div class="phase-head"><b>Setup inicial</b><span>Una sola vez</span></div>
       <ol class="steps">
         <li><b>Abrir la sesión</b><i><code>cd ~/mi-proyecto && claude</code></i></li>
-        <li><b>Activar Plan Mode</b><i>Shift+Tab × 2. Antes de cualquier prompt.</i></li>
+        <li><b>Activar Plan Mode</b><i><kbd>Shift+Tab</kbd> × 2. Antes de cualquier prompt.</i></li>
         <li><b>Explorar</b><i>«¿Qué hace este proyecto? Describe estructura, stack, entry points y cómo correr los tests.»</i></li>
         <li><b>Generar contexto</b><i><code>/init</code> escanea el repo y genera el CLAUDE.md</i></li>
         <li><b>Editar CLAUDE.md</b><i>Agrega lo que el código no dice: convenciones del equipo, gotchas, decisiones tomadas.</i></li>
@@ -476,7 +676,7 @@ Shift + Tab
       <div class="phase-head"><b>Corregir un error</b><span>Ciclo distinto al de un feature</span></div>
       <ol class="steps">
         <li><b>Reproducir primero</b><i>Dale el síntoma exacto, no tu teoría: el error literal, los pasos para provocarlo y qué esperabas. Una hipótesis en el prompt sesga la búsqueda hacia donde tú ya miraste.</i></li>
-        <li><b>Plan Mode para investigar</b><i>Shift+Tab × 2. Que lea y diagnostique sin arreglar nada. <code>/debug</code> activa el logging si necesitas más rastro.</i></li>
+        <li><b>Plan Mode para investigar</b><i><kbd>Shift+Tab</kbd> × 2. Que lea y diagnostique sin arreglar nada. <code>/debug</code> activa el logging si necesitas más rastro.</i></li>
         <li><b>Revisar el diagnóstico, no solo el arreglo</b><i>Si la causa raíz que describe no te convence, el parche tampoco servirá. Aquí es donde más rinde negarse a aprobar.</i></li>
         <li><b>Pedir el test antes del fix</b><i>«Escribe primero un test que falle por este bug, luego arréglalo.» Sin eso no hay prueba de que se corrigió ni red contra la regresión.</i></li>
         <li><b>Revisar y commitear</b><i><code>/code-review</code> sobre el diff antes de dar por cerrado.</i></li>
@@ -500,7 +700,7 @@ Shift + Tab
       <div class="phase-head"><b>Diseño</b><span>Antes de escribir una línea</span></div>
       <ol class="steps">
         <li><b>Crear el directorio</b><i><code>mkdir mi-proyecto && cd mi-proyecto && claude</code></i></li>
-        <li><b>Activar Plan Mode</b><i>Shift+Tab × 2. Evita que Claude cree archivos a media conversación.</i></li>
+        <li><b>Activar Plan Mode</b><i><kbd>Shift+Tab</kbd> × 2. Evita que Claude cree archivos a media conversación.</i></li>
         <li><b>Pedir la entrevista</b><i>«Quiero construir [X]. Antes de escribir código, entrevístame: pregúntame sobre requisitos, stack, casos borde y decisiones de diseño.»</i></li>
         <li><b>Responder</b><i>Stack, requisitos, edge cases, restricciones. Aquí es donde salen las preguntas que no habías considerado.</i></li>
       </ol>
@@ -675,7 +875,7 @@ separadas. No implementes nada todavía.</pre>
   <svg viewBox="0 0 700 340" role="img" aria-labelledby="f3t f3d">
     <title id="f3t">Árbol de decisión entre compact y clear</title>
     <desc id="f3d">Si Claude falla y la tarea sigue siendo la misma, usa compact. Si cambiaste de tarea o Claude repite el mismo error, usa clear.</desc>
-    <defs><marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#4A5A54" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker><marker id="arc3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#6B5B7B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+    <defs><marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M1 1L9 5L1 9" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker><marker id="arc3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-alt" d="M1 1L9 5L1 9" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
     <rect class="box-ink" x="200" y="14" width="300" height="46" rx="3"/>
     <text class="t-inv" x="350" y="42" text-anchor="middle">Claude empieza a fallar</text>
 
@@ -859,6 +1059,75 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   </div>
 </section>
 
+<!-- 09 -->
+<section id="comandos">
+  <div class="sec-head"><div class="sec-num">09</div><h2>Comandos del día a día</h2></div>
+  <p class="sec-sub">Hay unos setenta comandos. Estos son los que se usan de verdad mientras programas. Filtra por texto o por categoría.</p>
+
+  <div class="buscador">
+    <label class="visually-hidden" for="q">Filtrar comandos</label>
+    <input type="search" id="q" placeholder="filtrar comandos…" autocomplete="off">
+  </div>
+
+  <div class="filtros" role="group" aria-label="Filtrar por categoría">
+    <button type="button" data-cat="todos" aria-pressed="true">todos</button>
+    <button type="button" data-cat="sesion" aria-pressed="false">sesión</button>
+    <button type="button" data-cat="contexto" aria-pressed="false">contexto</button>
+    <button type="button" data-cat="planificar" aria-pressed="false">planificar</button>
+    <button type="button" data-cat="revisar" aria-pressed="false">revisar</button>
+    <button type="button" data-cat="config" aria-pressed="false">depurar y config</button>
+  </div>
+
+  <p class="cuenta" id="cuenta" aria-live="polite">24 comandos</p>
+
+  <div class="cmds" id="lista">
+    <div class="cmd-row" data-cat="sesion"><code>/clear <i>[nombre]</i></code><p>Sesión nueva con el contexto vacío. El nombre la etiqueta para encontrarla luego en <code>/resume</code>.</p><button class="cmd-copy" data-copiar="/clear">Copiar</button></div>
+    <div class="cmd-row" data-cat="sesion"><code>/resume</code><p>Volver a una conversación anterior desde un selector.</p><button class="cmd-copy" data-copiar="/resume">Copiar</button></div>
+    <div class="cmd-row" data-cat="sesion"><code>/rewind</code><p>Deshacer código y conversación hasta un punto anterior.</p><button class="cmd-copy" data-copiar="/rewind">Copiar</button></div>
+    <div class="cmd-row" data-cat="sesion"><code>/branch <i>[nombre]</i></code><p>Ramificar la conversación para probar otro camino sin perder este.</p><button class="cmd-copy" data-copiar="/branch">Copiar</button></div>
+    <div class="cmd-row" data-cat="sesion"><code>/status</code><p>Estado de la sesión actual.</p><button class="cmd-copy" data-copiar="/status">Copiar</button></div>
+
+    <div class="cmd-row" data-cat="contexto"><code>/context <i>[all]</i></code><p>Ver qué está llenando el contexto, como rejilla de colores.</p><button class="cmd-copy" data-copiar="/context">Copiar</button></div>
+    <div class="cmd-row" data-cat="contexto"><code>/compact <i>[instrucciones]</i></code><p>Resumir la conversación y seguir. Las instrucciones enfocan el resumen.</p><button class="cmd-copy" data-copiar="/compact">Copiar</button></div>
+    <div class="cmd-row" data-cat="contexto"><code>/memory</code><p>Editar los CLAUDE.md y ver o desactivar el auto memory.</p><button class="cmd-copy" data-copiar="/memory">Copiar</button></div>
+    <div class="cmd-row" data-cat="contexto"><code>/usage</code><p>Tokens consumidos en la sesión. También <code>/cost</code>.</p><button class="cmd-copy" data-copiar="/usage">Copiar</button></div>
+
+    <div class="cmd-row" data-cat="planificar"><code>/plan <i>[descripción]</i></code><p>Entrar en Plan Mode desde el prompt, sin usar <kbd>Shift+Tab</kbd>.</p><button class="cmd-copy" data-copiar="/plan">Copiar</button></div>
+    <div class="cmd-row" data-cat="planificar"><code>/init</code><p>Generar el CLAUDE.md analizando el repositorio.</p><button class="cmd-copy" data-copiar="/init">Copiar</button></div>
+    <div class="cmd-row" data-cat="planificar"><code>/subtask <i>&lt;instrucción&gt;</i></code><p>Delegar una tarea lateral a un subagente que reporta de vuelta.</p><button class="cmd-copy" data-copiar="/subtask">Copiar</button></div>
+    <div class="cmd-row" data-cat="planificar"><code>/btw <i>[pregunta]</i></code><p>Pregunta suelta que no entra en el historial de la conversación.</p><button class="cmd-copy" data-copiar="/btw">Copiar</button></div>
+
+    <div class="cmd-row" data-cat="revisar"><code>/code-review <i>[nivel] [--fix]</i></code><p>Revisar el diff, un PR o una ruta. Niveles de <code>low</code> a <code>max</code>. También <code>/review</code>.</p><button class="cmd-copy" data-copiar="/code-review">Copiar</button></div>
+    <div class="cmd-row" data-cat="revisar"><code>/security-review</code><p>Buscar vulnerabilidades en el diff.</p><button class="cmd-copy" data-copiar="/security-review">Copiar</button></div>
+    <div class="cmd-row" data-cat="revisar"><code>/simplify</code><p>Limpiar y refactorizar. No caza bugs; para eso está <code>/code-review</code>.</p><button class="cmd-copy" data-copiar="/simplify">Copiar</button></div>
+    <div class="cmd-row" data-cat="revisar"><code>/diff</code><p>Visor interactivo de los cambios sin commitear.</p><button class="cmd-copy" data-copiar="/diff">Copiar</button></div>
+
+    <div class="cmd-row" data-cat="config"><code>/debug <i>[descripción]</i></code><p>Activar el logging de depuración. La descripción enfoca el análisis.</p><button class="cmd-copy" data-copiar="/debug">Copiar</button></div>
+    <div class="cmd-row" data-cat="config"><code>/doctor</code><p>Diagnóstico de la configuración; propone recortes a un CLAUDE.md grande.</p><button class="cmd-copy" data-copiar="/doctor">Copiar</button></div>
+    <div class="cmd-row" data-cat="config"><code>/permissions</code><p>Gestionar las reglas de permitir, preguntar y denegar.</p><button class="cmd-copy" data-copiar="/permissions">Copiar</button></div>
+    <div class="cmd-row" data-cat="config"><code>/model <i>[modelo]</i></code><p>Cambiar de modelo y guardarlo como predeterminado.</p><button class="cmd-copy" data-copiar="/model">Copiar</button></div>
+    <div class="cmd-row" data-cat="config"><code>/mcp</code><p>Gestionar las conexiones a servidores MCP.</p><button class="cmd-copy" data-copiar="/mcp">Copiar</button></div>
+    <div class="cmd-row" data-cat="config"><code>/hooks</code><p>Ver la configuración de hooks por evento.</p><button class="cmd-copy" data-copiar="/hooks">Copiar</button></div>
+    <div class="cmd-row" data-cat="config"><code>/help</code><p>Ayuda y lista completa de comandos disponibles.</p><button class="cmd-copy" data-copiar="/help">Copiar</button></div>
+  </div>
+
+  <p class="vacio" id="vacio" hidden>Ningún comando coincide con ese filtro.</p>
+
+  <h4>Atajos que ahorran tiempo</h4>
+  <div class="atajos">
+    <div><kbd>Shift+Tab</kbd><span>Cambiar de modo de permisos</span></div>
+    <div><kbd>Esc</kbd><span>Interrumpir a Claude o cerrar un diálogo</span></div>
+    <div><kbd>Ctrl+C</kbd><span>Interrumpir, o limpiar lo escrito</span></div>
+    <div><kbd>Ctrl+O</kbd><span>Ver la transcripción completa</span></div>
+    <div><kbd>Ctrl+R</kbd><span>Buscar en el historial de prompts</span></div>
+    <div><kbd>Ctrl+B</kbd><span>Tareas en segundo plano</span></div>
+  </div>
+
+  <div class="note">
+    <p><b>Los comandos son skills.</b> Los personalizados y los de fábrica funcionan igual, así que los tuyos aparecen en este mismo menú <code>/</code> junto a los de arriba — ver sección 07.</p>
+  </div>
+</section>
+
 <footer>
   <b>Guía de campo · Claude Code</b><br>
   Agosto 2026 · Contenido contrastado con la documentación oficial el 12 de agosto de 2026.<br>
@@ -868,6 +1137,8 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
 </main>
 </div>
 
+<button id="arriba" type="button" aria-label="Volver arriba">↑</button>
+
 <script>
 // Scenario switcher
 const tabs=[document.getElementById('tab-a'),document.getElementById('tab-b')];
@@ -876,12 +1147,15 @@ tabs.forEach((t,i)=>t.addEventListener('click',()=>{
   tabs.forEach((x,j)=>{x.setAttribute('aria-selected',i===j);panels[j].hidden=i!==j});
 }));
 
-// Copy buttons
-document.querySelectorAll('.copy').forEach(btn=>{
+// Copiar. Un solo handler para los bloques de código y para las filas de
+// comandos: el texto sale de data-copiar, y si no está, del <pre> hermano.
+document.querySelectorAll('.copy,.cmd-copy').forEach(btn=>{
   btn.addEventListener('click',async()=>{
     const pre=btn.parentElement.querySelector('pre');
+    const texto=btn.dataset.copiar || (pre && pre.innerText);
+    if(!texto) return;
     try{
-      await navigator.clipboard.writeText(pre.innerText);
+      await navigator.clipboard.writeText(texto);
       btn.textContent='Copiado';btn.classList.add('done');
       setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('done')},1600);
     }catch(e){
@@ -890,6 +1164,47 @@ document.querySelectorAll('.copy').forEach(btn=>{
     }
   });
 });
+
+// Tema. 'sistema' borra el atributo y deja mandar a prefers-color-scheme.
+const btnsTema=[...document.querySelectorAll('[data-tema-btn]')];
+function aplicarTema(t){
+  if(t==='sistema') delete document.documentElement.dataset.tema;
+  else document.documentElement.dataset.tema=t;
+  btnsTema.forEach(b=>b.setAttribute('aria-pressed',b.dataset.temaBtn===t));
+  try{ t==='sistema' ? localStorage.removeItem('tema') : localStorage.setItem('tema',t); }catch(e){}
+}
+btnsTema.forEach(b=>b.addEventListener('click',()=>aplicarTema(b.dataset.temaBtn)));
+let temaGuardado='sistema';
+try{ temaGuardado=localStorage.getItem('tema')||'sistema'; }catch(e){}
+aplicarTema(temaGuardado);
+
+// Filtro de comandos
+const q=document.getElementById('q');
+const filas=[...document.querySelectorAll('.cmd-row')];
+const chips=[...document.querySelectorAll('.filtros button')];
+const cuenta=document.getElementById('cuenta');
+const vacio=document.getElementById('vacio');
+let categoria='todos';
+
+function filtrar(){
+  const texto=q.value.trim().toLowerCase();
+  let visibles=0;
+  filas.forEach(f=>{
+    const coincideCat = categoria==='todos' || f.dataset.cat===categoria;
+    const coincideTxt = !texto || f.textContent.toLowerCase().includes(texto);
+    const ver = coincideCat && coincideTxt;
+    f.hidden=!ver;
+    if(ver) visibles++;
+  });
+  cuenta.textContent = visibles===1 ? '1 comando' : visibles+' comandos';
+  vacio.hidden = visibles>0;
+}
+q.addEventListener('input',filtrar);
+chips.forEach(c=>c.addEventListener('click',()=>{
+  categoria=c.dataset.cat;
+  chips.forEach(x=>x.setAttribute('aria-pressed',x===c));
+  filtrar();
+}));
 
 // Scroll spy
 const links=[...document.querySelectorAll('.rail-nav a')];
@@ -903,6 +1218,27 @@ const spy=new IntersectionObserver(entries=>{
   });
 },{rootMargin:'-15% 0px -70% 0px'});
 secs.forEach(s=>s&&spy.observe(s));
+
+// Barra de progreso y volver arriba. El cálculo va en rAF para no hacerlo
+// en cada evento de scroll.
+const barra=document.getElementById('progreso');
+const arriba=document.getElementById('arriba');
+let pendiente=false;
+function pintar(){
+  const alto=document.documentElement.scrollHeight-window.innerHeight;
+  const y=window.scrollY;
+  barra.style.width=(alto>0 ? (y/alto)*100 : 0)+'%';
+  arriba.classList.toggle('on', y>window.innerHeight);
+  pendiente=false;
+}
+addEventListener('scroll',()=>{
+  if(!pendiente){ pendiente=true; requestAnimationFrame(pintar); }
+},{passive:true});
+pintar();
+arriba.addEventListener('click',()=>{
+  const suave=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  scrollTo({top:0,behavior:suave?'smooth':'auto'});
+});
 </script>
 </body>
 </html>

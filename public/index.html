@@ -192,6 +192,7 @@ a{color:var(--pine)}
 /* ---------- FIGURES ---------- */
 .fig{margin:34px 0 30px;max-width:720px}
 .fig svg{width:100%;height:auto;display:block}
+.fig-hint{display:none;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-top:8px}
 .fig figcaption{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:12px;padding-top:10px;border-top:1px solid var(--rule)}
 .fig .box{fill:var(--paper);stroke:var(--rule);stroke-width:1}
 .fig .box-pine{fill:var(--paper);stroke:var(--pine);stroke-width:1.5}
@@ -240,7 +241,17 @@ kbd{
 }
 #arriba.on{opacity:1;visibility:visible;transform:none}
 #arriba:hover{background:var(--pine)}
-@media(max-width:900px){.fig .t-b{font-size:12px}.fig .t-s{font-size:11px}.fig .t-h{font-size:15px}.fig .t-inv{font-size:12px}}
+/* El texto de los SVG escala con el viewBox de 700 unidades. Si el diagrama
+   se encoge a 320px, un texto de 11 unidades se renderiza a 4.7px reales y
+   deja de leerse. Por eso en pantalla estrecha no se encoge por debajo de
+   640px y se navega desplazando: a ese ancho el texto queda sobre 10px. */
+@media(max-width:900px){
+  .fig .t-b{font-size:12px}
+  .fig .t-s{font-size:11px}
+  .fig .t-h{font-size:15px}
+  .fig .t-inv{font-size:12px}
+  .fig .t-tag{font-size:11px}
+}
 
 /* ---------- CALLOUT ---------- */
 .callout{background:var(--mustard-bg);border-left:3px solid var(--mustard);padding:20px 24px;margin:28px 0;max-width:66ch}
@@ -439,6 +450,9 @@ footer b{color:var(--ink);font-weight:600}
   .cmd-row p{grid-column:1/-1}
   .cmd-copy{grid-row:1;grid-column:2}
   #arriba{bottom:16px;right:16px;width:38px;height:38px}
+  .fig-scroll{overflow-x:auto;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+  .fig-scroll svg{min-width:640px}
+  .fig-hint{display:block}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
 .visually-hidden{
@@ -495,6 +509,7 @@ footer b{color:var(--ink);font-weight:600}
 
 
   <figure class="fig">
+    <div class="fig-scroll">
   <svg viewBox="0 0 700 330" role="img" aria-labelledby="f1t f1d">
     <title id="f1t">Jerarquía de tres niveles de Claude Code</title>
     <desc id="f1d">Nivel 1 es la base con CLAUDE.md, /init, Plan Mode y auto memory. Nivel 2 agrega Skills, Hooks y MCP. Nivel 3 agrega Subagents, Plugins, Agent teams (experimental) y Worktrees.</desc>
@@ -522,6 +537,8 @@ footer b{color:var(--ink);font-weight:600}
     <text class="t-s" x="672" y="258" text-anchor="end">con esto ya eres productivo</text>
     <text class="t-s" x="672" y="276" text-anchor="end">día uno</text>
   </svg>
+  </div>
+  <p class="fig-hint">← Desliza para ver el diagrama completo →</p>
   <figcaption>Cada nivel asume el anterior. Saltarse el Nivel 1 es la causa más común de frustración.</figcaption>
   </figure>
 
@@ -583,6 +600,7 @@ Shift + Tab
 
 
   <figure class="fig">
+    <div class="fig-scroll">
   <svg viewBox="0 0 700 400" role="img" aria-labelledby="f2t f2d">
     <title id="f2t">Ciclo de vida de Plan Mode</title>
     <desc id="f2d">Dentro de Plan Mode, Claude lee y propone un plan. Si das feedback, regresa a proponer. Si apruebas con yes, sale automáticamente y ejecuta.</desc>
@@ -626,6 +644,8 @@ Shift + Tab
     <text class="t-b" x="30" y="380">Crea archivos · corre comandos · verifica</text>
     <text class="t-s" x="670" y="371" text-anchor="end">no cambias de modo a mano</text>
   </svg>
+  </div>
+  <p class="fig-hint">← Desliza para ver el diagrama completo →</p>
   <figcaption>Aprobar el plan es el cambio de modo. No hay paso manual intermedio.</figcaption>
   </figure>
 
@@ -875,6 +895,7 @@ separadas. No implementes nada todavía.</pre>
 
 
   <figure class="fig">
+    <div class="fig-scroll">
   <svg viewBox="0 0 700 340" role="img" aria-labelledby="f3t f3d">
     <title id="f3t">Árbol de decisión entre compact y clear</title>
     <desc id="f3d">Si Claude falla y la tarea sigue siendo la misma, usa compact. Si cambiaste de tarea o Claude repite el mismo error, usa clear.</desc>
@@ -908,6 +929,8 @@ separadas. No implementes nada todavía.</pre>
     <text class="t-b" x="390" y="284">· terminaste un feature</text>
     <text class="t-s" x="390" y="308">CLAUDE.md se recarga solo</text>
   </svg>
+  </div>
+  <p class="fig-hint">← Desliza para ver el diagrama completo →</p>
   <figcaption>La pregunta que decide es si la continuidad importa, no cuánto tiempo llevas.</figcaption>
   </figure>
 

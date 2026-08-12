@@ -294,15 +294,15 @@ footer b{color:var(--ink);font-weight:600}
   <figure class="fig">
   <svg viewBox="0 0 700 330" role="img" aria-labelledby="f1t f1d">
     <title id="f1t">Jerarquía de tres niveles de Claude Code</title>
-    <desc id="f1d">Nivel 1 es la base con CLAUDE.md, /init, Plan Mode y auto memory. Nivel 2 agrega Skills, Hooks y MCP. Nivel 3 agrega Subagents, Specs, Agent teams y Worktrees.</desc>
+    <desc id="f1d">Nivel 1 es la base con CLAUDE.md, /init, Plan Mode y auto memory. Nivel 2 agrega Skills, Hooks y MCP. Nivel 3 agrega Subagents, Plugins, Agent teams (experimental) y Worktrees.</desc>
     <defs><marker id="ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#4A5A54" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker><marker id="arc1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#6B5B7B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
     <line x1="22" y1="300" x2="22" y2="30" class="ln" marker-end="url(#ar1)"/>
     <text class="t-s" x="16" y="175" text-anchor="middle" transform="rotate(-90 16 175)">madurez del proyecto</text>
 
     <rect class="band-3" x="188" y="26" width="500" height="78" rx="3"/>
     <text class="t-tag" x="204" y="48" fill="#6B5B7B">NIVEL 3 · ARQUITECTURA</text>
-    <text class="t-b" x="204" y="70">Subagents · Specs (SDD)</text>
-    <text class="t-b" x="204" y="88">Agent teams · Worktrees</text>
+    <text class="t-b" x="204" y="70">Subagents · Plugins</text>
+    <text class="t-b" x="204" y="88">Worktrees · Agent teams (exp.)</text>
     <text class="t-s" x="672" y="48" text-anchor="end">proyectos grandes</text>
 
     <rect class="band-2" x="120" y="118" width="568" height="78" rx="3"/>
@@ -344,9 +344,9 @@ footer b{color:var(--ink);font-weight:600}
       <div class="lvl-top"><span class="lvl-tag">Nivel 3</span><h3>Arquitectura</h3><span class="lvl-when">Proyectos grandes</span></div>
       <div class="chips">
         <span class="chip"><b>Subagents</b> <i>agentes delegados</i></span>
-        <span class="chip"><b>Specs / SDD</b> <i>diseño antes de código</i></span>
-        <span class="chip"><b>Agent teams</b> <i>trabajo paralelo</i></span>
+        <span class="chip"><b>Plugins</b> <i>empaqueta tu setup</i></span>
         <span class="chip"><b>Worktrees</b> <i>aislamiento</i></span>
+        <span class="chip"><b>Agent teams</b> <i>experimental</i></span>
       </div>
     </div>
   </div>
@@ -472,13 +472,24 @@ Shift + Tab
       </ol>
       <div class="loop">↺ Volver al paso 1 con el siguiente feature</div>
     </div>
+    <div class="phase">
+      <div class="phase-head"><b>Corregir un error</b><span>Ciclo distinto al de un feature</span></div>
+      <ol class="steps">
+        <li><b>Reproducir primero</b><i>Dale el síntoma exacto, no tu teoría: el error literal, los pasos para provocarlo y qué esperabas. Una hipótesis en el prompt sesga la búsqueda hacia donde tú ya miraste.</i></li>
+        <li><b>Plan Mode para investigar</b><i>Shift+Tab × 2. Que lea y diagnostique sin arreglar nada. <code>/debug</code> activa el logging si necesitas más rastro.</i></li>
+        <li><b>Revisar el diagnóstico, no solo el arreglo</b><i>Si la causa raíz que describe no te convence, el parche tampoco servirá. Aquí es donde más rinde negarse a aprobar.</i></li>
+        <li><b>Pedir el test antes del fix</b><i>«Escribe primero un test que falle por este bug, luego arréglalo.» Sin eso no hay prueba de que se corrigió ni red contra la regresión.</i></li>
+        <li><b>Revisar y commitear</b><i><code>/code-review</code> sobre el diff antes de dar por cerrado.</i></li>
+        <li><b>Limpiar el contexto</b><i><code>/clear</code>. Un debug largo deja intentos fallidos que contaminan lo siguiente — ver sección 06.</i></li>
+      </ol>
+    </div>
     <div class="phase p-opt">
       <div class="phase-head"><b>Optimización</b><span>Solo cuando aparezca la señal — ver sección 08</span></div>
       <ol class="steps">
         <li><b>Skills</b><i>Repites el mismo prompt tres o más veces.</i></li>
         <li><b>Subagents</b><i>Una tarea necesita contexto aislado y reglas propias.</i></li>
-        <li><b>Specs (SDD)</b><i>Un feature toca tres o más archivos.</i></li>
-        <li><b>Hooks, MCP, agent teams</b><i>Automatización, datos externos o trabajo paralelo.</i></li>
+        <li><b>Specs (SDD)</b><i>Un feature toca tres o más archivos. Es una práctica de trabajo, no una función del producto.</i></li>
+        <li><b>Hooks, MCP, plugins</b><i>Automatización, datos externos, o reusar el mismo setup en otro repositorio.</i></li>
       </ol>
     </div>
   </div>
@@ -516,8 +527,8 @@ Shift + Tab
       <ol class="steps">
         <li><b>Skills</b><i>Repites el mismo prompt tres o más veces.</i></li>
         <li><b>Subagents</b><i>Una tarea necesita contexto aislado y reglas propias.</i></li>
-        <li><b>Specs (SDD)</b><i>Un feature toca tres o más archivos.</i></li>
-        <li><b>Hooks, MCP, agent teams</b><i>Automatización, datos externos o trabajo paralelo.</i></li>
+        <li><b>Specs (SDD)</b><i>Un feature toca tres o más archivos. Es una práctica de trabajo, no una función del producto.</i></li>
+        <li><b>Hooks, MCP, plugins</b><i>Automatización, datos externos, o reusar el mismo setup en otro repositorio.</i></li>
       </ol>
     </div>
   </div>
@@ -526,7 +537,7 @@ Shift + Tab
 <!-- 04 -->
 <section id="claudemd">
   <div class="sec-head"><div class="sec-num">04</div><h2>El archivo que ancla todo</h2></div>
-  <p class="sec-sub">Claude Code lee el CLAUDE.md al inicio de cada sesión. Sobrevive a /clear, se recarga desde disco, y es lo único que persiste sin que hagas nada.</p>
+  <p class="sec-sub">Claude Code lee el CLAUDE.md al inicio de cada sesión. Sobrevive a /clear y se recarga desde disco. Es uno de los dos mecanismos que cruzan sesiones: este lo escribes tú, el auto memory lo escribe Claude.</p>
 
   <p>En Claude Code el contexto pesa más que el prompt. Un buen CLAUDE.md con Plan Mode activo produce mejores resultados que el prompt más ingenioso sin contexto.</p>
 
@@ -579,6 +590,26 @@ src/
   <div class="callout">
     <p><b>Regla de oro para las convenciones:</b> escribe reglas verificables, no principios. «Type hints en todas las funciones públicas» sirve. «Código limpio» no sirve.</p>
   </div>
+
+  <h4>Cuando el archivo crece</h4>
+  <p>Apunta a <strong>menos de 200 líneas</strong>. El CLAUDE.md se carga entero en cada sesión, así que cada línea se paga en contexto siempre — y los archivos largos no solo cuestan más, sino que se siguen peor.</p>
+
+  <p>Si se te desborda, la salida no es recortar a lo bruto: es mover instrucciones a <code>.claude/rules/</code>. Son archivos markdown temáticos, y con frontmatter <code>paths:</code> se cargan <em>solo</em> cuando Claude toca archivos que casan con el patrón.</p>
+
+  <div class="cmd">
+    <span class="cmd-label">Una regla que solo aplica al backend</span>
+    <pre><span class="c"># .claude/rules/api.md</span>
+<span class="c">---</span>
+<span class="k">paths:</span>
+  - "src/api/**/*.ts"
+<span class="c">---</span>
+
+Valida siempre la entrada en los endpoints.
+Usa el formato de error estándar del proyecto.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <p>Esa regla no ocupa contexto mientras trabajas en el frontend. Una regla sin <code>paths</code> se carga siempre, igual que el CLAUDE.md. Si ya lo tienes grande, <code>/doctor</code> propone recortes: quita lo que Claude puede deducir del propio código y conserva las trampas y el porqué de las decisiones.</p>
 </section>
 
 <!-- 05 -->
@@ -746,7 +777,6 @@ separadas. No implementes nada todavía.</pre>
   vulnerabilidades. Dispara con: "revisa la seguridad",
   "busca vulnerabilidades", "audita este endpoint",
   "esto es seguro?", "checa por inyección SQL".
-<span class="k">user-invocable:</span> true
 <span class="k">argument-hint:</span> &lt;ruta o módulo a revisar&gt;
 <span class="c">---</span>
 
@@ -781,12 +811,20 @@ por qué es explotable, y el fix concreto.
 
   <h4>Skill, comando o subagente</h4>
   <dl class="anat">
-    <dt>Skill</dt><dd>Un workflow que quieres que Claude siga igual cada vez. Se activa solo o con slash si pones <code>user-invocable: true</code>.</dd>
+    <dt>Skill</dt><dd>Un workflow que quieres que Claude siga igual cada vez. Claude la activa sola cuando la descripción encaja, y tú con <code>/nombre</code> — ambas cosas van de fábrica, sin configurar nada.</dd>
     <dt>Hook</dt><dd>Un script que corre automáticamente antes o después de una acción. No es conversacional — es plomería.</dd>
     <dt>Subagente</dt><dd>Un asistente con su propio contexto y herramientas limitadas. Úsalo cuando la tarea generaría mucho ruido en tu sesión principal.</dd>
   </dl>
 
+  <div class="note">
+    <p><b>Quién puede disparar la skill.</b> Por defecto la disparan los dos: Claude cuando la descripción encaja, y tú con <code>/nombre</code>. Dos campos cambian eso.</p>
+    <p><code>disable-model-invocation: true</code> impide que Claude la dispare sola — imprescindible en skills con efectos secundarios, como un deploy, donde quieres ser tú quien decide. Y <code>user-invocable: false</code> la oculta del menú <code>/</code>, útil cuando es conocimiento de fondo y no una acción que tenga sentido invocar.</p>
+  </div>
+
   <p>Un skill debe tener un solo trabajo bien definido. «Revisar seguridad» es un buen skill. «Ayudar con calidad de código» es demasiado amplio y nunca se activa de forma confiable.</p>
+
+  <h4>Las que ya vienen incluidas</h4>
+  <p>Antes de escribir la tuya, revisa lo que Claude Code trae de fábrica. <code>/code-review</code> revisa el diff, un PR o una ruta, con niveles de esfuerzo de <code>low</code> a <code>max</code> y <code>--fix</code> para aplicar los hallazgos. <code>/simplify</code> limpia y refactoriza sin cazar bugs. <code>/security-review</code> busca vulnerabilidades en el diff. <code>/doctor</code> diagnostica tu configuración. Y <code>/batch</code> parte un cambio masivo en unidades independientes y lanza un subagente por cada una en worktrees aislados.</p>
 </section>
 
 <!-- 08 -->
@@ -800,10 +838,12 @@ por qué es explotable, y el fix concreto.
       <tr><td>Skill</td><td>Escribiste el mismo prompt por tercera vez. Guárdalo como workflow en lugar de re-explicarlo.</td></tr>
       <tr><td>Hook</td><td>Quieres que algo pase automáticamente después de cada edición — lint, format, tests.</td></tr>
       <tr><td>Subagente</td><td>Una tarea recurrente necesita reglas propias y contexto aislado, o genera tanto ruido que ensucia tu sesión.</td></tr>
-      <tr><td>Spec / SDD</td><td>Un feature toca tres o más archivos. Escribe el documento de diseño antes de implementar.</td></tr>
+      <tr><td>Regla con <code>paths</code></td><td>Tu CLAUDE.md pasa de 200 líneas. Mueve lo específico de un lenguaje o carpeta a <code>.claude/rules/</code>.</td></tr>
+      <tr><td>Spec / SDD<br><i>práctica</i></td><td>Un feature toca tres o más archivos. Escribe el documento de diseño antes de implementar. No es una función de Claude Code, es una forma de trabajar.</td></tr>
       <tr><td>MCP server</td><td>Necesitas datos que viven fuera del repo — tickets, documentos, calendario, CRM.</td></tr>
-      <tr><td>Agent team</td><td>El proyecto es grande y hay partes genuinamente independientes que pueden avanzar en paralelo.</td></tr>
+      <tr><td>Plugin</td><td>Un segundo repositorio necesita el mismo setup. Empaqueta skills, hooks, subagents y MCP en una unidad instalable.</td></tr>
       <tr><td>Worktree</td><td>Necesitas que varias sesiones trabajen sin pisarse en el mismo repositorio.</td></tr>
+      <tr><td>Agent team<br><i>experimental</i></td><td>Partes genuinamente independientes que además necesitan hablarse entre sí. Viene desactivado por defecto: hay que habilitarlo.</td></tr>
     </tbody>
   </table>
 
@@ -821,7 +861,8 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
 
 <footer>
   <b>Guía de campo · Claude Code</b><br>
-  Agosto 2026 · Verifica comandos y banderas contra la documentación oficial, que cambia rápido.
+  Agosto 2026 · Contenido contrastado con la documentación oficial el 12 de agosto de 2026.<br>
+  Verifica comandos y banderas antes de fiarte: Claude Code cambia rápido.
 </footer>
 
 </main>

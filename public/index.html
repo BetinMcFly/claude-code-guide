@@ -450,7 +450,15 @@ footer b{color:var(--ink);font-weight:600}
   .cmd-row p{grid-column:1/-1}
   .cmd-copy{grid-row:1;grid-column:2}
   #arriba{bottom:16px;right:16px;width:38px;height:38px}
-  .fig-scroll{overflow-x:auto;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+  /* overflow-x solo haría que overflow-y pasara de visible a auto, creando un
+     scroller de dos ejes que atrapa el gesto vertical y se siente atascado.
+     overflow-y:hidden lo deja en un eje. overscroll-behavior evita que al
+     llegar al borde el desplazamiento se encadene con la página. */
+  .fig-scroll{
+    overflow-x:auto;overflow-y:hidden;
+    overscroll-behavior-x:contain;
+    scrollbar-width:thin;
+  }
   .fig-scroll svg{min-width:640px}
   .fig-hint{display:block}
 }

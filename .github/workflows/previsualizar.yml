@@ -1,0 +1,48 @@
+name: Previsualizar pull request
+
+# Publica cada PR en una URL temporal y la comenta en el propio PR.
+# Es la versión automática del paso manual con hosting:channel:deploy.
+
+on:
+  pull_request:
+    paths:
+      - 'public/**'
+      - 'firebase.json'
+      - '.firebaserc'
+      - 'scripts/validar.sh'
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  previsualizar:
+    runs-on: ubuntu-latest
+    # Los secretos no se exponen a PRs desde un fork, así que el despliegue
+    # fallaría. En su lugar validamos, que es lo que sí podemos hacer sin
+    # credenciales.
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validar integridad del HTML
+        run: ./scripts/validar.sh
+
+      - name: Desplegar a un canal de previsualización
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: claude-projects-496723
+          expires: 7d
+
+      - name: Aviso para PRs desde un fork
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "PR desde un fork: se validó el HTML pero no se generó"
+          echo "previsualización, porque los secretos no se exponen a forks."

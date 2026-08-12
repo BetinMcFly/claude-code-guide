@@ -1,0 +1,52 @@
+name: Publicar en producción
+
+# Se dispara al fusionar en main. La validación corre antes del despliegue:
+# si el HTML está corrupto, el job falla y el sitio público no se toca.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/**'
+      - 'firebase.json'
+      - '.firebaserc'
+      - 'scripts/validar.sh'
+      - '.github/workflows/publicar.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: produccion
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validar integridad del HTML
+        run: ./scripts/validar.sh
+
+      - name: Desplegar a Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: claude-projects-496723
+          channelId: live
+
+      - name: Comprobar que lo publicado es lo del repositorio
+        run: |
+          # El CDN sirve con Cache-Control de 300s, así que reintentamos
+          # hasta que refleje el despliegue en vez de fallar al primer intento.
+          for i in $(seq 1 10); do
+            curl -sf https://claude-code.albertosolano.dev -o /tmp/publicado.html || true
+            if diff -q /tmp/publicado.html public/index.html >/dev/null 2>&1; then
+              echo "PUBLICADO = REPOSITORIO"
+              exit 0
+            fi
+            echo "intento $i: todavía no propagado, esperando 30s"
+            sleep 30
+          done
+          echo "El sitio no refleja el despliegue tras 5 minutos."
+          exit 1

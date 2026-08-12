@@ -390,11 +390,12 @@ pre .k{color:var(--code-key)}
 }
 .cmd-row:hover{border-left-color:var(--pine);background:var(--base-2)}
 .cmd-row[hidden]{display:none}
-.cmd-row code{
+.cmd-row > code{
   font-family:var(--mono);font-size:13px;font-weight:600;color:var(--pine);
   white-space:nowrap;overflow-x:auto;display:block;
 }
-.cmd-row code i{font-style:normal;font-weight:400;color:var(--ink-soft)}
+.cmd-row > code i{font-style:normal;font-weight:400;color:var(--ink-soft)}
+.cmd-row p code{font-family:var(--mono);font-size:.86em;background:var(--base-2);padding:1px 5px;border-radius:2px;color:var(--pine)}
 .cmd-row p{margin:0;font-size:.92rem;line-height:1.4;max-width:none}
 .cmd-copy{
   font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
@@ -418,7 +419,12 @@ footer b{color:var(--ink);font-weight:600}
 @media(max-width:900px){
   body{font-size:16px}
   .shell{grid-template-columns:1fr}
-  .rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--rule);padding:26px 22px 20px}
+  /* min-width:0 es imprescindible: .rail es un item de grid, y por defecto
+     un item no encoge por debajo de su contenido minimo. Ese minimo es la
+     tira de navegacion entera, cuyos enlaces van en nowrap, asi que sin esto
+     el rail fuerza ~620px y desborda la pagina en horizontal. .main ya lo
+     tenia; el rail no. */
+  .rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--rule);padding:26px 22px 20px;min-width:0}
   .rail-mark{margin-bottom:18px}
   .rail-nav{flex-direction:row;overflow-x:auto;gap:2px;padding-bottom:6px}
   .rail-nav a{border-left:0;border-bottom:2px solid transparent;margin-left:0;padding:6px 12px 8px 0;white-space:nowrap}
@@ -446,7 +452,7 @@ footer b{color:var(--ink);font-weight:600}
      debajo del comando, que va en nowrap, y la fila desborda la pantalla. */
   .cmd-row{grid-template-columns:minmax(0,1fr) auto;gap:4px 12px}
   /* Y aquí el comando parte de línea en vez de abrir un scroll por fila. */
-  .cmd-row code{grid-column:1;white-space:normal;overflow-x:visible}
+  .cmd-row > code{grid-column:1;white-space:normal;overflow-x:visible}
   .cmd-row p{grid-column:1/-1}
   .cmd-copy{grid-row:1;grid-column:2}
   #arriba{bottom:16px;right:16px;width:38px;height:38px}

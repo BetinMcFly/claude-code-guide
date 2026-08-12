@@ -431,8 +431,11 @@ footer b{color:var(--ink);font-weight:600}
   .steps li{padding-left:50px}
   .tema{max-width:280px;margin:14px 0 0}
   /* En una columna el comando y su descripción no caben lado a lado. */
-  .cmd-row{grid-template-columns:1fr auto;gap:4px 12px}
-  .cmd-row code{grid-column:1}
+  /* minmax(0,...) es imprescindible: sin él la columna no puede encoger por
+     debajo del comando, que va en nowrap, y la fila desborda la pantalla. */
+  .cmd-row{grid-template-columns:minmax(0,1fr) auto;gap:4px 12px}
+  /* Y aquí el comando parte de línea en vez de abrir un scroll por fila. */
+  .cmd-row code{grid-column:1;white-space:normal;overflow-x:visible}
   .cmd-row p{grid-column:1/-1}
   .cmd-copy{grid-row:1;grid-column:2}
   #arriba{bottom:16px;right:16px;width:38px;height:38px}

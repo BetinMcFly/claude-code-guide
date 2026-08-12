@@ -10,6 +10,7 @@ on:
       - 'firebase.json'
       - '.firebaserc'
       - 'scripts/validar.sh'
+      - '.github/workflows/previsualizar.yml'
 
 permissions:
   contents: read
@@ -27,7 +28,7 @@ jobs:
     # fallaría. En su lugar validamos, que es lo que sí podemos hacer sin
     # credenciales.
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Validar integridad del HTML
         run: ./scripts/validar.sh

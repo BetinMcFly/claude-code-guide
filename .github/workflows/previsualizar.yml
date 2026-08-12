@@ -61,6 +61,10 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
+      # Imprescindible: el CLI de Firebase exige un firebase.json en el
+      # directorio de trabajo aunque se le pase --project.
+      - uses: actions/checkout@v7
+
       - name: Instalar el CLI de Firebase
         run: npm install -g firebase-tools@^15
 
@@ -83,12 +87,25 @@ jobs:
           printf '%s' "$CLAVE" > "$F"
           export GOOGLE_APPLICATION_CREDENTIALS="$F"
 
-          # Si el canal no existe (por ejemplo, un PR cerrado antes de que
-          # llegara a desplegarse) no es un fallo del que haya que avisar.
-          if firebase hosting:channel:delete "$CANAL" --force --project "$PROYECTO"; then
-            echo "Canal $CANAL borrado."
-          else
-            echo "No se pudo borrar $CANAL; probablemente no existía."
-          fi
+          SALIDA=$(mktemp)
+          firebase hosting:channel:delete "$CANAL" --force --project "$PROYECTO" >"$SALIDA" 2>&1
+          CODIGO=$?
+          cat "$SALIDA"
 
           shred -u "$F" 2>/dev/null || rm -f "$F"
+
+          if [ "$CODIGO" -eq 0 ]; then
+            echo "Canal $CANAL borrado."
+            exit 0
+          fi
+
+          # Un canal inexistente es normal: el PR pudo cerrarse antes de que
+          # llegara a desplegarse. Cualquier otro fallo sí debe romper el job;
+          # tragárselo dejaría canales vivos sin que nadie se entere.
+          if grep -qiE "not find|does not exist|404" "$SALIDA"; then
+            echo "El canal $CANAL no existía. Nada que borrar."
+            exit 0
+          fi
+
+          echo "::error::No se pudo borrar el canal $CANAL (código $CODIGO)."
+          exit "$CODIGO"

@@ -109,3 +109,5 @@ jobs:
 
           echo "::error::No se pudo borrar el canal $CANAL (código $CODIGO)."
           exit "$CODIGO"
+
+# Segunda prueba del borrado automático.

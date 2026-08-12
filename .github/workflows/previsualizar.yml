@@ -1,10 +1,11 @@
 name: Previsualizar pull request
 
 # Publica cada PR en una URL temporal y la comenta en el propio PR.
-# Es la versión automática del paso manual con hosting:channel:deploy.
+# Al cerrar el PR, borra el canal en vez de esperar a que caduque.
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, closed]
     paths:
       - 'public/**'
       - 'firebase.json'
@@ -21,18 +22,22 @@ concurrency:
   group: preview-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+env:
+  PROYECTO: claude-projects-496723
+
 jobs:
   previsualizar:
+    if: github.event.action != 'closed'
     runs-on: ubuntu-latest
-    # Los secretos no se exponen a PRs desde un fork, así que el despliegue
-    # fallaría. En su lugar validamos, que es lo que sí podemos hacer sin
-    # credenciales.
     steps:
       - uses: actions/checkout@v7
 
       - name: Validar integridad del HTML
         run: ./scripts/validar.sh
 
+      # Los secretos no se exponen a PRs desde un fork, así que el despliegue
+      # fallaría. Esos PRs se quedan en la validación de arriba, que es lo que
+      # sí puede hacerse sin credenciales.
       - name: Desplegar a un canal de previsualización
         if: github.event.pull_request.head.repo.full_name == github.repository
         uses: FirebaseExtended/action-hosting-deploy@v0
@@ -47,3 +52,43 @@ jobs:
         run: |
           echo "PR desde un fork: se validó el HTML pero no se generó"
           echo "previsualización, porque los secretos no se exponen a forks."
+
+  limpiar:
+    # La acción de despliegue no borra nada al cerrar el PR: no tiene entrada
+    # para ello ni maneja el evento 'closed'. Hay que hacerlo con el CLI.
+    if: >-
+      github.event.action == 'closed' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Instalar el CLI de Firebase
+        run: npm install -g firebase-tools@^15
+
+      - name: Borrar el canal del PR
+        env:
+          # Por env y no interpolado en el script: el nombre de la rama lo
+          # controla quien abre el PR, y sustituirlo dentro de `run` permitiría
+          # inyectar comandos.
+          RAMA: ${{ github.event.pull_request.head.ref }}
+          NUMERO: ${{ github.event.pull_request.number }}
+          CLAVE: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          # Mismo algoritmo que usa la acción al crear el canal:
+          # pr<número>-<primeros 20 caracteres de la rama>, con los
+          # caracteres no admitidos sustituidos por guion bajo.
+          CANAL="pr${NUMERO}-$(printf '%s' "${RAMA:0:20}" | sed 's/[^a-zA-Z0-9_.-]/_/g')"
+          echo "Canal a borrar: $CANAL"
+
+          F="$(mktemp -d)/sa.json"
+          printf '%s' "$CLAVE" > "$F"
+          export GOOGLE_APPLICATION_CREDENTIALS="$F"
+
+          # Si el canal no existe (por ejemplo, un PR cerrado antes de que
+          # llegara a desplegarse) no es un fallo del que haya que avisar.
+          if firebase hosting:channel:delete "$CANAL" --force --project "$PROYECTO"; then
+            echo "Canal $CANAL borrado."
+          else
+            echo "No se pudo borrar $CANAL; probablemente no existía."
+          fi
+
+          shred -u "$F" 2>/dev/null || rm -f "$F"

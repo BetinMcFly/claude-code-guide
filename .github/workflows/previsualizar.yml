@@ -92,3 +92,5 @@ jobs:
           fi
 
           shred -u "$F" 2>/dev/null || rm -f "$F"
+
+# Prueba end-to-end del borrado automático de canales.

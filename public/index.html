@@ -27,6 +27,7 @@ try{
   --mustard-text:#7A6007;
   --clay:#6B5B7B;
   --rule:#C6CCC4;
+  --rail-num:#586C64;
   --paper:#F4F5F2;
   --shadow:rgba(20,32,28,.08);
 
@@ -71,6 +72,7 @@ try{
     --mustard-text:#D9B441;
     --clay:#B29ECA;
     --rule:#2C3833;
+    --rail-num:#84928D;
     --paper:#171F1C;
     --shadow:rgba(0,0,0,.4);
     --fig-band-1:#1C332C;
@@ -96,6 +98,7 @@ try{
   --mustard-text:#D9B441;
   --clay:#B29ECA;
   --rule:#2C3833;
+  --rail-num:#84928D;
   --paper:#171F1C;
   --shadow:rgba(0,0,0,.4);
   --fig-band-1:#1C332C;
@@ -135,7 +138,7 @@ body{
   display:flex;gap:9px;align-items:baseline;border-left:2px solid transparent;
   padding-left:11px;margin-left:-13px;transition:color .18s,border-color .18s;
 }
-.rail-nav a span{color:var(--rule);font-size:10px;min-width:14px}
+.rail-nav a span{color:var(--rail-num);font-size:10px;min-width:14px}
 .rail-nav a:hover{color:var(--ink)}
 .rail-nav a.on{color:var(--pine);border-left-color:var(--pine);font-weight:600}
 .rail-nav a.on span{color:var(--pine)}
@@ -295,7 +298,7 @@ kbd{
 }
 .steps li b{font-weight:600;display:block}
 .steps li i{font-style:normal;color:var(--ink-soft);font-size:.9rem;display:block;margin-top:2px}
-.steps code{font-family:var(--mono);font-size:.86em;background:var(--base-2);padding:1px 5px;border-radius:2px}
+.steps code{font-family:var(--mono);font-size:.86em;background:var(--base-2);padding:1px 5px;border-radius:2px;margin-right:-3px}
 .loop{padding:11px 24px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--pine);background:var(--base-2);text-transform:uppercase;font-weight:600}
 
 /* ---------- CODE ---------- */
@@ -395,7 +398,7 @@ pre .k{color:var(--code-key)}
   white-space:nowrap;overflow-x:auto;display:block;
 }
 .cmd-row > code i{font-style:normal;font-weight:400;color:var(--ink-soft)}
-.cmd-row p code{font-family:var(--mono);font-size:.86em;background:var(--base-2);padding:1px 5px;border-radius:2px;color:var(--pine)}
+.cmd-row p code{font-family:var(--mono);font-size:.86em;background:var(--base-2);padding:1px 5px;border-radius:2px;color:var(--pine);margin-right:-3px}
 .cmd-row p{margin:0;font-size:.92rem;line-height:1.4;max-width:none}
 .cmd-copy{
   font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
@@ -1259,7 +1262,7 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   <p class="cuenta" id="cuenta" aria-live="polite">29 comandos</p>
 
   <div class="cmds" id="lista">
-    <div class="cmd-row" data-cat="sesion"><code>/clear <i>[nombre]</i></code><p>Sesión nueva con el contexto vacío. El nombre la etiqueta para encontrarla luego en <code>/resume</code>.</p><button class="cmd-copy" data-copiar="/clear">Copiar</button></div>
+    <div class="cmd-row" data-cat="sesion"><code>/clear <i>[nombre]</i></code><p>Sesión nueva con el contexto vacío. El nombre la identifica luego en <code>/resume</code>.</p><button class="cmd-copy" data-copiar="/clear">Copiar</button></div>
     <div class="cmd-row" data-cat="sesion"><code>/resume</code><p>Volver a una conversación anterior desde un selector.</p><button class="cmd-copy" data-copiar="/resume">Copiar</button></div>
     <div class="cmd-row" data-cat="sesion"><code>/rewind</code><p>Deshacer código y conversación hasta un punto anterior, o resumir desde ahí. También <code>/checkpoint</code> y <code>/undo</code>.</p><button class="cmd-copy" data-copiar="/rewind">Copiar</button></div>
     <div class="cmd-row" data-cat="sesion"><code>/branch <i>[nombre]</i></code><p>Ramificar la conversación para probar otro camino sin perder este.</p><button class="cmd-copy" data-copiar="/branch">Copiar</button></div>

@@ -43,6 +43,8 @@ Los dos workflows viven en `.github/workflows/`:
 
 Ambos workflows filtran por rutas, así que tocar solo documentación no dispara un despliegue.
 
+Los PRs se fusionan con **squash**: el historial de `main` es lineal y cada commit lleva su `(#N)`.
+
 ### Despliegue manual
 
 Sigue funcionando y es útil para probar sin hacer commit. El CLI de Firebase es un binario standalone en `~/.local/bin`:
@@ -67,6 +69,8 @@ node ~/.local/share/capturas/capturar.js <url> <carpeta-salida>
 
 Captura a 320, 360, 390, 820 y 1280px en tema claro y oscuro, y reporta el desbordamiento horizontal de cada combinación. Funciona igual con un `file://` al archivo local, sin necesidad de desplegar.
 
+Para comprobar algo que las capturas no miden —si una tira de navegación desplaza dentro de sí misma, si un elemento desborda su contenedor— escribe un guion aparte, pero pásale `NODE_PATH=~/.local/share/capturas/node_modules`. `entorno.sh` no lo exporta, así que `require('playwright')` falla desde cualquier otra carpeta.
+
 **Espera siempre a `document.fonts.ready` antes de medir nada.** Esta máquina no traía ninguna fuente; se instalaron 316 en `~/.local/share/fonts`. Antes de eso, una comprobación de desbordamiento pasaba en verde y era falsa: sin fuentes el texto no ocupa ancho, así que nada desbordaba. Un chequeo que pasa por el motivo equivocado es peor que no tenerlo.
 
 ## Al editar el HTML
@@ -77,7 +81,18 @@ Captura a 320, 360, 390, 820 y 1280px en tema claro y oscuro, y reporta el desbo
 
 **Reutiliza las clases que ya existen** en vez de añadir CSS: `.lvl`/`.chip` para niveles, `.phase`/`.steps` para flujos (variantes `.p-design`, `.p-work`, `.p-opt`), `.cmd`/`pre`/`.copy` para bloques de código, `.callout` y `.note` para avisos, `.anat` para listas de definiciones, `.signals` para la tabla, `.fig` para figuras.
 
-**El menú lateral y los ids de sección deben coincidir.** Las nueve secciones son `jerarquia`, `planmode`, `flujos`, `claudemd`, `prompts`, `contexto`, `skills`, `senales`, `comandos`. El JS de scroll-spy los recorre; `validar.sh` detecta las discrepancias.
+**El menú lateral y los ids de sección deben coincidir.** Las trece secciones, en orden: `jerarquia`, `planmode`, `flujos`, `claudemd`, `prompts`, `contexto`, `skills`, `subagentes`, `mcp`, `senales`, `comandos`, `problemas`, `recursos`. El scroll-spy deriva su lista del propio menú, así que una sección nueva entra sola en cuanto tiene su enlace; `validar.sh` detecta los enlaces sin sección.
+
+**Insertar una sección en medio renumera todas las de abajo, y cada número vive en dos sitios**: el `<span>NN</span>` del menú y el `<div class="sec-num">NN</div>` de la cabecera. Si cambias solo uno, el índice y el cuerpo discrepan y `validar.sh` no lo nota — comprueba que las dos listas dan la misma secuencia:
+
+```bash
+grep -oE '<span>[0-9]+</span>' public/index.html
+grep -oE '<div class="sec-num">[0-9]+</div>' public/index.html
+```
+
+Renumera **en una sola pasada con un mapa completo**, nunca en cadena: sustituir `08→10` y después `10→12` vuelve a mover lo que acabas de mover. Y quedan las referencias cruzadas en la prosa, que ningún script valida: `grep -o 'sección [0-9]*'`.
+
+**Si generas marcado con un heredoc de Python, cuidado con la barra invertida.** Dentro de una cadena normal, `\` al final de línea es una continuación y Python se la come junto al salto: una continuación de línea de shell en un bloque de código desaparece sin avisar y el ejemplo queda con un doble espacio en medio.
 
 ## Trampas del CSS, todas descubiertas rompiendo algo
 
@@ -91,6 +106,20 @@ Captura a 320, 360, 390, 820 y 1280px en tema claro y oscuro, y reporta el desbo
 
 **Acota los selectores de descendiente.** `.cmd-row code` alcanzaba también a los `<code>` en línea de las descripciones; ahora es `.cmd-row > code`.
 
+## Cómo está escrita la guía
+
+Una revisión de redacción en octubre de 2026 encontró que casi todo lo ilegible venía de cuatro hábitos. Conviene no reintroducirlos.
+
+**Nombra el sujeto en cada frase.** El caso que lo destapó: «Plan Mode le quita las herramientas de escritura: lee archivos, busca en el código…». El sujeto cambia a mitad de frase —quien lee los archivos es Claude, no Plan Mode— y el «le» no tiene antecedente. Si la frase habla de Claude, escribe Claude.
+
+**Nada de elipsis que obliguen a reconstruir la frase anterior.** «Plan Mode no.» exigía recomponer «Plan Mode no es una sugerencia que se pueda ignorar».
+
+**«skill» es femenino**: la skill, las skills, una skill. Estuvo mezclado con el masculino en la mitad del sitio.
+
+**No uses «la salida» con el sentido de solución.** En una guía llena de salidas de terminal, choca. Lo mismo con «prerequisito», que lleva doble erre.
+
+Y una regla de estructura: **una idea, una vez**. La sección 02 abría con una metáfora y repetía el mismo contraste tres párrafos después.
+
 ## Exactitud del contenido
 
 La guía documenta Claude Code, que cambia rápido. **Contrasta cualquier afirmación nueva contra https://code.claude.com/docs antes de escribirla, nunca de memoria.**
@@ -101,6 +130,8 @@ Una revisión previa encontró cuatro errores factuales. Los que conviene no rep
 - CLAUDE.md no es el único mecanismo que persiste entre sesiones: **auto memory** también, y lo escribe Claude solo.
 - Specs / SDD es una metodología, no una función del producto. La lista oficial de extensiones es CLAUDE.md, Skills, Code intelligence, MCP, Subagents, Agent teams, Hooks, Plugins y Artifacts.
 - **Agent teams es experimental y viene desactivado por defecto.** Cualquier mención debe decirlo.
+
+**Y una verificación caduca.** La guía decía `Shift+Tab × 2` para entrar en Plan Mode. Era correcto cuando se escribió y dejó de serlo dos días después, cuando el modo automático pasó a ser el arranque por defecto y se colocó por delante en el ciclo: ahora son tres pulsaciones. Que algo se contrastara una vez no lo mantiene cierto — si una afirmación lleva meses escrita, vuelve a comprobarla antes de apoyarte en ella.
 
 ## Infraestructura
 

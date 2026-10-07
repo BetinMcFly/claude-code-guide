@@ -71,6 +71,8 @@ Captura a 320, 360, 390, 820 y 1280px en tema claro y oscuro, y reporta el desbo
 
 Para comprobar algo que las capturas no miden —si una tira de navegación desplaza dentro de sí misma, si un elemento desborda su contenedor— escribe un guion aparte, pero pásale `NODE_PATH=~/.local/share/capturas/node_modules`. `entorno.sh` no lo exporta, así que `require('playwright')` falla desde cualquier otra carpeta.
 
+**La página lleva `scroll-behavior:smooth`, así que desplazarse es una animación.** Un `scrollIntoView()` a una sección del final son 12.000px animados: si capturas o mides a los pocos cientos de milisegundos, te crees cosas que no pasan. A mí me dio dos falsos positivos en la misma tanda — una captura de escritorio completamente negra y un enlace del menú que parecía dejar su sección a 202px del borde, cuando la deja a 20px. Salta de golpe con `window.scrollTo({top, behavior:'instant'})` y espera a que `window.scrollY` se estabilice antes de disparar la captura.
+
 **Espera siempre a `document.fonts.ready` antes de medir nada.** Esta máquina no traía ninguna fuente; se instalaron 316 en `~/.local/share/fonts`. Antes de eso, una comprobación de desbordamiento pasaba en verde y era falsa: sin fuentes el texto no ocupa ancho, así que nada desbordaba. Un chequeo que pasa por el motivo equivocado es peor que no tenerlo.
 
 ## Al editar el HTML
@@ -105,6 +107,10 @@ Renumera **en una sola pasada con un mapa completo**, nunca en cadena: sustituir
 **El texto de un SVG escala con su `viewBox`.** Con 700 unidades comprimidas en un móvil, un texto de 11 unidades se renderiza a menos de 5px reales. Por eso las figuras viven en `.fig-scroll`, que en pantalla estrecha las mantiene a 640px mínimos y se navegan desplazando. Ese contenedor lleva `overflow-y:hidden` a propósito: con solo `overflow-x`, el eje vertical pasa a `auto` y el scroller de dos ejes atrapa el gesto táctil.
 
 **Acota los selectores de descendiente.** `.cmd-row code` alcanzaba también a los `<code>` en línea de las descripciones; ahora es `.cmd-row > code`.
+
+**`--rule` es un color de filetes; como color de texto no se lee.** Los números del menú lo usaban y daban 1.36:1 en tema claro y 1.48:1 en oscuro, con el mínimo en 4.5:1 — a 10px, invisibles. Un color pensado para una línea de 1px no sirve para texto, por muy secundario que sea. Para eso existe ahora `--rail-num`, con 4.67:1 y 5.56:1, todavía por debajo del contraste de la etiqueta para conservar la jerarquía. Si quieres un texto tenue, mide el contraste antes de dar por bueno un token que ya existe.
+
+**Los `<code>` en línea llevan relleno lateral, y eso despega el punto que los sigue.** Se leía «en `/resume` .» con cinco píxeles de hueco. Lo corrige un `margin-right:-3px` en `.steps code` y `.cmd-row p code`. Si tocas ese relleno, comprueba de nuevo una frase que termine en `<code>`.
 
 ## Cómo está escrita la guía
 

@@ -512,7 +512,7 @@ footer b{color:var(--ink);font-weight:600}
 <header class="hero">
   <div class="eyebrow">Guía práctica · Desarrollo agéntico</div>
   <h1>Empieza con lo mínimo. <em>Agrega cuando duela.</em></h1>
-  <p class="lede">Claude Code parece intimidante porque todo el contenido disponible mezcla lo básico con técnicas avanzadas. La realidad: <strong>necesitas cuatro cosas para arrancar</strong>. Todo lo demás — skills, agentes, specs — llega solo cuando el proyecto lo pide.</p>
+  <p class="lede">Claude Code parece intimidante porque casi todo lo que se publica sobre él mezcla lo básico con técnicas avanzadas, sin decir qué va primero. En realidad <strong>necesitas cuatro cosas para arrancar</strong>. Todo lo demás — skills, agentes, specs — llega solo cuando el proyecto lo pide.</p>
   <div class="hero-stats">
     <div><b>4</b><span>Conceptos para el día uno</span></div>
     <div><b>2</b><span>Flujos según tu proyecto</span></div>
@@ -523,7 +523,7 @@ footer b{color:var(--ink);font-weight:600}
 <!-- 01 -->
 <section id="jerarquia">
   <div class="sec-head"><div class="sec-num">01</div><h2>La jerarquía que nadie te explica</h2></div>
-  <p class="sec-sub">El error más común es querer arquitectar todo desde el principio. Estos tres niveles no son opcionales entre sí — son secuenciales.</p>
+  <p class="sec-sub">El error más común es querer arquitectar todo desde el principio. Estos tres niveles no son alternativas entre las que elegir: son escalones, y van en orden.</p>
 
 
   <figure class="fig">
@@ -598,13 +598,13 @@ footer b{color:var(--ink);font-weight:600}
 <!-- 02 -->
 <section id="planmode">
   <div class="sec-head"><div class="sec-num">02</div><h2>Plan Mode primero, siempre</h2></div>
-  <p class="sec-sub">Es la diferencia entre pedirle a alguien que no toque tu comida y guardar la comida en una vitrina cerrada. Uno es una solicitud, el otro es una restricción mecánica.</p>
+  <p class="sec-sub">El modo en el que Claude investiga y te propone un plan con las herramientas de escritura desactivadas. Nada cambia en tu código hasta que tú apruebes.</p>
 
-  <p><strong>Desde agosto de 2026 tu sesión ya no arranca preguntándote.</strong> Arranca en modo automático: un segundo modelo, el clasificador, revisa cada acción en tu lugar y deja pasar lo que considera seguro. Se nota enseguida — Claude edita archivos y ejecuta comandos sin pedirte permiso.</p>
+  <p><strong>Desde agosto de 2026 tu sesión ya no arranca pidiéndote permiso.</strong> Arranca en modo automático: un segundo modelo, el clasificador, revisa cada acción en tu lugar y deja pasar lo que considera seguro. Se nota enseguida — Claude edita archivos y ejecuta comandos sin pedirte permiso.</p>
 
-  <p>Eso hace que Plan Mode importe <em>más</em> que antes, no menos. Plan Mode le quita las herramientas de escritura: lee archivos, busca en el código, investiga en la web y ejecuta los comandos que el clasificador aprueba, pero <strong>no toca tu código</strong> hasta que apruebes el plan.</p>
+  <p>Por eso Plan Mode importa ahora más que antes, no menos: es lo que te devuelve el control sobre <em>cuándo</em> se escribe. Con Plan Mode activo, Claude conserva las herramientas de lectura —abre archivos, busca en el código, consulta la web, ejecuta comandos que no modifican nada— y pierde las de escritura. <strong>No puede tocar tu código</strong> hasta que apruebes el plan.</p>
 
-  <p>Escribir <em>«no modifiques nada»</em> en un prompt es una sugerencia que se puede ignorar. Plan Mode no.</p>
+  <p>La diferencia es la que hay entre pedir e impedir. <em>«No modifiques nada»</em> escrito en el prompt es una instrucción más: Claude puede entenderla a su manera, o perderla de vista veinte mensajes después. En Plan Mode no hay nada que obedecer, porque la herramienta de escritura no está ahí.</p>
 
   <div class="cmd">
     <span class="cmd-label">Activar</span>
@@ -672,11 +672,11 @@ Shift + Tab
 
   <h4>Los cinco modos</h4>
   <dl class="anat">
-    <dt>auto</dt><dd><strong>Donde arranca la sesión.</strong> Hace todo sin preguntar, con comprobaciones de seguridad en segundo plano. Para tareas largas y para dejar de pelearte con los permisos.</dd>
-    <dt>Manual</dt><dd>Solo lectura; te pregunta por lo demás. Es el antiguo comportamiento por defecto. En la configuración se llama <code>default</code>.</dd>
-    <dt>acceptEdits</dt><dd>Lectura, ediciones y comandos de archivos sin preguntar. Para iterar sobre código que vas revisando.</dd>
-    <dt>plan</dt><dd>Lectura más los comandos que apruebe el clasificador. No escribe. Para explorar antes de cambiar.</dd>
-    <dt>dontAsk</dt><dd>Lectura y herramientas preaprobadas; lo que normalmente preguntaría, se deniega. Para CI y scripts cerrados.</dd>
+    <dt>auto</dt><dd><strong>El modo en el que arranca la sesión.</strong> Claude actúa sin preguntarte y el clasificador revisa cada acción por detrás. Para tareas largas y para dejar de pelearte con los permisos.</dd>
+    <dt>Manual</dt><dd>Claude lee sin pedirte permiso y te pregunta por todo lo demás. Era el comportamiento por defecto hasta agosto. En la configuración se llama <code>default</code>.</dd>
+    <dt>acceptEdits</dt><dd>Claude lee, edita archivos y ejecuta comandos de archivos sin preguntar. Para iterar sobre código que vas revisando sobre la marcha.</dd>
+    <dt>plan</dt><dd>Claude lee y ejecuta comandos que no modifican nada, pero no puede escribir. Para explorar antes de cambiar.</dd>
+    <dt>dontAsk</dt><dd>Claude usa lo que tengas preaprobado y nada más: cualquier acción que exigiría preguntarte se deniega sola, sin interrumpir. Para CI y scripts cerrados.</dd>
   </dl>
 
   <h3>Cómo sales de Plan Mode</h3>
@@ -693,7 +693,7 @@ Shift + Tab
   </div>
 
   <h3>/goal, la otra mitad del modo automático</h3>
-  <p>El modo automático te quita las preguntas <em>dentro</em> de un turno. <code>/goal</code> te las quita <em>entre</em> turnos: fijas una condición, y al terminar cada turno un evaluador comprueba si se cumple. Si no, Claude arranca otro turno solo. Se detiene cuando la cumple, cuando el evaluador la juzga imposible, o cuando tú haces <code>/goal clear</code>.</p>
+  <p>El modo automático evita que Claude te pregunte <em>mientras</em> trabaja. <code>/goal</code> evita que se detenga <em>al terminar</em>. Normalmente Claude acaba su turno y espera tu siguiente mensaje; con un objetivo fijado, un evaluador comprueba al final de cada turno si ya se cumple, y si no se cumple Claude arranca otro turno por su cuenta. Se detiene cuando lo consigue, cuando el evaluador lo da por imposible, o cuando tú escribes <code>/goal clear</code>.</p>
 
   <div class="cmd">
     <span class="cmd-label">Una condición que funciona</span>
@@ -704,7 +704,7 @@ está limpio, o detente tras 20 turnos</pre>
 
   <div class="callout">
     <p><b>El evaluador solo ve la conversación.</b> No ejecuta comandos ni abre archivos por su cuenta: juzga a partir de lo que Claude ya haya mostrado. «Los tests pasan» sirve porque Claude los ejecuta y el resultado queda en la transcripción. «El código está bien» no sirve.</p>
-    <p>Añade siempre una cláusula de parada — <em>«o detente tras 20 turnos»</em> — o un objetivo mal escrito puede dar muchas vueltas.</p>
+    <p>Añade siempre una cláusula de parada, como <em>«o detente tras 20 turnos»</em>. Sin ella, un objetivo que nunca llega a cumplirse deja a Claude dando vueltas turno tras turno.</p>
   </div>
 </section>
 
@@ -745,8 +745,8 @@ está limpio, o detente tras 20 turnos</pre>
       <ol class="steps">
         <li><b>Reproducir primero</b><i>Dale el síntoma exacto, no tu teoría: el error literal, los pasos para provocarlo y qué esperabas. Una hipótesis en el prompt sesga la búsqueda hacia donde tú ya miraste.</i></li>
         <li><b>Plan Mode para investigar</b><i><kbd>Shift+Tab</kbd> × 3. Que lea y diagnostique sin arreglar nada. <code>/debug</code> activa el logging si necesitas más rastro.</i></li>
-        <li><b>Revisar el diagnóstico, no solo el arreglo</b><i>Si la causa raíz que describe no te convence, el parche tampoco servirá. Aquí es donde más rinde negarse a aprobar.</i></li>
-        <li><b>Pedir el test antes del fix</b><i>«Escribe primero un test que falle por este bug, luego arréglalo.» Sin eso no hay prueba de que se corrigió ni red contra la regresión.</i></li>
+        <li><b>Revisar el diagnóstico, no solo el arreglo</b><i>Si la causa raíz que describe no te convence, el parche tampoco servirá. Es el momento en el que más vale negarse a aprobar.</i></li>
+        <li><b>Pedir el test antes del fix</b><i>«Escribe primero un test que falle por este bug, luego arréglalo.» Sin ese test no tienes prueba de que el bug se haya corregido, ni nada que avise si vuelve más adelante.</i></li>
         <li><b>Revisar y commitear</b><i><code>/code-review</code> sobre el diff antes de dar por cerrado.</i></li>
         <li><b>Limpiar el contexto</b><i><code>/clear</code>. Un debug largo deja intentos fallidos que contaminan lo siguiente — ver sección 06.</i></li>
       </ol>
@@ -805,7 +805,7 @@ está limpio, o detente tras 20 turnos</pre>
 <!-- 04 -->
 <section id="claudemd">
   <div class="sec-head"><div class="sec-num">04</div><h2>El archivo que ancla todo</h2></div>
-  <p class="sec-sub">Claude Code lee el CLAUDE.md al inicio de cada sesión. Sobrevive a /clear y se recarga desde disco. Es uno de los dos mecanismos que cruzan sesiones: este lo escribes tú, el auto memory lo escribe Claude.</p>
+  <p class="sec-sub">Claude Code lee el CLAUDE.md al inicio de cada sesión. Sobrevive a /clear y se recarga desde disco. Es uno de los dos mecanismos que sobreviven de una sesión a la siguiente: este lo escribes tú, el auto memory lo escribe Claude solo.</p>
 
   <p>En Claude Code el contexto pesa más que el prompt. Un buen CLAUDE.md con Plan Mode activo produce mejores resultados que el prompt más ingenioso sin contexto.</p>
 
@@ -862,7 +862,7 @@ src/
   <h4>Cuando el archivo crece</h4>
   <p>Apunta a <strong>menos de 200 líneas</strong>. El CLAUDE.md se carga entero en cada sesión, así que cada línea se paga en contexto siempre — y los archivos largos no solo cuestan más, sino que se siguen peor.</p>
 
-  <p>Si se te desborda, la salida no es recortar a lo bruto: es mover instrucciones a <code>.claude/rules/</code>. Son archivos markdown temáticos, y con frontmatter <code>paths:</code> se cargan <em>solo</em> cuando Claude toca archivos que casan con el patrón.</p>
+  <p>Si se te desborda, no lo recortes a ciegas: mueve instrucciones a <code>.claude/rules/</code>. Son archivos markdown temáticos, y con frontmatter <code>paths:</code> se cargan <em>solo</em> cuando Claude toca archivos que casan con el patrón.</p>
 
   <div class="cmd">
     <span class="cmd-label">Una regla que solo aplica al backend</span>
@@ -1028,7 +1028,7 @@ separadas. No implementes nada todavía.</pre>
 <!-- 07 -->
 <section id="skills">
   <div class="sec-head"><div class="sec-num">07</div><h2>Skills: workflows que no vuelves a explicar</h2></div>
-  <p class="sec-sub">Un skill es una carpeta con un archivo SKILL.md adentro. Eso es toda la mecánica.</p>
+  <p class="sec-sub">Una skill es una carpeta con un archivo SKILL.md dentro. Eso es toda la mecánica.</p>
 
   <p>Claude lee la descripción de cada skill al inicio de la sesión y activa la que coincida con tu petición. El resto del archivo solo se carga cuando se dispara — por eso puedes tener muchos sin saturar el contexto.</p>
 
@@ -1077,7 +1077,7 @@ por qué es explotable, y el fix concreto.
   </div>
 
   <div class="callout">
-    <p><b>El campo <code>description</code> es el 80% del trabajo.</b> Es lo único que Claude lee para decidir si activa el skill. Escribe ahí las frases exactas que dirías en voz alta, no una descripción formal. Si no coincide con cómo hablas, el skill nunca se dispara.</p>
+    <p><b>El campo <code>description</code> es el 80% del trabajo.</b> Es lo único que Claude lee para decidir si la activa. Escribe ahí las frases exactas que dirías en voz alta, no una descripción formal. Si no coincide con cómo hablas, la skill nunca se dispara.</p>
   </div>
 
   <h4>Skill, comando o subagente</h4>
@@ -1092,7 +1092,7 @@ por qué es explotable, y el fix concreto.
     <p><code>disable-model-invocation: true</code> impide que Claude la dispare sola — imprescindible en skills con efectos secundarios, como un deploy, donde quieres ser tú quien decide. Y <code>user-invocable: false</code> la oculta del menú <code>/</code>, útil cuando es conocimiento de fondo y no una acción que tenga sentido invocar.</p>
   </div>
 
-  <p>Un skill debe tener un solo trabajo bien definido. «Revisar seguridad» es un buen skill. «Ayudar con calidad de código» es demasiado amplio y nunca se activa de forma confiable.</p>
+  <p>Una skill debe tener un solo trabajo bien definido. «Revisar seguridad» es una buena skill. «Ayudar con calidad de código» es demasiado amplio y nunca se activa de forma confiable.</p>
 
   <h4>Las que ya vienen incluidas</h4>
   <p>Antes de escribir la tuya, revisa lo que Claude Code trae de fábrica. <code>/code-review</code> revisa el diff, un PR o una ruta, con niveles de esfuerzo de <code>low</code> a <code>max</code> y <code>--fix</code> para aplicar los hallazgos. <code>/simplify</code> limpia y refactoriza sin cazar bugs. <code>/security-review</code> busca vulnerabilidades en el diff. <code>/doctor</code> diagnostica tu configuración. Y <code>/batch</code> parte un cambio masivo en unidades independientes y lanza un subagente por cada una en worktrees aislados.</p>
@@ -1201,7 +1201,7 @@ claude mcp list</pre>
   <p>Los servicios como Sentry, Linear o Notion piden iniciar sesión: los añades por su URL y luego <code>/mcp</code> → <em>Authenticate</em> abre el navegador. Los que usan un token lo reciben al añadirlos, con <code>--header</code>.</p>
 
   <div class="callout">
-    <p><b>Cada servidor conectado te cuesta contexto en todas las sesiones</b>, porque sus nombres de herramienta se cargan siempre, lo uses o no. Quita los que ya no utilices con <code>claude mcp remove</code>. Es la misma economía de la sección 06.</p>
+    <p><b>Cada servidor conectado te cuesta contexto en todas las sesiones</b>, porque sus nombres de herramienta se cargan siempre, lo uses o no. Quita los que ya no utilices con <code>claude mcp remove</code>. Es la misma economía de contexto de la <a href="#contexto">sección 06</a>.</p>
     <p><b>Y un servidor de ámbito <code>project</code> te pide aprobación la primera vez.</b> No es burocracia: evita que un repositorio que acabas de clonar lance procesos en tu máquina sin que lo autorices.</p>
   </div>
 </section>
@@ -1226,7 +1226,7 @@ claude mcp list</pre>
   </table>
 
   <div class="note">
-    <p><b>El principio que conecta todo:</b> la Fase de optimización no es prerequisito de nada. Es consecuencia de haber trabajado lo suficiente en las fases anteriores como para saber qué te está costando tiempo.</p>
+    <p><b>El principio que conecta todo:</b> la fase de optimización no es un requisito previo de nada. Es la consecuencia de haber trabajado lo suficiente en las fases anteriores como para saber qué te está costando tiempo.</p>
   </div>
 
   <h3>El ciclo completo, en una línea</h3>
@@ -1307,14 +1307,14 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   </div>
 
   <div class="note">
-    <p><b>Los comandos son skills.</b> Los personalizados y los de fábrica funcionan igual, así que los tuyos aparecen en este mismo menú <code>/</code> junto a los de arriba — ver sección 07.</p>
+    <p><b>Los comandos son skills.</b> Una skill que escribas tú funciona igual que las de fábrica, así que aparece en este mismo menú <code>/</code> junto a todas las de arriba — ver la <a href="#skills">sección 07</a>.</p>
   </div>
 </section>
 
 <!-- 10 -->
 <section id="problemas">
   <div class="sec-head"><div class="sec-num">12</div><h2>Problemas comunes</h2></div>
-  <p class="sec-sub">Lo que más desconcierta cuando llevas poco tiempo, con la salida que documenta Anthropic.</p>
+  <p class="sec-sub">Lo que más desconcierta cuando llevas poco tiempo, y la solución que documenta Anthropic para cada caso.</p>
 
   <dl class="anat">
     <dt>Edita sin preguntar</dt><dd>La sesión arranca en modo automático y el clasificador aprueba por ti. No está roto: es el comportamiento desde agosto de 2026. <kbd>Shift+Tab</kbd> una vez te lleva a Manual, donde vuelve a preguntarte. Ver sección 02.</dd>

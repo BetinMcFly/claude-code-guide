@@ -886,27 +886,43 @@ Usa el formato de error estándar del proyecto.</pre>
 <!-- 05 -->
 <section id="prompts">
   <div class="sec-head"><div class="sec-num">05</div><h2>Prompts que funcionan</h2></div>
-  <p class="sec-sub">Copiables tal cual. Todos asumen Plan Mode activo y CLAUDE.md en la raíz.</p>
+  <p class="sec-sub">De qué partes se compone uno, y los copiables de cada escenario. Todos asumen Plan Mode activo y CLAUDE.md en la raíz.</p>
+
+  <h4>De qué se compone un prompt</h4>
+  <p>En Claude Code el contexto pesa más que el prompt, así que el prompt no tiene que contarlo todo: tiene que decir lo que el contexto no puede decir por su cuenta. Son cinco partes, y se notan sobre todo cuando faltan.</p>
+
+  <dl class="anat">
+    <dt>El resultado</dt><dd>Qué tiene que ser verdad cuando termine, no cómo llegar hasta ahí. Si le dictas el procedimiento a Claude, pierdes lo que mejor hace, que es leer el código y encontrar el camino — y si tu procedimiento era malo, lo ejecuta igual de bien.</dd>
+    <dt>El punto de partida</dt><dd>Dónde está lo que tiene que mirar, o la orden explícita de que lo busque él. Si no se lo dices, Claude elige por dónde empezar y acierta a medias.</dd>
+    <dt>Los límites</dt><dd>Qué no debe tocar. En un proyecto que ya existe es la parte que más daño evita: el esquema de la base de datos, la API pública, las dependencias.</dd>
+    <dt>El criterio de terminado</dt><dd>Algo que se pueda comprobar. «Los tests de auth pasan» sirve; «que quede bien» no. Es la misma regla que sigue el evaluador de <code>/goal</code> en la <a href="#planmode">sección 02</a>.</dd>
+    <dt>Qué quieres de vuelta</dt><dd>Un plan, el código, o un <code>plan.md</code> que sobreviva a varias sesiones. Plan Mode ya te garantiza un plan; decir cuál quieres cambia el detalle con que Claude te lo entrega.</dd>
+  </dl>
+
+  <div class="callout">
+    <p><b>En un proyecto nuevo el prompt lo carga todo.</b> No hay CLAUDE.md, ni código, ni convenciones: lo único que Claude sabe es lo que tú escribas. Por eso el primer prompt de un proyecto nuevo no pide código — pide una entrevista.</p>
+    <p>En uno que ya existe pasa lo contrario: el CLAUDE.md y el propio código ya responden al punto de partida y a los límites, así que el prompt se acorta y se vuelve más concreto. <b>Si en un proyecto existente te sale un prompt larguísimo, no es que lo estés escribiendo mal: es que lo que repites cada vez le falta al CLAUDE.md.</b></p>
+  </div>
+
+  <h4>Proyecto nuevo</h4>
 
   <div class="cmd">
-    <span class="cmd-label">Explorar un repo desconocido</span>
-    <pre>¿Qué hace este proyecto? Describe la estructura, lenguaje,
-framework, entry points y cómo correr los tests.
-No modifiques nada.</pre>
+    <span class="cmd-label">1 · La entrevista, antes de una sola línea</span>
+    <pre>Quiero construir [qué hace y para quién, en dos frases].
+
+Antes de escribir código, entrevístame: pregúntame por los
+requisitos, el stack, los casos borde y las decisiones de
+diseño que debería estar considerando y no he mencionado.
+
+Hazme las preguntas de una en una y espera mi respuesta.
+
+Cuando terminemos, vuelca las decisiones en un CLAUDE.md.
+No implementes nada todavía.</pre>
     <button class="copy">Copiar</button>
   </div>
 
   <div class="cmd">
-    <span class="cmd-label">Entrevista para un proyecto nuevo</span>
-    <pre>Quiero construir [descripción del proyecto].
-Antes de escribir código, entrevístame: pregúntame sobre
-los requisitos, stack tecnológico preferido, casos borde
-y decisiones de diseño que debería considerar.</pre>
-    <button class="copy">Copiar</button>
-  </div>
-
-  <div class="cmd">
-    <span class="cmd-label">Scaffolding</span>
+    <span class="cmd-label">2 · Scaffolding</span>
     <pre>Scaffoldea el proyecto según la estructura definida en el
 CLAUDE.md. Crea todos los directorios, archivos con docstrings
 que describan su responsabilidad, el archivo de dependencias,
@@ -915,15 +931,60 @@ que describan su responsabilidad, el archivo de dependencias,
   </div>
 
   <div class="cmd">
-    <span class="cmd-label">Implementar un módulo</span>
+    <span class="cmd-label">3 · Implementar un módulo</span>
     <pre>Implementa [ruta/al/archivo] según el CLAUDE.md.
 Incluye los modelos que necesite en [ruta/schemas].
 Agrega tests en tests/ siguiendo las convenciones del proyecto.</pre>
     <button class="copy">Copiar</button>
   </div>
 
+  <h4>Un proyecto que ya existe</h4>
+
   <div class="cmd">
-    <span class="cmd-label">Feature grande — plan escrito primero</span>
+    <span class="cmd-label">1 · Entender el repo antes de tocarlo</span>
+    <pre>¿Qué hace este proyecto? Describe la estructura, lenguaje,
+framework, entry points y cómo correr los tests.
+No modifiques nada.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <div class="cmd">
+    <span class="cmd-label">2 · Añadir una funcionalidad</span>
+    <pre>Añade [qué va a poder hacer el usuario cuando esté listo].
+
+El código relevante está en [módulo o ruta]. Si hace falta
+tocar algo fuera de ahí, dímelo en el plan antes de hacerlo.
+
+No cambies el esquema de la base de datos, la API pública
+ni las dependencias sin avisarme.
+
+Terminado = [los tests de X pasan y puedo hacer Y].
+
+Dame el plan primero.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <div class="cmd">
+    <span class="cmd-label">3 · Corregir un error</span>
+    <pre>Hay un bug. Esto es lo que observo:
+
+  Error literal:   [pégalo entero, con la traza]
+  Para provocarlo: [1, 2, 3]
+  Esperaba:        [...]
+  Pasa:            [...]
+
+No te doy mi teoría a propósito. Investiga y dime la causa
+raíz antes de arreglar nada.
+
+Cuando estemos de acuerdo en la causa, escribe primero un
+test que falle por este bug y luego arréglalo.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <p>Ese prompt renuncia a dos cosas a propósito: a darle a Claude tu hipótesis, que sesgaría la búsqueda hacia donde tú ya miraste, y a pedir el arreglo antes que el diagnóstico. El porqué de ambas está en el Flujo A de la <a href="#flujos">sección 03</a>.</p>
+
+  <div class="cmd">
+    <span class="cmd-label">4 · Feature grande, con el plan escrito primero</span>
     <pre>Escribe un plan.md con los pasos para implementar [feature].
 Divídelo en secciones que se puedan ejecutar en sesiones
 separadas. No implementes nada todavía.</pre>

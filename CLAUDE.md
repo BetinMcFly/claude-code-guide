@@ -114,13 +114,15 @@ Renumera **en una sola pasada con un mapa completo**, nunca en cadena: sustituir
 
 ## Cómo está escrita la guía
 
-Una revisión de redacción en octubre de 2026 encontró que casi todo lo ilegible venía de cuatro hábitos. Conviene no reintroducirlos.
+Dos revisiones de redacción en octubre de 2026 encontraron que casi todo lo ilegible o lo mal escrito venía de estos hábitos. Conviene no reintroducirlos.
 
 **Nombra el sujeto en cada frase.** El caso que lo destapó: «Plan Mode le quita las herramientas de escritura: lee archivos, busca en el código…». El sujeto cambia a mitad de frase —quien lee los archivos es Claude, no Plan Mode— y el «le» no tiene antecedente. Si la frase habla de Claude, escribe Claude.
 
 **Nada de elipsis que obliguen a reconstruir la frase anterior.** «Plan Mode no.» exigía recomponer «Plan Mode no es una sugerencia que se pueda ignorar».
 
 **«skill» es femenino**: la skill, las skills, una skill. Estuvo mezclado con el masculino en la mitad del sitio.
+
+**Nada de verbos calcados del inglés.** *Scaffoldea*, *commitear*, *testear*, *lintear* y *commitea* llegaron a convivir en el texto; ninguno se dice en voz alta. Los sustantivos sí se quedan, porque un equipo los usa de verdad: commit, bug, prompt, stack, feature, skill, hook, workflow. La frontera es esa — se admite el sustantivo prestado, no el verbo inventado a partir de él.
 
 **No uses «la salida» con el sentido de solución.** En una guía llena de salidas de terminal, choca. Lo mismo con «prerequisito», que lleva doble erre.
 
@@ -136,6 +138,8 @@ Una revisión previa encontró cuatro errores factuales. Los que conviene no rep
 - CLAUDE.md no es el único mecanismo que persiste entre sesiones: **auto memory** también, y lo escribe Claude solo.
 - Specs / SDD es una metodología, no una función del producto. La lista oficial de extensiones es CLAUDE.md, Skills, Code intelligence, MCP, Subagents, Agent teams, Hooks, Plugins y Artifacts.
 - **Agent teams es experimental y viene desactivado por defecto.** Cualquier mención debe decirlo.
+
+**Retocar la redacción de una frase no es revisar lo que afirma.** La fila de `/clear [nombre]` decía que el nombre etiqueta la sesión nueva; etiqueta la conversación que dejas atrás, para reconocerla en `/resume`. Le arreglé la gramática en una pasada de estilo sin mirar si era cierta, así que el error sobrevivió justo a la revisión que debía cazarlo. Si tocas una frase que hace una afirmación sobre el producto, contrástala, aunque la estés tocando por otro motivo.
 
 **Y una verificación caduca.** La guía decía `Shift+Tab × 2` para entrar en Plan Mode. Era correcto cuando se escribió y dejó de serlo dos días después, cuando el modo automático pasó a ser el arranque por defecto y se colocó por delante en el ciclo: ahora son tres pulsaciones. Que algo se contrastara una vez no lo mantiene cierto — si una afirmación lleva meses escrita, vuelve a comprobarla antes de apoyarte en ella.
 

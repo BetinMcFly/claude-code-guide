@@ -6,7 +6,7 @@
 <title>Guía práctica de Claude Code</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=Literata:opsz,wght@7..72,400;7..72,600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script>
 // Antes de pintar, o al cargar en oscuro habría un destello blanco.
 try{
@@ -16,44 +16,44 @@ try{
 </script>
 <style>
 :root{
-  --base:#E9EBE6;
-  --base-2:#DFE3DC;
-  --ink:#14201C;
-  --ink-soft:#4A5A54;
-  --pine:#0E5347;
-  --pine-light:#1A7A69;
-  --mustard:#B8930F;
-  --mustard-bg:#F2E9C8;
-  --mustard-text:#7A6007;
-  --clay:#6B5B7B;
-  --rule:#C6CCC4;
-  --rail-num:#586C64;
-  --paper:#F4F5F2;
-  --shadow:rgba(20,32,28,.08);
+  --base:#E7ECEF;
+  --base-2:#DBE3E8;
+  --ink:#0D141B;
+  --ink-soft:#46586A;
+  --pine:#0B6B5E;
+  --pine-light:#0E8878;
+  --mustard:#B07407;
+  --mustard-bg:#F6E9CF;
+  --mustard-text:#7A4F03;
+  --clay:#4C5486;
+  --rule:#C2CDD5;
+  --rail-num:#566B7C;
+  --paper:#F2F5F7;
+  --shadow:rgba(13,20,27,.10);
 
   /* Los bloques de código son oscuros en ambos temas: no derivan de --ink,
      que se invierte. Si dependieran de él quedarían claro sobre claro. */
-  --code-bg:#14201C;
-  --code-fg:#DCE5E1;
-  --code-comment:#7E9B92;
-  --code-key:#D9C26B;
-  --copy-bg:#2A3B35;
-  --copy-fg:#A9C0B8;
+  --code-bg:#0A1118;
+  --code-fg:#CBD6DF;
+  --code-comment:#6B8293;
+  --code-key:#F2BE6B;
+  --copy-bg:#1E2C38;
+  --copy-fg:#9DB0BF;
 
   /* Colores de los diagramas. Antes estaban fijos dentro del SVG, incluso
      como atributos fill= que ganaban al CSS. */
-  --fig-band-1:#D6E3DE;
-  --fig-band-2:#F2E9C8;
-  --fig-band-3:#E3DDE8;
-  --fig-inv-bg:#14201C;
-  --fig-inv-fg:#DCE5E1;
-  --fig-arrow:#4A5A54;
-  --fig-arrow-alt:#6B5B7B;
-  --fig-tag-3:#6B5B7B;
-  --fig-tag-2:#8A6D08;
+  --fig-band-1:#D3E6E2;
+  --fig-band-2:#F6E9CF;
+  --fig-band-3:#DEE2F0;
+  --fig-inv-bg:#0A1118;
+  --fig-inv-fg:#CBD6DF;
+  --fig-arrow:#46586A;
+  --fig-arrow-alt:#4C5486;
+  --fig-tag-3:#4C5486;
+  --fig-tag-2:#8A5A06;
 
-  --display:'Bricolage Grotesque',system-ui,sans-serif;
-  --body:'Source Serif 4',Georgia,serif;
+  --display:'Archivo',system-ui,sans-serif;
+  --body:'Literata',Georgia,serif;
   --mono:'JetBrains Mono',ui-monospace,monospace;
 }
 
@@ -61,55 +61,55 @@ try{
    elección explícita, y por data-tema cuando la hay. */
 @media(prefers-color-scheme:dark){
   :root:not([data-tema="claro"]){
-    --base:#111815;
-    --base-2:#1B2320;
-    --ink:#E3EAE6;
-    --ink-soft:#A2B3AC;
-    --pine:#67C6AA;
-    --pine-light:#8CDCC3;
-    --mustard:#D9B441;
-    --mustard-bg:#2C2612;
-    --mustard-text:#D9B441;
-    --clay:#B29ECA;
-    --rule:#2C3833;
-    --rail-num:#84928D;
-    --paper:#171F1C;
-    --shadow:rgba(0,0,0,.4);
-    --fig-band-1:#1C332C;
-    --fig-band-2:#33290F;
-    --fig-band-3:#2A2333;
-    --fig-inv-bg:#050807;
-    --fig-inv-fg:#DCE5E1;
-    --fig-arrow:#A2B3AC;
-    --fig-arrow-alt:#B29ECA;
-    --fig-tag-3:#B29ECA;
-    --fig-tag-2:#D9B441;
+    --base:#0D141B;
+    --base-2:#16202A;
+    --ink:#DCE4EA;
+    --ink-soft:#8A9CAB;
+    --pine:#5FC8B8;
+    --pine-light:#8ADFD2;
+    --mustard:#F2A93B;
+    --mustard-bg:#2A1E0B;
+    --mustard-text:#F2A93B;
+    --clay:#9FA8D4;
+    --rule:#22303C;
+    --rail-num:#7C8EA0;
+    --paper:#111A22;
+    --shadow:rgba(0,0,0,.5);
+    --fig-band-1:#102A2C;
+    --fig-band-2:#2A1E0B;
+    --fig-band-3:#1B2033;
+    --fig-inv-bg:#060B10;
+    --fig-inv-fg:#CBD6DF;
+    --fig-arrow:#8A9CAB;
+    --fig-arrow-alt:#9FA8D4;
+    --fig-tag-3:#9FA8D4;
+    --fig-tag-2:#F2A93B;
   }
 }
 :root[data-tema="oscuro"]{
-  --base:#111815;
-  --base-2:#1B2320;
-  --ink:#E3EAE6;
-  --ink-soft:#A2B3AC;
-  --pine:#67C6AA;
-  --pine-light:#8CDCC3;
-  --mustard:#D9B441;
-  --mustard-bg:#2C2612;
-  --mustard-text:#D9B441;
-  --clay:#B29ECA;
-  --rule:#2C3833;
-  --rail-num:#84928D;
-  --paper:#171F1C;
-  --shadow:rgba(0,0,0,.4);
-  --fig-band-1:#1C332C;
-  --fig-band-2:#33290F;
-  --fig-band-3:#2A2333;
-  --fig-inv-bg:#050807;
-  --fig-inv-fg:#DCE5E1;
-  --fig-arrow:#A2B3AC;
-  --fig-arrow-alt:#B29ECA;
-  --fig-tag-3:#B29ECA;
-  --fig-tag-2:#D9B441;
+  --base:#0D141B;
+  --base-2:#16202A;
+  --ink:#DCE4EA;
+  --ink-soft:#8A9CAB;
+  --pine:#5FC8B8;
+  --pine-light:#8ADFD2;
+  --mustard:#F2A93B;
+  --mustard-bg:#2A1E0B;
+  --mustard-text:#F2A93B;
+  --clay:#9FA8D4;
+  --rule:#22303C;
+  --rail-num:#7C8EA0;
+  --paper:#111A22;
+  --shadow:rgba(0,0,0,.5);
+  --fig-band-1:#102A2C;
+  --fig-band-2:#2A1E0B;
+  --fig-band-3:#1B2033;
+  --fig-inv-bg:#060B10;
+  --fig-inv-fg:#CBD6DF;
+  --fig-arrow:#8A9CAB;
+  --fig-arrow-alt:#9FA8D4;
+  --fig-tag-3:#9FA8D4;
+  --fig-tag-2:#F2A93B;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -129,9 +129,12 @@ body{
 .main{padding:0 0 120px 56px;min-width:0}
 
 /* ---------- RAIL ---------- */
-.rail-mark{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--pine);margin-bottom:38px;line-height:1.5}
-.rail-mark b{display:block;font-weight:600;color:var(--ink)}
+.rail-mark{font-family:var(--display);font-size:12px;letter-spacing:0;color:var(--ink-soft);margin-bottom:34px;line-height:1.45}
+.rail-mark b{display:block;font-weight:700;font-size:15px;color:var(--ink);letter-spacing:-.01em}
 .rail-nav{display:flex;flex-direction:column;gap:1px;flex:1;overflow-y:auto}
+.rail-grupo{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.01em;
+  color:var(--ink-soft);margin:22px 0 7px;padding-left:11px}
+.rail-grupo:first-child{margin-top:0}
 .rail-nav a{
   font-family:var(--mono);font-size:11px;letter-spacing:.02em;
   color:var(--ink-soft);text-decoration:none;padding:7px 12px 7px 0;
@@ -145,21 +148,52 @@ body{
 .rail-foot{font-family:var(--mono);font-size:9.5px;color:var(--ink-soft);letter-spacing:.04em;padding-top:20px;border-top:1px solid var(--rule);line-height:1.7}
 
 /* ---------- HERO ---------- */
-.hero{padding:96px 0 72px;border-bottom:1px solid var(--rule)}
-.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--pine);margin-bottom:26px}
-.hero h1{
-  font-family:var(--display);font-weight:800;font-size:clamp(2.9rem,7vw,5.1rem);
-  line-height:.94;letter-spacing:-.035em;max-width:14ch;margin-bottom:30px;
+/* La tira de modos es lo único ruidoso de la página: es la tesis de la guía
+   hecha objeto. El color aquí no decora — --pine significa «solo lee» y
+   --mustard «puede cambiar tus archivos», y no se usan para nada más. */
+.modos{margin-top:48px;max-width:680px;border:1px solid var(--rule);background:var(--paper);overflow:hidden}
+.modos-tira{display:flex}
+.modos-tira button{
+  flex:1;min-width:0;appearance:none;background:none;cursor:pointer;
+  border:0;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  font-family:var(--mono);font-size:12px;color:var(--ink-soft);
+  padding:14px 4px;transition:color .16s,background .16s,box-shadow .16s;
 }
-.hero h1 em{font-style:normal;color:var(--pine)}
+.modos-tira button:last-child{border-right:0}
+.modos-tira button:hover{color:var(--ink)}
+.modos-tira button[aria-selected="true"]{
+  background:var(--base-2);color:var(--ink);font-weight:600;
+  border-bottom-color:transparent;box-shadow:inset 0 2px 0 var(--pine);
+}
+.modos-cuerpo{padding:26px 26px 24px}
+.modos-estado{
+  font-family:var(--display);font-size:clamp(1.6rem,4.2vw,2.3rem);font-weight:800;
+  font-stretch:112%;letter-spacing:-.025em;line-height:1;margin:0 0 20px;
+  transition:color .22s;
+}
+.modos-estado[data-escribe="si"]{color:var(--mustard-text)}
+.modos-estado[data-escribe="pregunta"]{color:var(--mustard-text)}
+.modos-estado[data-escribe="no"]{color:var(--pine)}
+.modos-detalle{display:flex;flex-wrap:wrap;gap:8px 34px;margin:0 0 18px}
+.modos-detalle > div{display:flex;gap:10px;align-items:baseline;min-width:0}
+.modos-detalle dt{font-family:var(--mono);font-size:11px;color:var(--pine);flex:none}
+.modos-detalle dd{margin:0;font-size:.92rem;color:var(--ink-soft);min-width:0}
+.modos-nota{margin:0;font-size:.95rem;color:var(--ink);max-width:52ch}
+.modos-pie{margin-top:14px;font-size:.88rem;color:var(--ink-soft);max-width:58ch}
+@media(prefers-reduced-motion:reduce){
+  .modos-tira button,.modos-estado{transition:none}
+}
+
+/* ---------- HERO ---------- */
+.hero{padding:64px 0 60px;border-bottom:1px solid var(--rule)}
+
+.hero h1{
+  font-family:var(--display);font-weight:800;font-size:clamp(2.1rem,4.3vw,3.3rem);
+  font-stretch:108%;line-height:1.02;letter-spacing:-.028em;max-width:22ch;margin-bottom:26px;
+}
 .lede{font-size:1.22rem;line-height:1.55;max-width:52ch;color:var(--ink-soft)}
 .lede strong{color:var(--ink);font-weight:600}
 
-.hero-stats{display:flex;gap:0;margin-top:52px;border-top:1px solid var(--rule);max-width:640px}
-.hero-stats div{flex:1;padding:18px 20px 0 0;border-right:1px solid var(--rule)}
-.hero-stats div:last-child{border-right:0}
-.hero-stats b{display:block;font-family:var(--display);font-size:2rem;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--pine)}
-.hero-stats span{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-top:7px;line-height:1.5}
 
 /* ---------- SECTIONS ---------- */
 section{padding:78px 0;border-bottom:1px solid var(--rule);scroll-margin-top:20px}
@@ -169,7 +203,7 @@ section:last-of-type{border-bottom:0}
 h2{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,3.6vw,2.7rem);letter-spacing:-.03em;line-height:1.05;max-width:20ch}
 .sec-sub{font-size:1.05rem;color:var(--ink-soft);max-width:60ch;margin:0 0 40px 0;padding-left:29px}
 h3{font-family:var(--display);font-weight:600;font-size:1.28rem;letter-spacing:-.015em;margin:38px 0 12px}
-h4{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--pine);margin:30px 0 12px;font-weight:600}
+h4{font-family:var(--display);font-size:1.08rem;font-weight:700;letter-spacing:-.012em;color:var(--ink);margin:38px 0 12px;line-height:1.25}
 p{max-width:64ch;margin-bottom:16px}
 p strong{font-weight:600}
 a{color:var(--pine)}
@@ -181,9 +215,9 @@ a{color:var(--pine)}
 .lvl.l2{border-left-color:var(--mustard)}
 .lvl.l3{border-left-color:var(--clay)}
 .lvl-top{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;margin-bottom:14px}
-.lvl-tag{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;padding:3px 8px;border-radius:2px}
+.lvl-tag{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:none;font-weight:600;padding:3px 8px;border-radius:2px}
 .l1 .lvl-tag{background:var(--pine);color:var(--paper)}
-.l2 .lvl-tag{background:var(--mustard);color:#2A2003}
+.l2 .lvl-tag{background:var(--mustard);color:#0D141B}
 .l3 .lvl-tag{background:var(--clay);color:var(--paper)}
 .lvl-top h3{margin:0;font-size:1.15rem}
 .lvl-when{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);letter-spacing:.03em}
@@ -195,8 +229,8 @@ a{color:var(--pine)}
 /* ---------- FIGURES ---------- */
 .fig{margin:34px 0 30px;max-width:720px}
 .fig svg{width:100%;height:auto;display:block}
-.fig-hint{display:none;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-top:8px}
-.fig figcaption{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-top:12px;padding-top:10px;border-top:1px solid var(--rule)}
+.fig-hint{display:none;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:none;color:var(--ink-soft);margin-top:8px}
+.fig figcaption{font-family:var(--mono);font-size:11.5px;letter-spacing:0;color:var(--ink-soft);margin-top:12px;padding-top:10px;border-top:1px solid var(--rule)}
 .fig .box{fill:var(--paper);stroke:var(--rule);stroke-width:1}
 .fig .box-pine{fill:var(--paper);stroke:var(--pine);stroke-width:1.5}
 .fig .box-ink{fill:var(--fig-inv-bg);stroke:none}
@@ -274,7 +308,7 @@ kbd{
   text-align:left;transition:background .18s,color .18s;line-height:1.3;
 }
 .switch button+button{border-left:1px solid var(--ink)}
-.switch button small{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.62;margin-top:5px;font-weight:400}
+.switch button small{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:none;opacity:.62;margin-top:5px;font-weight:400}
 .switch button[aria-selected="true"]{background:var(--ink);color:var(--base)}
 
 .flow{margin-top:34px}
@@ -285,7 +319,7 @@ kbd{
 .phase.p-opt{border-left-color:var(--ink-soft)}
 .phase-head{padding:16px 24px 14px;border-bottom:1px solid var(--rule)}
 .phase-head b{font-family:var(--display);font-weight:600;font-size:1.06rem;letter-spacing:-.015em;display:block}
-.phase-head span{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-top:4px}
+.phase-head span{font-family:var(--mono);font-size:11.5px;letter-spacing:0;color:var(--ink-soft);display:block;margin-top:4px}
 .steps{list-style:none;counter-reset:s}
 .steps li{
   counter-increment:s;padding:13px 24px 13px 58px;position:relative;
@@ -299,11 +333,11 @@ kbd{
 .steps li b{font-weight:600;display:block}
 .steps li i{font-style:normal;color:var(--ink-soft);font-size:.9rem;display:block;margin-top:2px}
 .steps code{font-family:var(--mono);font-size:.86em;background:var(--base-2);padding:1px 5px;border-radius:2px;margin-right:-3px}
-.loop{padding:11px 24px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--pine);background:var(--base-2);text-transform:uppercase;font-weight:600}
+.loop{padding:11px 24px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--pine);background:var(--base-2);text-transform:none;font-weight:600}
 
 /* ---------- CODE ---------- */
 .cmd{position:relative;margin:18px 0;max-width:70ch}
-.cmd-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px;display:block}
+.cmd-label{font-family:var(--mono);font-size:11.5px;letter-spacing:0;color:var(--ink-soft);margin-bottom:8px;display:block}
 pre{
   background:var(--code-bg);color:var(--code-fg);font-family:var(--mono);font-size:13px;line-height:1.62;
   padding:20px 58px 20px 22px;overflow-x:auto;border-radius:2px;
@@ -312,11 +346,11 @@ pre .c{color:var(--code-comment)}
 pre .k{color:var(--code-key)}
 .copy{
   position:absolute;top:32px;right:10px;background:var(--copy-bg);color:var(--copy-fg);border:0;
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:none;
   padding:6px 9px;cursor:pointer;border-radius:2px;transition:background .18s,color .18s;
 }
 .copy:hover{background:var(--pine-light);color:#fff}
-.copy.done{background:var(--mustard);color:#2A2003}
+.copy.done{background:var(--mustard);color:#0D141B}
 
 /* ---------- COMPARE ---------- */
 .compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:30px 0}
@@ -333,7 +367,7 @@ pre .k{color:var(--code-key)}
 /* ---------- SIGNALS TABLE ---------- */
 .signals{width:100%;border-collapse:collapse;margin:26px 0;font-size:.94rem}
 .signals th{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:none;
   text-align:left;padding:0 16px 10px 0;color:var(--pine);border-bottom:1px solid var(--ink);font-weight:600;
 }
 .signals td{padding:14px 16px 14px 0;border-bottom:1px solid var(--rule);vertical-align:top;line-height:1.45}
@@ -350,7 +384,7 @@ pre .k{color:var(--code-key)}
 /* ---------- INTERRUPTOR DE TEMA ---------- */
 .tema{display:flex;gap:0;border:1px solid var(--rule);margin-bottom:14px;border-radius:2px;overflow:hidden}
 .tema button{
-  flex:1;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;
+  flex:1;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:none;
   background:transparent;color:var(--ink-soft);border:0;padding:6px 2px;cursor:pointer;
   transition:background .18s,color .18s;
 }
@@ -378,10 +412,10 @@ pre .k{color:var(--code-key)}
 .filtros button:hover{border-color:var(--rule)}
 .filtros button[aria-pressed="true"]{background:var(--pine);color:var(--paper);font-weight:600}
 :root[data-tema="oscuro"] .filtros button[aria-pressed="true"],
-:root[data-tema="oscuro"] .tema button[aria-pressed="true"]{color:#0C1512}
+:root[data-tema="oscuro"] .tema button[aria-pressed="true"]{color:#0D141B}
 @media(prefers-color-scheme:dark){
   :root:not([data-tema="claro"]) .filtros button[aria-pressed="true"],
-  :root:not([data-tema="claro"]) .tema button[aria-pressed="true"]{color:#0C1512}
+  :root:not([data-tema="claro"]) .tema button[aria-pressed="true"]{color:#0D141B}
 }
 .cuenta{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);margin-bottom:18px;letter-spacing:.02em}
 
@@ -401,12 +435,12 @@ pre .k{color:var(--code-key)}
 .cmd-row p code{font-family:var(--mono);font-size:.86em;background:var(--base-2);padding:1px 5px;border-radius:2px;color:var(--pine);margin-right:-3px}
 .cmd-row p{margin:0;font-size:.92rem;line-height:1.4;max-width:none}
 .cmd-copy{
-  font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:none;
   background:transparent;color:var(--ink-soft);border:1px solid var(--rule);
   padding:5px 8px;border-radius:2px;cursor:pointer;transition:background .18s,color .18s;
 }
 .cmd-copy:hover{background:var(--pine);color:var(--paper);border-color:var(--pine)}
-.cmd-copy.done{background:var(--mustard);color:#2A2003;border-color:var(--mustard)}
+.cmd-copy.done{background:var(--mustard);color:#0D141B;border-color:var(--mustard)}
 .vacio{padding:26px 14px;font-family:var(--mono);font-size:12px;color:var(--ink-soft);background:var(--paper)}
 .vacio[hidden]{display:none}
 
@@ -431,15 +465,18 @@ footer b{color:var(--ink);font-weight:600}
   .rail-mark{margin-bottom:18px}
   .rail-nav{flex-direction:row;overflow-x:auto;gap:2px;padding-bottom:6px}
   .rail-nav a{border-left:0;border-bottom:2px solid transparent;margin-left:0;padding:6px 12px 8px 0;white-space:nowrap}
+  .rail-grupo{display:none}
   .rail-nav a.on{border-left:0;border-bottom-color:var(--pine)}
   .rail-nav a span{display:none}
   .rail-foot{display:none}
   .main{padding:0 22px 80px}
-  .hero{padding:56px 0 46px}
-  .hero-stats{flex-direction:column;max-width:none}
-  .hero-stats div{border-right:0;border-bottom:1px solid var(--rule);padding:14px 0}
-  .hero-stats div:last-child{border-bottom:0}
-  section{padding:52px 0}
+  .hero{padding:34px 0 40px}
+  .hero h1{font-size:clamp(1.72rem,6.4vw,2.4rem);max-width:none;margin-bottom:20px}
+  .modos{margin-top:34px}
+  .modos-cuerpo{padding:20px 18px 18px}
+  .modos-tira button{font-size:11px;padding:12px 2px}
+  .modos-detalle{gap:10px 20px}
+        section{padding:52px 0}
   .sec-sub{padding-left:0}
   .sec-head{gap:12px}
   .compare{grid-template-columns:1fr}
@@ -488,16 +525,19 @@ footer b{color:var(--ink);font-weight:600}
 <nav class="rail">
   <div class="rail-mark">Guía de campo<b>Claude Code</b></div>
   <div class="rail-nav" id="nav">
+    <p class="rail-grupo">Empieza aquí</p>
     <a href="#jerarquia"><span>01</span>Jerarquía</a>
     <a href="#planmode"><span>02</span>Plan Mode</a>
     <a href="#flujos"><span>03</span>Flujos</a>
     <a href="#claudemd"><span>04</span>CLAUDE.md</a>
     <a href="#prompts"><span>05</span>Prompts</a>
     <a href="#contexto"><span>06</span>Contexto</a>
+    <p class="rail-grupo">Cuando duela</p>
     <a href="#skills"><span>07</span>Skills</a>
     <a href="#subagentes"><span>08</span>Subagentes</a>
     <a href="#mcp"><span>09</span>MCP</a>
     <a href="#senales"><span>10</span>Señales</a>
+    <p class="rail-grupo">Referencia</p>
     <a href="#comandos"><span>11</span>Comandos</a>
     <a href="#problemas"><span>12</span>Problemas</a>
     <a href="#recursos"><span>13</span>Recursos</a>
@@ -513,14 +553,26 @@ footer b{color:var(--ink);font-weight:600}
 <main class="main">
 
 <header class="hero">
-  <div class="eyebrow">Guía práctica · Desarrollo agéntico</div>
-  <h1>Empieza con lo mínimo. <em>Agrega cuando duela.</em></h1>
-  <p class="lede">Claude Code parece intimidante porque casi todo lo que se publica sobre él mezcla lo básico con técnicas avanzadas, sin decir qué va primero. En realidad <strong>necesitas cuatro cosas para arrancar</strong>. Todo lo demás — skills, agentes, specs — llega solo cuando el proyecto lo pide.</p>
-  <div class="hero-stats">
-    <div><b>4</b><span>Conceptos para el día uno</span></div>
-    <div><b>2</b><span>Flujos según tu proyecto</span></div>
-    <div><b>1</b><span>Archivo que lo ancla todo</span></div>
+  <h1>Empieza con lo mínimo.<br>Agrega cuando duela.</h1>
+  <p class="lede">Claude Code parece intimidante porque casi todo lo que se publica sobre él mezcla lo básico con técnicas avanzadas, sin decir qué va primero. En realidad <strong>necesitas cuatro cosas para arrancar</strong>. Todo lo demás llega solo cuando el proyecto lo pide.</p>
+
+  <div class="modos" id="modos">
+    <div class="modos-tira" role="tablist" aria-label="Modos de permiso">
+      <button type="button" role="tab" data-modo="auto" aria-selected="true">auto</button>
+      <button type="button" role="tab" data-modo="manual" aria-selected="false">manual</button>
+      <button type="button" role="tab" data-modo="acceptEdits" aria-selected="false">acceptEdits</button>
+      <button type="button" role="tab" data-modo="plan" aria-selected="false">plan</button>
+    </div>
+    <div class="modos-cuerpo">
+      <p class="modos-estado" id="modo-estado" data-escribe="si" aria-live="polite">Puede escribir</p>
+      <dl class="modos-detalle">
+        <div><dt>lee</dt><dd id="modo-lee">archivos, el repositorio, la web</dd></div>
+        <div><dt>ejecuta</dt><dd id="modo-ejecuta">comandos, con el clasificador revisando</dd></div>
+      </dl>
+      <p class="modos-nota" id="modo-nota">Donde arranca la sesión desde agosto de 2026. Claude actúa sin pedirte permiso.</p>
+    </div>
   </div>
+  <p class="modos-pie"><kbd>Shift+Tab</kbd> recorre los cuatro. Tres pulsaciones desde donde arranca la sesión hasta Plan Mode, el único en el que no puede tocar tu código.</p>
 </header>
 
 <!-- 01 -->
@@ -539,19 +591,19 @@ footer b{color:var(--ink);font-weight:600}
     <text class="t-s" x="16" y="175" text-anchor="middle" transform="rotate(-90 16 175)">madurez del proyecto</text>
 
     <rect class="band-3" x="188" y="26" width="500" height="78" rx="3"/>
-    <text class="t-tag t-tag-3" x="204" y="48">NIVEL 3 · ARQUITECTURA</text>
+    <text class="t-tag t-tag-3" x="204" y="48">Nivel 3 · arquitectura</text>
     <text class="t-b" x="204" y="70">Subagents · Plugins</text>
     <text class="t-b" x="204" y="88">Worktrees · Agent teams (exp.)</text>
     <text class="t-s" x="672" y="48" text-anchor="end">proyectos grandes</text>
 
     <rect class="band-2" x="120" y="118" width="568" height="78" rx="3"/>
-    <text class="t-tag t-tag-2" x="136" y="140">NIVEL 2 · PRODUCTIVIDAD</text>
+    <text class="t-tag t-tag-2" x="136" y="140">Nivel 2 · productividad</text>
     <text class="t-b" x="136" y="162">Skills · Hooks</text>
     <text class="t-b" x="136" y="180">MCP servers</text>
     <text class="t-s" x="672" y="140" text-anchor="end">cuando repitas trabajo</text>
 
     <rect class="band-1" x="52" y="210" width="636" height="94" rx="3"/>
-    <text class="t-tag" x="68" y="234">NIVEL 1 · ESENCIAL</text>
+    <text class="t-tag" x="68" y="234">Nivel 1 · esencial</text>
     <text class="t-b" x="68" y="258">CLAUDE.md · /init</text>
     <text class="t-b" x="68" y="276">Plan Mode · Auto memory</text>
     <text class="t-h" x="672" y="238" text-anchor="end">Empieza aquí</text>
@@ -630,7 +682,7 @@ Shift + Tab
     <desc id="f2d">Dentro de Plan Mode, Claude lee y propone un plan. Si das feedback, regresa a proponer. Si apruebas con yes, sale automáticamente y ejecuta.</desc>
     <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M1 1L9 5L1 9" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker><marker id="arc2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-alt" d="M1 1L9 5L1 9" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
     <rect class="zone" x="12" y="14" width="676" height="228" rx="6"/>
-    <text class="t-tag" x="30" y="40">PLAN MODE ACTIVO · SOLO LECTURA</text>
+    <text class="t-tag" x="30" y="40">Plan Mode activo · solo lectura</text>
 
     <rect class="box-pine" x="42" y="58" width="180" height="46" rx="3"/>
     <text class="t-b" x="132" y="86" text-anchor="middle">Te entrevista</text>
@@ -664,7 +716,7 @@ Shift + Tab
     <line x1="376" y1="314" x2="376" y2="340" class="ln" marker-end="url(#ar2)"/>
 
     <rect class="zone zone-pine" x="12" y="340" width="676" height="50" rx="6"/>
-    <text class="t-tag" x="30" y="362">EJECUCIÓN</text>
+    <text class="t-tag" x="30" y="362">Ejecución</text>
     <text class="t-b" x="30" y="380">Crea archivos · corre comandos · verifica</text>
     <text class="t-s" x="670" y="371" text-anchor="end">no cambias de modo a mano</text>
   </svg>
@@ -1514,6 +1566,53 @@ chips.forEach(c=>c.addEventListener('click',()=>{
   chips.forEach(x=>x.setAttribute('aria-pressed',x===c));
   filtrar();
 }));
+
+// Tira de modos del héroe. Los datos salen de la sección 02, que está
+// contrastada contra la documentación oficial: si cambias una, cambia la otra.
+const MODOS={
+  auto:{escribe:'si',titulo:'Puede escribir',
+    lee:'archivos, el repositorio, la web',
+    ejecuta:'comandos, con el clasificador revisando por detrás',
+    nota:'Donde arranca la sesión desde agosto de 2026. Claude actúa sin pedirte permiso.'},
+  manual:{escribe:'pregunta',titulo:'Pregunta antes de escribir',
+    lee:'archivos, sin pedirte permiso',
+    ejecuta:'solo lo que apruebes, comando a comando',
+    nota:'Era el comportamiento por defecto hasta agosto. En la configuración se llama default.'},
+  acceptEdits:{escribe:'si',titulo:'Puede escribir',
+    lee:'archivos, sin pedirte permiso',
+    ejecuta:'comandos de archivos sin preguntar; para el resto, pregunta',
+    nota:'Para iterar sobre código que vas revisando sobre la marcha.'},
+  plan:{escribe:'no',titulo:'No puede escribir',
+    lee:'archivos, el repositorio, la web',
+    ejecuta:'solo comandos que no modifican nada',
+    nota:'Lee y te propone un plan. No toca tu código hasta que lo apruebes.'}
+};
+const tiraBotones=[...document.querySelectorAll('.modos-tira button')];
+const mEstado=document.getElementById('modo-estado');
+const mLee=document.getElementById('modo-lee');
+const mEjecuta=document.getElementById('modo-ejecuta');
+const mNota=document.getElementById('modo-nota');
+function pintarModo(nombre){
+  const d=MODOS[nombre]; if(!d) return;
+  tiraBotones.forEach(b=>b.setAttribute('aria-selected',String(b.dataset.modo===nombre)));
+  mEstado.dataset.escribe=d.escribe;
+  mEstado.textContent=d.titulo;
+  mLee.textContent=d.lee;
+  mEjecuta.textContent=d.ejecuta;
+  mNota.textContent=d.nota;
+}
+tiraBotones.forEach(b=>b.addEventListener('click',()=>pintarModo(b.dataset.modo)));
+
+// Un solo momento orquestado en toda la página: al cargar, la tira recorre el
+// ciclo de Shift+Tab hasta Plan Mode. Después es del lector.
+(function(){
+  const quieto=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const ciclo=['auto','manual','acceptEdits','plan'];
+  if(quieto){ pintarModo('plan'); return; }
+  let i=0;
+  const avanzar=()=>{ i++; pintarModo(ciclo[i]); if(i<ciclo.length-1) setTimeout(avanzar,560); };
+  setTimeout(avanzar,900);
+})();
 
 // Scroll spy
 const links=[...document.querySelectorAll('.rail-nav a')];

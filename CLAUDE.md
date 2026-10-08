@@ -79,9 +79,18 @@ Para comprobar algo que las capturas no miden —si una tira de navegación desp
 
 **Los diagramas duplican texto que también está en el HTML.** Las tres figuras SVG llevan sus rótulos escritos dentro del `<svg>`, incluido un `<desc>` que enumera los mismos elementos para lectores de pantalla. Si cambias los chips de niveles de la sección 01 sin tocar la figura 1, el error queda duplicado en vez de corregido.
 
+**La tira de modos del héroe repite lo que dice la sección 02.** Los cuatro modos, lo que cada uno puede leer, escribir y ejecutar, y su frase de explicación viven dos veces: en el objeto `MODOS` del JavaScript y en la lista `.anat` de la sección 02. Si corriges uno y no el otro, la página se contradice consigo misma en la primera pantalla. Es el mismo peligro que el de las figuras, y lo hereda del mismo sitio: la documentación oficial, que es contra lo que hay que contrastar los dos.
+
 **Los dos flujos de la sección 03 comparten bloques.** El bloque de «Optimización» está repetido en el Flujo A y el Flujo B con contenido idéntico; al cambiar uno decide conscientemente sobre el otro. La fase «Corregir un error» está **solo** en el Flujo A a propósito: el Flujo B arranca sin código que depurar.
 
-**Reutiliza las clases que ya existen** en vez de añadir CSS: `.lvl`/`.chip` para niveles, `.phase`/`.steps` para flujos (variantes `.p-design`, `.p-work`, `.p-opt`), `.cmd`/`pre`/`.copy` para bloques de código, `.callout` y `.note` para avisos, `.anat` para listas de definiciones, `.signals` para la tabla, `.fig` para figuras.
+**Reutiliza las clases que ya existen** en vez de añadir CSS: `.lvl`/`.chip` para niveles, `.phase`/`.steps` para flujos (variantes `.p-design`, `.p-work`, `.p-opt`), `.callout` y `.note` para avisos, `.anat` para listas de definiciones, `.signals` para la tabla, `.fig` para figuras, `.cmd-row` para la tabla de comandos, `.modos` para la tira del héroe.
+
+**Un bloque de código y un prompt no son lo mismo, y la página lo distingue.** `.cmd`/`pre`/`.copy` es el bloque oscuro monoespaciado, y es **solo** para lo que tecleas en la terminal o para el contenido de un archivo. Lo que le dices a Claude va en `.prompt` (con `.prompt-cab`, `.prompt-texto`, `.prompt-datos`), una tarjeta clara en tipo de lectura. Los huecos a rellenar son `.hueco`.
+
+Las dos reglas que hacen que `.prompt` funcione, y que es fácil romper sin darse cuenta:
+
+- **Nada de cortes de línea a mano.** Un párrafo es un `<p>` y el navegador reparte. Los cortes que había antes estaban puestos a 58 caracteres para caber en el bloque oscuro y se iban con el texto al copiarlo.
+- **Los corchetes de los huecos no están en el marcado.** Los pone el manejador de copiar, mutando y restaurando en el mismo tick. Si añades un hueco, escribe solo el texto: los corchetes llegan al portapapeles solos.
 
 **El menú lateral y los ids de sección deben coincidir.** Las trece secciones, en orden: `jerarquia`, `planmode`, `flujos`, `claudemd`, `prompts`, `contexto`, `skills`, `subagentes`, `mcp`, `senales`, `comandos`, `problemas`, `recursos`. El scroll-spy deriva su lista del propio menú, así que una sección nueva entra sola en cuanto tiene su enlace; `validar.sh` detecta los enlaces sin sección.
 
@@ -100,6 +109,8 @@ Renumera **en una sola pasada con un mapa completo**, nunca en cadena: sustituir
 
 **No uses `--ink` como fondo.** Se invierte con el tema, así que un fondo oscuro con texto claro construido sobre él queda claro sobre claro en modo oscuro. Para eso están `--code-bg`, `--code-fg` y `--fig-inv-bg`, que se mantienen oscuros en ambos temas. Lo mismo con `--mustard`: como texto no llega al contraste mínimo en tema claro, para eso existe `--mustard-text`.
 
+**Las dos tintas significan, no decoran.** `--pine` quiere decir «la herramienta solo puede leer» y `--mustard` «puede cambiar tus archivos», y el rediseño se sostiene sobre que no se usen para nada más. Si necesitas destacar algo que no va de eso —un hueco a rellenar, un borde, un estado de interfaz— tira de los neutros: `--ink`, `--ink-soft`, `--rule`, `--base-2`. Es la razón de que `.hueco` no lleve color.
+
 **Dentro de los SVG, los colores van en clases, nunca en atributos.** Un `fill="#6B5B7B"` escrito en el marcado **gana a cualquier regla CSS** y no se adapta al tema. Las clases disponibles son `.t-tag-2`, `.t-tag-3`, `.t-alt`, `.box-alt`, `.box-fill`, `.zone-pine`, `.mk` y `.mk-alt`.
 
 **Todo ítem de grid o flex necesita `min-width:0` si su contenido no puede encoger.** Por defecto un ítem no baja de su contenido mínimo. El `.rail` no lo tenía y su tira de navegación, con los enlaces en `nowrap`, forzaba 666px en un viewport de 360: la página entera se desplazaba en horizontal. Aplica igual a `.cmd-row`, que usa `minmax(0,1fr)` por el mismo motivo.
@@ -108,9 +119,9 @@ Renumera **en una sola pasada con un mapa completo**, nunca en cadena: sustituir
 
 **Acota los selectores de descendiente.** `.cmd-row code` alcanzaba también a los `<code>` en línea de las descripciones; ahora es `.cmd-row > code`.
 
-**`--rule` es un color de filetes; como color de texto no se lee.** Los números del menú lo usaban y daban 1.36:1 en tema claro y 1.48:1 en oscuro, con el mínimo en 4.5:1 — a 10px, invisibles. Un color pensado para una línea de 1px no sirve para texto, por muy secundario que sea. Para eso existe ahora `--rail-num`, con 4.67:1 y 5.56:1, todavía por debajo del contraste de la etiqueta para conservar la jerarquía. Si quieres un texto tenue, mide el contraste antes de dar por bueno un token que ya existe.
+**`--rule` es un color de filetes; como color de texto no se lee.** Los números del menú lo usaban y daban 1.36:1 en tema claro y 1.48:1 en oscuro, con el mínimo en 4.5:1 — a 10px, invisibles. Un color pensado para una línea de 1px no sirve para texto, por muy secundario que sea. Para eso existe `--rail-num`, que con la paleta actual mide **4.66:1 en claro y 5.50:1 en oscuro**, todavía por debajo de la etiqueta (6.16 y 6.55) para conservar la jerarquía. Si quieres un texto tenue, mide el contraste antes de dar por bueno un token que ya existe.
 
-**Los `<code>` en línea llevan relleno lateral, y eso despega el punto que los sigue.** Se leía «en `/resume` .» con cinco píxeles de hueco. Lo corrige un `margin-right:-3px` en `.steps code` y `.cmd-row p code`. Si tocas ese relleno, comprueba de nuevo una frase que termine en `<code>`.
+**Cualquier cosa en línea con relleno lateral despega la puntuación que la sigue.** Ha aparecido tres veces: en `.steps code`, en `.cmd-row p code` y en `.hueco`, donde se leía «cuando esté listo .». Las tres lo corrigen con un margen derecho negativo. Si añades un elemento en línea con `padding`, escribe una frase que termine con él y míralo antes de darlo por bueno.
 
 ## Cómo está escrita la guía
 

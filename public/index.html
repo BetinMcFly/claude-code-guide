@@ -714,7 +714,7 @@ está limpio, o detente tras 20 turnos</pre>
 <!-- 03 -->
 <section id="flujos">
   <div class="sec-head"><div class="sec-num">03</div><h2>Dos flujos, según tu punto de partida</h2></div>
-  <p class="sec-sub">El patrón es el mismo — explorar, planear, implementar, commitear — pero el arranque cambia según si ya hay código que entender.</p>
+  <p class="sec-sub">El patrón es el mismo — explorar, planear, implementar y confirmar los cambios — pero el arranque cambia según si ya hay código que entender.</p>
 
   <div class="switch" role="tablist">
     <button role="tab" aria-selected="true" aria-controls="flow-a" id="tab-a">Proyecto existente<small>Escenario A</small></button>
@@ -739,7 +739,7 @@ está limpio, o detente tras 20 turnos</pre>
         <li><b>Pedir el cambio</b><i>«Implementa [feature] según el CLAUDE.md»</i></li>
         <li><b>Revisar el plan</b><i>Verifica archivos tocados, dependencias, que respete tus gotchas.</i></li>
         <li><b>Aprobar y ejecutar</b><i>«yes» — Claude sale de Plan Mode e implementa.</i></li>
-        <li><b>Commitear</b><i>«commit my changes with a descriptive message»</i></li>
+        <li><b>Confirmar los cambios</b><i>«haz un commit de mis cambios con un mensaje descriptivo»</i></li>
       </ol>
       <div class="loop">↺ Volver al paso 1 con el siguiente feature</div>
     </div>
@@ -750,7 +750,7 @@ está limpio, o detente tras 20 turnos</pre>
         <li><b>Plan Mode para investigar</b><i><kbd>Shift+Tab</kbd> × 3. Que lea y diagnostique sin arreglar nada. <code>/debug</code> activa el logging si necesitas más rastro.</i></li>
         <li><b>Revisar el diagnóstico, no solo el arreglo</b><i>Si la causa raíz que describe no te convence, el parche tampoco servirá. Es el momento en el que más vale negarse a aprobar.</i></li>
         <li><b>Pedir el test antes del fix</b><i>«Escribe primero un test que falle por este bug, luego arréglalo.» Sin ese test no tienes prueba de que el bug se haya corregido, ni nada que avise si vuelve más adelante.</i></li>
-        <li><b>Revisar y commitear</b><i><code>/code-review</code> sobre el diff antes de dar por cerrado.</i></li>
+        <li><b>Revisar antes del commit</b><i><code>/code-review</code> sobre el diff antes de dar nada por cerrado.</i></li>
         <li><b>Limpiar el contexto</b><i><code>/clear</code>. Un debug largo deja intentos fallidos que contaminan lo siguiente — ver sección 06.</i></li>
       </ol>
     </div>
@@ -789,7 +789,7 @@ está limpio, o detente tras 20 turnos</pre>
       <ol class="steps">
         <li><b>Pedir el feature</b><i>«Implementa [módulo] según el CLAUDE.md»</i></li>
         <li><b>Revisar y aprobar</b><i>Un feature a la vez, siempre revisando el plan.</i></li>
-        <li><b>Commitear</b><i>«commit» y al siguiente.</i></li>
+        <li><b>Confirmar los cambios</b><i>«haz el commit» y al siguiente.</i></li>
       </ol>
       <div class="loop">↺ Volver al paso 1 con el siguiente feature</div>
     </div>
@@ -818,7 +818,7 @@ está limpio, o detente tras 20 turnos</pre>
     <dt>Stack técnico</dt><dd>Lenguaje, framework, librerías, base de datos, deploy, tests, linter. Con versiones cuando importen.</dd>
     <dt>Estructura</dt><dd>Árbol de directorios con un comentario por módulo. Esto le dice a Claude dónde va cada cosa.</dd>
     <dt>Convenciones</dt><dd>Type hints, idioma de los nombres, manejo de errores, dónde van los tests. Lo que un dev nuevo necesitaría saber.</dd>
-    <dt>Comandos</dt><dd>Cómo correr, testear, lintear. Claude los ejecuta directamente.</dd>
+    <dt>Comandos</dt><dd>Cómo arrancar el proyecto, ejecutar los tests y pasar el linter. Claude los ejecuta directamente.</dd>
     <dt>Decisiones de diseño</dt><dd>Numeradas, con el <em>porqué</em>. Evita que Claude proponga algo que ya descartaste.</dd>
     <dt>Gotchas</dt><dd>Rate limits, secretos, trampas conocidas. La sección que más valor entrega con el tiempo.</dd>
     <dt>Fases</dt><dd>Checklist de qué está hecho y qué falta. Le da a Claude sentido de progreso.</dd>
@@ -886,10 +886,69 @@ Usa el formato de error estándar del proyecto.</pre>
 <!-- 05 -->
 <section id="prompts">
   <div class="sec-head"><div class="sec-num">05</div><h2>Prompts que funcionan</h2></div>
-  <p class="sec-sub">Copiables tal cual. Todos asumen Plan Mode activo y CLAUDE.md en la raíz.</p>
+  <p class="sec-sub">De qué partes se compone uno, y los copiables de cada escenario. Todos asumen Plan Mode activo y CLAUDE.md en la raíz.</p>
+
+  <h4>De qué se compone un prompt</h4>
+  <p>En Claude Code el contexto pesa más que el prompt, así que el prompt no tiene que contarlo todo: tiene que decir lo que el contexto no puede decir por su cuenta. Son cinco partes, y se notan sobre todo cuando faltan.</p>
+
+  <dl class="anat">
+    <dt>El resultado</dt><dd>Qué tiene que ser verdad cuando termine, no cómo llegar hasta ahí. Si le dictas el procedimiento a Claude, pierdes lo que mejor hace, que es leer el código y encontrar el camino — y si tu procedimiento era malo, lo ejecuta igual de bien.</dd>
+    <dt>El punto de partida</dt><dd>Dónde está lo que tiene que mirar, o la orden explícita de que lo busque él. Si no se lo dices, Claude elige por dónde empezar y acierta a medias.</dd>
+    <dt>Los límites</dt><dd>Qué no debe tocar. En un proyecto que ya existe es la parte que más daño evita: el esquema de la base de datos, la API pública, las dependencias.</dd>
+    <dt>El criterio de terminado</dt><dd>Algo que se pueda comprobar. «Los tests de auth pasan» sirve; «que quede bien» no. Es la misma regla que sigue el evaluador de <code>/goal</code> en la <a href="#planmode">sección 02</a>.</dd>
+    <dt>Qué quieres de vuelta</dt><dd>Un plan, el código, o un <code>plan.md</code> que sobreviva a varias sesiones. Plan Mode ya te garantiza un plan; decir cuál quieres cambia el detalle con que Claude te lo entrega.</dd>
+  </dl>
+
+  <div class="note">
+    <p><b>Un prompt concreto no es solo más claro: es más barato.</b> Un encargo vago —«mejora este código»— obliga a Claude a rastrear medio repositorio para averiguar a qué te refieres, y cada archivo que abre se paga. Uno que nombra el archivo y el criterio de terminado se resuelve leyendo lo justo.</p>
+    <p>Y Plan Mode te ahorra la factura más cara de todas: la de implementar en la dirección equivocada y tener que deshacerlo. Lo que cuesta cada hábito está en la <a href="#contexto">sección 06</a>.</p>
+  </div>
+
+  <div class="callout">
+    <p><b>En un proyecto nuevo el prompt lo carga todo.</b> No hay CLAUDE.md, ni código, ni convenciones: lo único que Claude sabe es lo que tú escribas. Por eso el primer prompt de un proyecto nuevo no pide código — pide una entrevista.</p>
+    <p>En uno que ya existe pasa lo contrario: el CLAUDE.md y el propio código ya responden al punto de partida y a los límites, así que el prompt se acorta y se vuelve más concreto. <b>Si en un proyecto existente te sale un prompt larguísimo, no es que lo estés escribiendo mal: es que lo que repites cada vez le falta al CLAUDE.md.</b></p>
+  </div>
+
+  <h4>Proyecto nuevo</h4>
 
   <div class="cmd">
-    <span class="cmd-label">Explorar un repo desconocido</span>
+    <span class="cmd-label">1 · La entrevista, antes de una sola línea</span>
+    <pre>Quiero construir [qué hace y para quién, en dos frases].
+
+Antes de escribir código, entrevístame: pregúntame por los
+requisitos, el stack, los casos borde y las decisiones de
+diseño que debería estar considerando y no he mencionado.
+
+Hazme las preguntas de una en una y espera mi respuesta.
+
+Cuando terminemos, vuelca las decisiones en un CLAUDE.md.
+No implementes nada todavía.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <div class="cmd">
+    <span class="cmd-label">2 · Scaffolding</span>
+    <pre>Crea la estructura del proyecto que acordamos en el CLAUDE.md:
+los directorios, un archivo por módulo con un comentario de
+cabecera que describa su responsabilidad, el archivo de
+dependencias, el .gitignore y un .env.example.
+
+No implementes lógica todavía.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <div class="cmd">
+    <span class="cmd-label">3 · Implementar un módulo</span>
+    <pre>Implementa [ruta/al/archivo] según el CLAUDE.md.
+Incluye los modelos que necesite en [ruta/schemas].
+Agrega tests en tests/ siguiendo las convenciones del proyecto.</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <h4>Un proyecto que ya existe</h4>
+
+  <div class="cmd">
+    <span class="cmd-label">1 · Entender el repo antes de tocarlo</span>
     <pre>¿Qué hace este proyecto? Describe la estructura, lenguaje,
 framework, entry points y cómo correr los tests.
 No modifiques nada.</pre>
@@ -897,33 +956,42 @@ No modifiques nada.</pre>
   </div>
 
   <div class="cmd">
-    <span class="cmd-label">Entrevista para un proyecto nuevo</span>
-    <pre>Quiero construir [descripción del proyecto].
-Antes de escribir código, entrevístame: pregúntame sobre
-los requisitos, stack tecnológico preferido, casos borde
-y decisiones de diseño que debería considerar.</pre>
+    <span class="cmd-label">2 · Añadir una funcionalidad</span>
+    <pre>Añade [qué va a poder hacer el usuario cuando esté listo].
+
+El código relevante está en [módulo o ruta]. Si hace falta
+tocar algo fuera de ahí, dímelo en el plan antes de hacerlo.
+
+No cambies el esquema de la base de datos, la API pública
+ni las dependencias sin avisarme.
+
+Terminado = [los tests de X pasan y puedo hacer Y].
+
+Dame el plan primero.</pre>
     <button class="copy">Copiar</button>
   </div>
 
   <div class="cmd">
-    <span class="cmd-label">Scaffolding</span>
-    <pre>Scaffoldea el proyecto según la estructura definida en el
-CLAUDE.md. Crea todos los directorios, archivos con docstrings
-que describan su responsabilidad, el archivo de dependencias,
-.gitignore y .env.example. No implementes lógica todavía.</pre>
+    <span class="cmd-label">3 · Corregir un error</span>
+    <pre>Hay un bug. Esto es lo que observo:
+
+  Error literal:   [pégalo entero, con la traza]
+  Para provocarlo: [1, 2, 3]
+  Esperaba:        [...]
+  Pasa:            [...]
+
+No te doy mi teoría a propósito. Investiga y dime la causa
+raíz antes de arreglar nada.
+
+Cuando estemos de acuerdo en la causa, escribe primero un
+test que falle por este bug y luego arréglalo.</pre>
     <button class="copy">Copiar</button>
   </div>
 
-  <div class="cmd">
-    <span class="cmd-label">Implementar un módulo</span>
-    <pre>Implementa [ruta/al/archivo] según el CLAUDE.md.
-Incluye los modelos que necesite en [ruta/schemas].
-Agrega tests en tests/ siguiendo las convenciones del proyecto.</pre>
-    <button class="copy">Copiar</button>
-  </div>
+  <p>Ese prompt renuncia a dos cosas a propósito: a darle a Claude tu hipótesis, que sesgaría la búsqueda hacia donde tú ya miraste, y a pedir el arreglo antes que el diagnóstico. El porqué de ambas está en el Flujo A de la <a href="#flujos">sección 03</a>.</p>
 
   <div class="cmd">
-    <span class="cmd-label">Feature grande — plan escrito primero</span>
+    <span class="cmd-label">4 · Feature grande, con el plan escrito primero</span>
     <pre>Escribe un plan.md con los pasos para implementar [feature].
 Divídelo en secciones que se puedan ejecutar en sesiones
 separadas. No implementes nada todavía.</pre>
@@ -1026,6 +1094,21 @@ separadas. No implementes nada todavía.</pre>
   </div>
 
   <p>Un detalle que cambia el ritmo de trabajo: el CLAUDE.md se recarga desde disco en cada sesión nueva. Usar <code>/clear</code> entre features no te cuesta las decisiones del proyecto — solo la conversación.</p>
+
+  <h4>Lo que cuesta cada hábito</h4>
+  <p>El contexto no es solo una cuestión de calidad: <strong>es lo que pagas</strong>. Claude Code envía la conversación entera en cada petición, así que una pregunta de una línea en una sesión que lleva abierta todo el día arrastra el día entero. De ahí salen casi todas las sorpresas en la factura.</p>
+
+  <dl class="anat">
+    <dt>Compactar no es gratis</dt><dd><code>/compact</code> tiene que leer la conversación que resume, así que compactar un contexto enorme es en sí mismo una petición enorme. Es otra razón para hacerlo pronto. Cuando no necesitas continuidad, <code>/clear</code> no cuesta nada.</dd>
+    <dt>La caché caduca</dt><dd>Lo que ya se procesó se relee a precio de caché, pero esa caché dura una hora con suscripción y cinco minutos con clave de API o créditos de uso. Volver a una sesión larga después de comer reprocesa todo el contexto a precio completo.</dd>
+    <dt>El razonamiento se paga como salida</dt><dd>El pensamiento extendido viene activado y su presupuesto puede ser de decenas de miles de tokens. Para tareas mecánicas, <code>/effort low</code> lo baja. En los modelos actuales se puede reducir, no apagar.</dd>
+    <dt>El modelo, según la tarea</dt><dd>Sonnet resuelve bien la mayor parte del trabajo de código y cuesta menos que Opus. Guarda Opus para decisiones de arquitectura. En un subagente que solo recopila, <code>model: haiku</code>.</dd>
+    <dt>Herramientas antes que servidores</dt><dd>Un CLI que ya tienes —<code>gh</code>, <code>aws</code>, <code>gcloud</code>— no añade nada al contexto solo por estar instalado. Un servidor MCP carga los nombres de sus herramientas en todas las sesiones, como dice la <a href="#mcp">sección 09</a>.</dd>
+  </dl>
+
+  <div class="note">
+    <p><b>Antes de adivinar, mira.</b> <code>/context</code> dibuja qué está ocupando la ventana y señala lo que se puede recortar. <code>/usage</code> da el gasto de la sesión y, con plan de suscripción, marca los comportamientos que se llevan más del 10% — contexto largo o fallos de caché. Y <code>/insights</code> analiza tus últimas sesiones y escribe un informe con dónde se te va el tiempo.</p>
+  </div>
 </section>
 
 <!-- 07 -->
@@ -1197,7 +1280,7 @@ claude mcp list</pre>
 
   <dl class="anat">
     <dt>local</dt><dd>El predeterminado. Solo tú, y solo en este proyecto. Si abres Claude Code en otra carpeta, no está.</dd>
-    <dt>project</dt><dd>Se escribe en <code>.mcp.json</code> en la raíz y <strong>se commitea</strong>: quien clone el repositorio lo tiene. <code>--scope project</code>.</dd>
+    <dt>project</dt><dd>Se escribe en <code>.mcp.json</code> en la raíz y <strong>entra en el repositorio</strong>: quien lo clone lo tiene. <code>--scope project</code>.</dd>
     <dt>user</dt><dd>Solo tú, pero en todos tus proyectos. <code>--scope user</code>.</dd>
   </dl>
 
@@ -1262,7 +1345,8 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   <p class="cuenta" id="cuenta" aria-live="polite">29 comandos</p>
 
   <div class="cmds" id="lista">
-    <div class="cmd-row" data-cat="sesion"><code>/clear <i>[nombre]</i></code><p>Sesión nueva con el contexto vacío. El nombre la identifica luego en <code>/resume</code>.</p><button class="cmd-copy" data-copiar="/clear">Copiar</button></div>
+    <div class="cmd-row" data-cat="sesion"><code>/clear <i>[nombre]</i></code><p>Sesión nueva con el contexto vacío. El nombre etiqueta la conversación que dejas atrás, para reconocerla en <code>/resume</code>.</p><button class="cmd-copy" data-copiar="/clear">Copiar</button></div>
+    <div class="cmd-row" data-cat="sesion"><code>/rename <i>[nombre]</i></code><p>Poner nombre a la sesión actual y verlo en la barra. Sin nombre, lo genera del historial.</p><button class="cmd-copy" data-copiar="/rename">Copiar</button></div>
     <div class="cmd-row" data-cat="sesion"><code>/resume</code><p>Volver a una conversación anterior desde un selector.</p><button class="cmd-copy" data-copiar="/resume">Copiar</button></div>
     <div class="cmd-row" data-cat="sesion"><code>/rewind</code><p>Deshacer código y conversación hasta un punto anterior, o resumir desde ahí. También <code>/checkpoint</code> y <code>/undo</code>.</p><button class="cmd-copy" data-copiar="/rewind">Copiar</button></div>
     <div class="cmd-row" data-cat="sesion"><code>/branch <i>[nombre]</i></code><p>Ramificar la conversación para probar otro camino sin perder este.</p><button class="cmd-copy" data-copiar="/branch">Copiar</button></div>
@@ -1272,7 +1356,8 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
     <div class="cmd-row" data-cat="contexto"><code>/context <i>[all]</i></code><p>Ver qué está llenando el contexto, como rejilla de colores.</p><button class="cmd-copy" data-copiar="/context">Copiar</button></div>
     <div class="cmd-row" data-cat="contexto"><code>/compact <i>[instrucciones]</i></code><p>Resumir la conversación y seguir. Las instrucciones enfocan el resumen.</p><button class="cmd-copy" data-copiar="/compact">Copiar</button></div>
     <div class="cmd-row" data-cat="contexto"><code>/memory</code><p>Editar los CLAUDE.md y ver o desactivar el auto memory.</p><button class="cmd-copy" data-copiar="/memory">Copiar</button></div>
-    <div class="cmd-row" data-cat="contexto"><code>/usage</code><p>Tokens consumidos en la sesión. También <code>/cost</code>.</p><button class="cmd-copy" data-copiar="/usage">Copiar</button></div>
+    <div class="cmd-row" data-cat="contexto"><code>/usage</code><p>Gasto de la sesión y uso del plan. También <code>/cost</code> y <code>/stats</code>.</p><button class="cmd-copy" data-copiar="/usage">Copiar</button></div>
+    <div class="cmd-row" data-cat="contexto"><code>/insights</code><p>Informe HTML de tus últimas sesiones: en qué trabajas y dónde se atasca.</p><button class="cmd-copy" data-copiar="/insights">Copiar</button></div>
 
     <div class="cmd-row" data-cat="planificar"><code>/plan <i>[descripción]</i></code><p>Entrar en Plan Mode desde el prompt, sin usar <kbd>Shift+Tab</kbd>.</p><button class="cmd-copy" data-copiar="/plan">Copiar</button></div>
     <div class="cmd-row" data-cat="planificar"><code>/init</code><p>Generar el CLAUDE.md analizando el repositorio.</p><button class="cmd-copy" data-copiar="/init">Copiar</button></div>
@@ -1284,9 +1369,10 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
     <div class="cmd-row" data-cat="revisar"><code>/code-review <i>[nivel] [--fix]</i></code><p>Revisar el diff, un PR o una ruta. Niveles de <code>low</code> a <code>max</code>. También <code>/review</code>.</p><button class="cmd-copy" data-copiar="/code-review">Copiar</button></div>
     <div class="cmd-row" data-cat="revisar"><code>/security-review</code><p>Buscar vulnerabilidades en el diff.</p><button class="cmd-copy" data-copiar="/security-review">Copiar</button></div>
     <div class="cmd-row" data-cat="revisar"><code>/simplify</code><p>Limpiar y refactorizar. No caza bugs; para eso está <code>/code-review</code>.</p><button class="cmd-copy" data-copiar="/simplify">Copiar</button></div>
-    <div class="cmd-row" data-cat="revisar"><code>/diff</code><p>Visor interactivo de los cambios sin commitear.</p><button class="cmd-copy" data-copiar="/diff">Copiar</button></div>
+    <div class="cmd-row" data-cat="revisar"><code>/diff</code><p>Visor interactivo de los cambios que aún no están en un commit.</p><button class="cmd-copy" data-copiar="/diff">Copiar</button></div>
 
     <div class="cmd-row" data-cat="config"><code>/debug <i>[descripción]</i></code><p>Activar el logging de depuración. La descripción enfoca el análisis.</p><button class="cmd-copy" data-copiar="/debug">Copiar</button></div>
+    <div class="cmd-row" data-cat="config"><code>/effort <i>[nivel]</i></code><p>Cuánto razona antes de responder, de <code>low</code> a <code>max</code>. Bájalo en tareas mecánicas.</p><button class="cmd-copy" data-copiar="/effort">Copiar</button></div>
     <div class="cmd-row" data-cat="config"><code>/doctor</code><p>Diagnóstico de la configuración; propone recortes a un CLAUDE.md grande.</p><button class="cmd-copy" data-copiar="/doctor">Copiar</button></div>
     <div class="cmd-row" data-cat="config"><code>/permissions</code><p>Gestionar las reglas de permitir, preguntar y denegar.</p><button class="cmd-copy" data-copiar="/permissions">Copiar</button></div>
     <div class="cmd-row" data-cat="config"><code>/model <i>[modelo]</i></code><p>Cambiar de modelo y guardarlo como predeterminado.</p><button class="cmd-copy" data-copiar="/model">Copiar</button></div>

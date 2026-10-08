@@ -336,6 +336,41 @@ kbd{
 .loop{padding:11px 24px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--pine);background:var(--base-2);text-transform:none;font-weight:600}
 
 /* ---------- CODE ---------- */
+/* ---------- PROMPTS: lo que le dices a Claude ---------- */
+/* Un prompt no es un comando. Los bloques oscuros son para lo que tecleas en
+   la terminal o para el contenido de un archivo; esto es una frase, y tiene
+   que leerse como se lee una frase. Los huecos van en neutro a propósito:
+   --pine y --mustard significan «lee» y «escribe», y no se prestan. */
+.prompt{margin:22px 0;max-width:72ch;background:var(--paper);border:1px solid var(--rule)}
+.prompt-cab{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  padding:11px 12px 11px 18px;border-bottom:1px solid var(--rule)}
+.prompt-n{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink-soft);flex:none}
+.prompt-nombre{font-family:var(--display);font-size:.95rem;font-weight:700;color:var(--ink);min-width:0}
+.prompt-que{font-family:var(--mono);font-size:11px;color:var(--ink-soft);margin-left:auto;flex:none}
+.prompt-cab .copy{position:static;flex:none;align-self:center;
+  background:none;color:var(--ink-soft);border:1px solid var(--rule)}
+.prompt-cab .copy:hover{background:var(--pine);color:var(--paper);border-color:var(--pine)}
+.prompt-cab .copy.done{background:var(--mustard);color:#0D141B;border-color:var(--mustard)}
+.prompt-texto{padding:18px 22px 20px 18px;font-size:1rem;line-height:1.62;color:var(--ink)}
+.prompt-texto p{margin:0 0 .8em;max-width:none}
+.prompt-texto p:last-child{margin-bottom:0}
+.hueco{background:var(--base-2);border-bottom:1px dashed var(--ink-soft);
+  padding:1px 6px;border-radius:2px;color:var(--ink);margin-right:-4px}
+.prompt-datos{margin:0 0 .8em}
+.prompt-datos > div{margin-bottom:.34em}
+/* dt en inline-block, no en grid ni flex: así se alinean las columnas y aun
+   así innerText deja cada par en una sola línea al copiar. */
+.prompt-datos dt{display:inline-block;min-width:13.5ch;font-family:var(--mono);
+  font-size:.86em;color:var(--ink-soft)}
+.prompt-datos dd{display:inline;margin:0}
+@media(max-width:640px){
+  .prompt-cab{padding:10px 10px 10px 14px;gap:8px}
+  .prompt-que{display:none}
+  .prompt-texto{padding:15px 16px 17px 14px;font-size:.96rem}
+  .prompt-datos dt{display:block;min-width:0;margin-bottom:1px}
+  .prompt-datos dd{display:block}
+}
+
 .cmd{position:relative;margin:18px 0;max-width:70ch}
 .cmd-label{font-family:var(--mono);font-size:11.5px;letter-spacing:0;color:var(--ink-soft);margin-bottom:8px;display:block}
 pre{
@@ -963,91 +998,110 @@ Usa el formato de error estándar del proyecto.</pre>
 
   <h4>Proyecto nuevo</h4>
 
-  <div class="cmd">
-    <span class="cmd-label">1 · La entrevista, antes de una sola línea</span>
-    <pre>Quiero construir [qué hace y para quién, en dos frases].
-
-Antes de escribir código, entrevístame: pregúntame por los
-requisitos, el stack, los casos borde y las decisiones de
-diseño que debería estar considerando y no he mencionado.
-
-Hazme las preguntas de una en una y espera mi respuesta.
-
-Cuando terminemos, vuelca las decisiones en un CLAUDE.md.
-No implementes nada todavía.</pre>
-    <button class="copy">Copiar</button>
+  <div class="prompt">
+    <div class="prompt-cab">
+      <span class="prompt-n">1</span>
+      <span class="prompt-nombre">La entrevista, antes de una sola línea</span>
+      <span class="prompt-que">se lo dices a Claude</span>
+      <button class="copy">Copiar</button>
+    </div>
+    <div class="prompt-texto">
+      <p>Quiero construir <span class="hueco">qué hace y para quién, en dos frases</span>.</p>
+      <p>Antes de escribir código, entrevístame: pregúntame por los requisitos, el stack, los casos borde y las decisiones de diseño que debería estar considerando y no he mencionado.</p>
+      <p>Hazme las preguntas de una en una y espera mi respuesta.</p>
+      <p>Cuando terminemos, vuelca las decisiones en un CLAUDE.md. No implementes nada todavía.</p>
+    </div>
   </div>
 
-  <div class="cmd">
-    <span class="cmd-label">2 · Scaffolding</span>
-    <pre>Crea la estructura del proyecto que acordamos en el CLAUDE.md:
-los directorios, un archivo por módulo con un comentario de
-cabecera que describa su responsabilidad, el archivo de
-dependencias, el .gitignore y un .env.example.
-
-No implementes lógica todavía.</pre>
-    <button class="copy">Copiar</button>
+  <div class="prompt">
+    <div class="prompt-cab">
+      <span class="prompt-n">2</span>
+      <span class="prompt-nombre">Scaffolding</span>
+      <span class="prompt-que">se lo dices a Claude</span>
+      <button class="copy">Copiar</button>
+    </div>
+    <div class="prompt-texto">
+      <p>Crea la estructura del proyecto que acordamos en el CLAUDE.md: los directorios, un archivo por módulo con un comentario de cabecera que describa su responsabilidad, el archivo de dependencias, el .gitignore y un .env.example.</p>
+      <p>No implementes lógica todavía.</p>
+    </div>
   </div>
 
-  <div class="cmd">
-    <span class="cmd-label">3 · Implementar un módulo</span>
-    <pre>Implementa [ruta/al/archivo] según el CLAUDE.md.
-Incluye los modelos que necesite en [ruta/schemas].
-Agrega tests en tests/ siguiendo las convenciones del proyecto.</pre>
-    <button class="copy">Copiar</button>
+  <div class="prompt">
+    <div class="prompt-cab">
+      <span class="prompt-n">3</span>
+      <span class="prompt-nombre">Implementar un módulo</span>
+      <span class="prompt-que">se lo dices a Claude</span>
+      <button class="copy">Copiar</button>
+    </div>
+    <div class="prompt-texto">
+      <p>Implementa <span class="hueco">ruta/al/archivo</span> según el CLAUDE.md. Incluye los modelos que necesite en <span class="hueco">ruta/schemas</span>.</p>
+      <p>Agrega tests en tests/ siguiendo las convenciones del proyecto.</p>
+    </div>
   </div>
 
   <h4>Un proyecto que ya existe</h4>
 
-  <div class="cmd">
-    <span class="cmd-label">1 · Entender el repo antes de tocarlo</span>
-    <pre>¿Qué hace este proyecto? Describe la estructura, lenguaje,
-framework, entry points y cómo correr los tests.
-No modifiques nada.</pre>
-    <button class="copy">Copiar</button>
+  <div class="prompt">
+    <div class="prompt-cab">
+      <span class="prompt-n">1</span>
+      <span class="prompt-nombre">Entender el repo antes de tocarlo</span>
+      <span class="prompt-que">se lo dices a Claude</span>
+      <button class="copy">Copiar</button>
+    </div>
+    <div class="prompt-texto">
+      <p>¿Qué hace este proyecto? Describe la estructura, lenguaje, framework, entry points y cómo correr los tests. No modifiques nada.</p>
+    </div>
   </div>
 
-  <div class="cmd">
-    <span class="cmd-label">2 · Añadir una funcionalidad</span>
-    <pre>Añade [qué va a poder hacer el usuario cuando esté listo].
-
-El código relevante está en [módulo o ruta]. Si hace falta
-tocar algo fuera de ahí, dímelo en el plan antes de hacerlo.
-
-No cambies el esquema de la base de datos, la API pública
-ni las dependencias sin avisarme.
-
-Terminado = [los tests de X pasan y puedo hacer Y].
-
-Dame el plan primero.</pre>
-    <button class="copy">Copiar</button>
+  <div class="prompt">
+    <div class="prompt-cab">
+      <span class="prompt-n">2</span>
+      <span class="prompt-nombre">Añadir una funcionalidad</span>
+      <span class="prompt-que">se lo dices a Claude</span>
+      <button class="copy">Copiar</button>
+    </div>
+    <div class="prompt-texto">
+      <p>Añade <span class="hueco">qué va a poder hacer el usuario cuando esté listo</span>.</p>
+      <p>El código relevante está en <span class="hueco">módulo o ruta</span>. Si hace falta tocar algo fuera de ahí, dímelo en el plan antes de hacerlo.</p>
+      <p>No cambies el esquema de la base de datos, la API pública ni las dependencias sin avisarme.</p>
+      <p>Terminado = <span class="hueco">los tests de X pasan y puedo hacer Y</span>.</p>
+      <p>Dame el plan primero.</p>
+    </div>
   </div>
 
-  <div class="cmd">
-    <span class="cmd-label">3 · Corregir un error</span>
-    <pre>Hay un bug. Esto es lo que observo:
-
-  Error literal:   [pégalo entero, con la traza]
-  Para provocarlo: [1, 2, 3]
-  Esperaba:        [...]
-  Pasa:            [...]
-
-No te doy mi teoría a propósito. Investiga y dime la causa
-raíz antes de arreglar nada.
-
-Cuando estemos de acuerdo en la causa, escribe primero un
-test que falle por este bug y luego arréglalo.</pre>
-    <button class="copy">Copiar</button>
+  <div class="prompt">
+    <div class="prompt-cab">
+      <span class="prompt-n">3</span>
+      <span class="prompt-nombre">Corregir un error</span>
+      <span class="prompt-que">se lo dices a Claude</span>
+      <button class="copy">Copiar</button>
+    </div>
+    <div class="prompt-texto">
+      <p>Hay un bug. Esto es lo que observo:</p>
+      <dl class="prompt-datos">
+        <div><dt>Error literal:</dt> <dd><span class="hueco">pégalo entero, con la traza</span></dd></div>
+        <div><dt>Para provocarlo:</dt> <dd><span class="hueco">1, 2, 3</span></dd></div>
+        <div><dt>Esperaba:</dt> <dd><span class="hueco">qué debería haber pasado</span></dd></div>
+        <div><dt>Pasa:</dt> <dd><span class="hueco">qué pasa en su lugar</span></dd></div>
+      </dl>
+      <p>No te doy mi teoría a propósito. Investiga y dime la causa raíz antes de arreglar nada.</p>
+      <p>Cuando estemos de acuerdo en la causa, escribe primero un test que falle por este bug y luego arréglalo.</p>
+    </div>
   </div>
 
   <p>Ese prompt renuncia a dos cosas a propósito: a darle a Claude tu hipótesis, que sesgaría la búsqueda hacia donde tú ya miraste, y a pedir el arreglo antes que el diagnóstico. El porqué de ambas está en el Flujo A de la <a href="#flujos">sección 03</a>.</p>
 
-  <div class="cmd">
-    <span class="cmd-label">4 · Feature grande, con el plan escrito primero</span>
-    <pre>Escribe un plan.md con los pasos para implementar [feature].
-Divídelo en secciones que se puedan ejecutar en sesiones
-separadas. No implementes nada todavía.</pre>
-    <button class="copy">Copiar</button>
+  <div class="prompt">
+    <div class="prompt-cab">
+      <span class="prompt-n">4</span>
+      <span class="prompt-nombre">Feature grande, con el plan escrito primero</span>
+      <span class="prompt-que">se lo dices a Claude</span>
+      <button class="copy">Copiar</button>
+    </div>
+    <div class="prompt-texto">
+      <p>Escribe un plan.md con los pasos para implementar <span class="hueco">feature</span>. Divídelo en secciones que se puedan ejecutar en sesiones separadas.</p>
+      <p>No implementes nada todavía.</p>
+    </div>
   </div>
 
   <h4>Qué revisar antes de aprobar un plan</h4>
@@ -1512,8 +1566,18 @@ tabs.forEach((t,i)=>t.addEventListener('click',()=>{
 // comandos: el texto sale de data-copiar, y si no está, del <pre> hermano.
 document.querySelectorAll('.copy,.cmd-copy').forEach(btn=>{
   btn.addEventListener('click',async()=>{
-    const pre=btn.parentElement.querySelector('pre');
-    const texto=btn.dataset.copiar || (pre && pre.innerText);
+    const fuente=btn.parentElement.querySelector('pre, .prompt-texto')
+      || btn.closest('.prompt')?.querySelector('.prompt-texto');
+    let texto=btn.dataset.copiar;
+    if(!texto && fuente){
+      // Los corchetes se ven de más en pantalla —el hueco ya se distingue solo—
+      // pero al pegar el prompt hacen falta para saber qué hay que sustituir.
+      // Mutar y restaurar en el mismo tick: no hay repintado intermedio.
+      const huecos=[...fuente.querySelectorAll('.hueco')];
+      huecos.forEach(h=>{h.textContent='['+h.textContent+']'});
+      texto=fuente.innerText;
+      huecos.forEach(h=>{h.textContent=h.textContent.slice(1,-1)});
+    }
     if(!texto) return;
     try{
       await navigator.clipboard.writeText(texto);

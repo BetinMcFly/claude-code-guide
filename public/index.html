@@ -728,7 +728,7 @@ está limpio, o detente tras 20 turnos</pre>
       <ol class="steps">
         <li><b>Abrir la sesión</b><i><code>cd ~/mi-proyecto && claude</code></i></li>
         <li><b>Activar Plan Mode</b><i><kbd>Shift+Tab</kbd> × 3. Antes de cualquier prompt.</i></li>
-        <li><b>Explorar</b><i>«¿Qué hace este proyecto? Describe estructura, stack, entry points y cómo correr los tests.»</i></li>
+        <li><b>Explorar</b><i>Que te describa qué hace el proyecto, su estructura, su stack y cómo se corren los tests, sin tocar nada. El prompt está en la <a href="#prompts">sección 05</a>.</i></li>
         <li><b>Generar contexto</b><i><code>/init</code> escanea el repo y genera el CLAUDE.md</i></li>
         <li><b>Editar CLAUDE.md</b><i>Agrega lo que el código no dice: convenciones del equipo, gotchas, decisiones tomadas.</i></li>
       </ol>
@@ -736,10 +736,10 @@ está limpio, o detente tras 20 turnos</pre>
     <div class="phase p-work">
       <div class="phase-head"><b>Ciclo de trabajo</b><span>Se repite por cada feature</span></div>
       <ol class="steps">
-        <li><b>Pedir el cambio</b><i>«Implementa [feature] según el CLAUDE.md»</i></li>
+        <li><b>Pedir el cambio</b><i>Di qué podrá hacer el usuario cuando esté listo, por dónde empezar y qué no debe tocar — <a href="#prompts">sección 05</a>.</i></li>
         <li><b>Revisar el plan</b><i>Verifica archivos tocados, dependencias, que respete tus gotchas.</i></li>
-        <li><b>Aprobar y ejecutar</b><i>«yes» — Claude sale de Plan Mode e implementa.</i></li>
-        <li><b>Confirmar los cambios</b><i>«haz un commit de mis cambios con un mensaje descriptivo»</i></li>
+        <li><b>Aprobar y ejecutar</b><i>Al aprobar el plan, Claude sale de Plan Mode e implementa. La aprobación es el cambio de modo.</i></li>
+        <li><b>Confirmar los cambios</b><i>Que haga el commit con un mensaje descriptivo.</i></li>
       </ol>
       <div class="loop">↺ Volver al paso 1 con el siguiente feature</div>
     </div>
@@ -749,7 +749,7 @@ está limpio, o detente tras 20 turnos</pre>
         <li><b>Reproducir primero</b><i>Dale el síntoma exacto, no tu teoría: el error literal, los pasos para provocarlo y qué esperabas. Una hipótesis en el prompt sesga la búsqueda hacia donde tú ya miraste.</i></li>
         <li><b>Plan Mode para investigar</b><i><kbd>Shift+Tab</kbd> × 3. Que lea y diagnostique sin arreglar nada. <code>/debug</code> activa el logging si necesitas más rastro.</i></li>
         <li><b>Revisar el diagnóstico, no solo el arreglo</b><i>Si la causa raíz que describe no te convence, el parche tampoco servirá. Es el momento en el que más vale negarse a aprobar.</i></li>
-        <li><b>Pedir el test antes del fix</b><i>«Escribe primero un test que falle por este bug, luego arréglalo.» Sin ese test no tienes prueba de que el bug se haya corregido, ni nada que avise si vuelve más adelante.</i></li>
+        <li><b>Pedir el test antes del arreglo</b><i>Primero un test que falle por el bug, y después el arreglo. Sin ese test no tienes prueba de que se haya corregido, ni nada que avise si vuelve más adelante. El prompt completo, en la <a href="#prompts">sección 05</a>.</i></li>
         <li><b>Revisar antes del commit</b><i><code>/code-review</code> sobre el diff antes de dar nada por cerrado.</i></li>
         <li><b>Limpiar el contexto</b><i><code>/clear</code>. Un debug largo deja intentos fallidos que contaminan lo siguiente — ver sección 06.</i></li>
       </ol>
@@ -772,24 +772,24 @@ está limpio, o detente tras 20 turnos</pre>
       <ol class="steps">
         <li><b>Crear el directorio</b><i><code>mkdir mi-proyecto && cd mi-proyecto && claude</code></i></li>
         <li><b>Activar Plan Mode</b><i><kbd>Shift+Tab</kbd> × 3. Evita que Claude cree archivos a media conversación.</i></li>
-        <li><b>Pedir la entrevista</b><i>«Quiero construir [X]. Antes de escribir código, entrevístame: pregúntame sobre requisitos, stack, casos borde y decisiones de diseño.»</i></li>
+        <li><b>Pedir la entrevista</b><i>Que te pregunte por requisitos, stack, casos borde y decisiones de diseño antes de escribir una línea, y que cierre volcándolas en el CLAUDE.md. El prompt está en la <a href="#prompts">sección 05</a>.</i></li>
         <li><b>Responder</b><i>Stack, requisitos, edge cases, restricciones. Aquí es donde salen las preguntas que no habías considerado.</i></li>
       </ol>
     </div>
     <div class="phase">
       <div class="phase-head"><b>Scaffolding</b><span>Aprobar el plan y ejecutar</span></div>
       <ol class="steps">
-        <li><b>Pedir la estructura</b><i>«Crea la estructura, CLAUDE.md, README y git init. No implementes lógica todavía.»</i></li>
-        <li><b>Revisar CLAUDE.md</b><i>Verifica que refleje las decisiones de la entrevista.</i></li>
-        <li><b>Primer commit</b><i>«commit inicial con estructura base»</i></li>
+        <li><b>Revisar el CLAUDE.md</b><i>El que salió de la entrevista. Verifica que refleje las decisiones antes de construir nada sobre él.</i></li>
+        <li><b>Pedir la estructura</b><i>Directorios, un archivo por módulo, dependencias y README, siguiendo ese CLAUDE.md. Sin lógica todavía — <a href="#prompts">sección 05</a>.</i></li>
+        <li><b>Primer commit</b><i>Un commit con la estructura base, antes de implementar nada.</i></li>
       </ol>
     </div>
     <div class="phase p-work">
       <div class="phase-head"><b>Ciclo de trabajo</b><span>Se repite por cada feature</span></div>
       <ol class="steps">
-        <li><b>Pedir el feature</b><i>«Implementa [módulo] según el CLAUDE.md»</i></li>
+        <li><b>Pedir el feature</b><i>De uno en uno, nombrando el archivo y según el CLAUDE.md — <a href="#prompts">sección 05</a>.</i></li>
         <li><b>Revisar y aprobar</b><i>Un feature a la vez, siempre revisando el plan.</i></li>
-        <li><b>Confirmar los cambios</b><i>«haz el commit» y al siguiente.</i></li>
+        <li><b>Confirmar los cambios</b><i>Commit, y al siguiente.</i></li>
       </ol>
       <div class="loop">↺ Volver al paso 1 con el siguiente feature</div>
     </div>

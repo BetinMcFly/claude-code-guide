@@ -152,6 +152,8 @@ Una revisión previa encontró cuatro errores factuales. Los que conviene no rep
 
 **Retocar la redacción de una frase no es revisar lo que afirma.** La fila de `/clear [nombre]` decía que el nombre etiqueta la sesión nueva; etiqueta la conversación que dejas atrás, para reconocerla en `/resume`. Le arreglé la gramática en una pasada de estilo sin mirar si era cierta, así que el error sobrevivió justo a la revisión que debía cazarlo. Si tocas una frase que hace una afirmación sobre el producto, contrástala, aunque la estés tocando por otro motivo.
 
+**La guía lleva ahora 62 cifras de precio de seis fuentes, y son lo más perecedero del sitio.** Están en la sección 06, fechadas en el propio texto, y cada tabla enlaza la página oficial de la que salió: Anthropic (`platform.claude.com`), OpenAI (`developers.openai.com`), Google (`ai.google.dev`), DeepSeek (`api-docs.deepseek.com`), Mistral (`mistral.ai`) y los modelos abiertos servidos en Together (`together.ai`). Se avisó de que una tabla de precios envejece sin decir nada y el propietario decidió incluirla igualmente; la mitigación es la fecha y los enlaces. **Si actualizas una cifra, actualiza también la fecha del bloque** — una tabla con fecha vieja al menos avisa, una con fecha nueva y cifras viejas miente.
+
 **Y una verificación caduca.** La guía decía `Shift+Tab × 2` para entrar en Plan Mode. Era correcto cuando se escribió y dejó de serlo dos días después, cuando el modo automático pasó a ser el arranque por defecto y se colocó por delante en el ciclo: ahora son tres pulsaciones. Que algo se contrastara una vez no lo mantiene cierto — si una afirmación lleva meses escrita, vuelve a comprobarla antes de apoyarte en ella.
 
 ## Infraestructura

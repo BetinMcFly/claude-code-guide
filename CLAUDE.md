@@ -91,6 +91,7 @@ Las dos reglas que hacen que `.prompt` funcione, y que es fácil romper sin dars
 
 - **Nada de cortes de línea a mano.** Un párrafo es un `<p>` y el navegador reparte. Los cortes que había antes estaban puestos a 58 caracteres para caber en el bloque oscuro y se iban con el texto al copiarlo.
 - **Los corchetes de los huecos no están en el marcado.** Los pone el manejador de copiar, mutando y restaurando en el mismo tick. Si añades un hueco, escribe solo el texto: los corchetes llegan al portapapeles solos.
+- **Un hueco dice qué escribir, no enseña una forma.** `[qué va a poder hacer el usuario cuando esté listo]` se rellena solo; `[ruta/al/archivo]` obliga a ir a buscar el dato, y el propietario se quedó atascado justo ahí. Si para rellenar un hueco hay que salir del prompt, está mal planteado — y si ese dato lo sabe Claude, el prompt no debería pedirlo.
 
 **El menú lateral y los ids de sección deben coincidir.** Las catorce secciones, en orden: `jerarquia`, `planmode`, `flujos`, `claudemd`, `prompts`, `contexto`, `skills`, `subagentes`, `mcp`, `senales`, `precios`, `comandos`, `problemas`, `recursos`. El scroll-spy deriva su lista del propio menú, así que una sección nueva entra sola en cuanto tiene su enlace; `validar.sh` detecta los enlaces sin sección.
 

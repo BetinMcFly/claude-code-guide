@@ -604,9 +604,10 @@ footer b{color:var(--ink);font-weight:600}
     <a href="#mcp"><span>09</span>MCP</a>
     <a href="#senales"><span>10</span>Señales</a>
     <p class="rail-grupo">Referencia</p>
-    <a href="#comandos"><span>11</span>Comandos</a>
-    <a href="#problemas"><span>12</span>Problemas</a>
-    <a href="#recursos"><span>13</span>Recursos</a>
+    <a href="#precios"><span>11</span>Precios</a>
+    <a href="#comandos"><span>12</span>Comandos</a>
+    <a href="#problemas"><span>13</span>Problemas</a>
+    <a href="#recursos"><span>14</span>Recursos</a>
   </div>
   <div class="tema" role="group" aria-label="Tema de color">
     <button type="button" data-tema-btn="sistema" aria-pressed="true">Auto</button>
@@ -1258,97 +1259,6 @@ Usa el formato de error estándar del proyecto.</pre>
   </dl>
 
 
-  <h4>Qué cuesta cada modelo del mercado</h4>
-  <p>Precios de API en dólares por millón de tokens, <strong>consultados el 22 de octubre de 2026</strong> en la página oficial de cada proveedor, que va enlazada en cada tabla. Conviene decirlo claro: <strong>esto es lo primero que envejece de toda la guía</strong>. Si vas a decidir con estas cifras, compruébalas en la fuente.</p>
-
-  <table class="precios">
-    <caption>Anthropic<a href="https://platform.claude.com/docs/en/about-claude/pricing">platform.claude.com</a></caption>
-    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
-    <tbody>
-      <tr><td>Haiku 5.5</td><td>$0,10</td><td>$0,50</td></tr>
-      <tr><td>Sonnet 5.5</td><td>$2</td><td>$10</td></tr>
-      <tr><td>Opus 5.5</td><td>$4</td><td>$20</td></tr>
-      <tr><td>Fable 5.1</td><td>$10</td><td>$50</td></tr>
-    </tbody>
-  </table>
-  <p class="precios-nota">Los precios de Haiku son para prompts de hasta 100.000 tokens; por encima se multiplican por cinco.</p>
-
-  <table class="precios">
-    <caption>OpenAI<a href="https://developers.openai.com/api/docs/pricing">developers.openai.com</a></caption>
-    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
-    <tbody>
-      <tr><td>gpt-6-luna</td><td>$0,10</td><td>$0,50</td></tr>
-      <tr><td>gpt-5.6-luna</td><td>$0,20</td><td>$1,20</td></tr>
-      <tr><td>gpt-6-sol</td><td>$2</td><td>$10</td></tr>
-      <tr><td>gpt-6.1-sol</td><td>$2</td><td>$10</td></tr>
-      <tr><td>gpt-5.6-terra</td><td>$2</td><td>$12</td></tr>
-      <tr><td>gpt-5.6-sol</td><td>$4</td><td>$20</td></tr>
-      <tr><td>gpt-5.5</td><td>$5</td><td>$30</td></tr>
-      <tr><td>gpt-6-astra</td><td>$10</td><td>$50</td></tr>
-      <tr><td>gpt-5.5-pro</td><td>$30</td><td>$180</td></tr>
-    </tbody>
-  </table>
-  <p class="precios-nota">Solo la generación vigente. El catálogo completo incluye además modelos de generaciones anteriores.</p>
-
-  <table class="precios">
-    <caption>Google<a href="https://ai.google.dev/gemini-api/docs/pricing">ai.google.dev</a></caption>
-    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
-    <tbody>
-      <tr><td>Gemini 2.5 Flash-Lite</td><td>$0,10</td><td>$0,40</td></tr>
-      <tr><td>Gemini 3.1 Flash-Lite</td><td>$0,25</td><td>$1,50</td></tr>
-      <tr><td>Gemini 2.5 Flash</td><td>$0,30</td><td>$2,50</td></tr>
-      <tr><td>Gemini 3.5 Flash-Lite</td><td>$0,30</td><td>$2,50</td></tr>
-      <tr><td>Gemini 3 Flash</td><td>$0,50</td><td>$3</td></tr>
-      <tr><td>Gemini 3.6 Flash</td><td>$0,75</td><td>$3,75</td></tr>
-      <tr><td>Gemini 3.8 Flash</td><td>$0,75</td><td>$3,75</td></tr>
-      <tr><td>Gemini 2.5 Pro</td><td>$1,25</td><td>$10</td></tr>
-      <tr><td>Gemini 3.1 Pro</td><td>$2</td><td>$12</td></tr>
-    </tbody>
-  </table>
-  <p class="precios-nota">Los dos Flash llevan precio promocional: <strong>se duplican el 1 de enero de 2027</strong>. Gemini Pro sube de tramo por encima de 200.000 tokens.</p>
-
-  <table class="precios">
-    <caption>DeepSeek<a href="https://api-docs.deepseek.com/quick_start/pricing">api-docs.deepseek.com</a></caption>
-    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
-    <tbody>
-      <tr><td>deepseek-flash</td><td>$0,30</td><td>$1,20</td></tr>
-      <tr><td>deepseek-v4-pro</td><td>$1,32</td><td>$3,96</td></tr>
-    </tbody>
-  </table>
-  <p class="precios-nota">Estas son las tarifas en horas punta: DeepSeek cobra <strong>la mitad fuera de ellas</strong>, así que el mismo modelo puede salir por $0,15 de entrada.</p>
-
-  <table class="precios">
-    <caption>Mistral<a href="https://mistral.ai/pricing">mistral.ai</a></caption>
-    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
-    <tbody>
-      <tr><td>Mistral Large</td><td>$0,50</td><td>$1,50</td></tr>
-    </tbody>
-  </table>
-  <p class="precios-nota">Es el único precio que publican en las páginas consultadas. Del resto documentan la licencia pero no la tarifa: Small 4 y Large 3 son Apache 2.0, y Medium 3.5 es MIT modificada.</p>
-
-  <h4>Los modelos abiertos no tienen precio</h4>
-  <p>Llama, Qwen, DeepSeek o gpt-oss tienen los pesos descargables. Lo que cuestan depende de <em>quién los sirva</em>: correrlos tú no gasta tokens, gasta hardware y electricidad. Por eso las cifras de abajo son <strong>del proveedor, no del modelo</strong> — el mismo modelo en otro sitio vale otra cosa.</p>
-
-  <table class="precios">
-    <caption>Modelos abiertos servidos en Together.ai<a href="https://www.together.ai/pricing">together.ai</a></caption>
-    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
-    <tbody>
-      <tr><td>Llama 3 8B Lite</td><td>$0,14</td><td>$0,14</td></tr>
-      <tr><td>DeepSeek V4 Flash</td><td>$0,14</td><td>$0,28</td></tr>
-      <tr><td>gpt-oss-120B</td><td>$0,15</td><td>$0,60</td></tr>
-      <tr><td>Qwen3.5 9B</td><td>$0,17</td><td>$0,25</td></tr>
-      <tr><td>Qwen3 235B A22B</td><td>$0,20</td><td>$0,60</td></tr>
-      <tr><td>Llama 3.3 70B</td><td>$1,04</td><td>$1,04</td></tr>
-    </tbody>
-  </table>
-  <p class="precios-nota">Together.ai es solo uno de los sitios donde se sirven estos modelos; el mismo peso en otro proveedor tiene otra tarifa.</p>
-
-  <div class="callout">
-    <p><b>Una tabla de precios miente por omisión.</b> Comparar solo entrada y salida deja fuera casi todo lo que decide la factura:</p>
-    <p>La caché y el lote mueven la cuenta más que el modelo — leer de caché cuesta una fracción del precio de entrada, y el Batch API descuenta el 50% en ambos sentidos. El precio cambia por tamaño de prompt, por horario en el caso de DeepSeek, y lleva fecha de caducidad en las promociones de Google.</p>
-    <p>Y sobre todo: <strong>lo que importa es el coste por tarea terminada</strong>, no por millón de tokens. Un modelo barato que necesita tres intentos y una corrección sale más caro que uno que acierta a la primera.</p>
-  </div>
-
   <div class="note">
     <p><b>Antes de adivinar, mira.</b> <code>/context</code> dibuja qué está ocupando la ventana y señala lo que se puede recortar. <code>/usage</code> da el gasto de la sesión y, con plan de suscripción, marca los comportamientos que se llevan más del 10% — contexto largo o fallos de caché. Y <code>/insights</code> analiza tus últimas sesiones y escribe un informe con dónde se te va el tiempo.</p>
     <p><b>Ojo con el número.</b> Con suscripción Pro o Max, el gasto en dólares que muestra <code>/usage</code> se calcula a precio de lista y <strong>no es lo que te facturan</strong>: tu uso va contra la cuota del plan. Esa cifra solo es tu factura si pagas por API.</p>
@@ -1430,7 +1340,6 @@ por qué es explotable, y el fix concreto.
   <p>Con el tiempo acumularás skills que ya no usas, y cada una paga su descripción en contexto en cada sesión. <code>/skill-doctor</code> te dice cuánto cuesta cada una y con qué frecuencia se dispara, para apagar las que sobran.</p>
 </section>
 
-<!-- 08 -->
 <!-- 08 -->
 <section id="subagentes">
   <div class="sec-head"><div class="sec-num">08</div><h2>Subagentes: delegar sin ensuciar tu sesión</h2></div>
@@ -1536,6 +1445,7 @@ claude mcp list</pre>
   </div>
 </section>
 
+<!-- 10 -->
 <section id="senales">
   <div class="sec-head"><div class="sec-num">10</div><h2>Cuándo agregar cada pieza</h2></div>
   <p class="sec-sub">No por calendario. Por síntoma.</p>
@@ -1567,9 +1477,167 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   </div>
 </section>
 
-<!-- 09 -->
+<!-- 11 -->
+<section id="precios">
+  <div class="sec-head"><div class="sec-num">11</div><h2>Lo que cuesta cada modelo</h2></div>
+  <p class="sec-sub">Precios de API en dólares por millón de tokens, consultados el 22 de octubre de 2026 en la página oficial de cada proveedor. Es el contenido que antes envejece de toda la guía: si vas a decidir con estas cifras, compruébalas en la fuente.</p>
+
+  <h4>Comparativa por tramos</h4>
+  <p>Los tramos van <strong>por precio de entrada, no por capacidad</strong>. Dos modelos de la misma tabla cuestan parecido; eso no significa que hagan el mismo trabajo. Dentro de cada tramo van del más barato al más caro.</p>
+
+  <table class="precios">
+    <caption>Económico · hasta $0,50 de entrada</caption>
+    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
+    <tbody>
+      <tr><td>Haiku 5.5</td><td>$0,10</td><td>$0,50</td></tr>
+      <tr><td>gpt-6-luna</td><td>$0,10</td><td>$0,50</td></tr>
+      <tr><td>Gemini 2.5 Flash-Lite</td><td>$0,10</td><td>$0,40</td></tr>
+      <tr><td>gpt-oss-120B</td><td>$0,15</td><td>$0,60</td></tr>
+      <tr><td>deepseek-flash</td><td>$0,30</td><td>$1,20</td></tr>
+    </tbody>
+  </table>
+
+  <table class="precios">
+    <caption>Intermedio · entre $1 y $2</caption>
+    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
+    <tbody>
+      <tr><td>Gemini 2.5 Pro</td><td>$1,25</td><td>$10</td></tr>
+      <tr><td>deepseek-v4-pro</td><td>$1,32</td><td>$3,96</td></tr>
+      <tr><td>Sonnet 5.5</td><td>$2</td><td>$10</td></tr>
+      <tr><td>gpt-6-sol</td><td>$2</td><td>$10</td></tr>
+      <tr><td>Gemini 3.1 Pro</td><td>$2</td><td>$12</td></tr>
+    </tbody>
+  </table>
+
+  <table class="precios">
+    <caption>Alto · entre $4 y $5</caption>
+    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
+    <tbody>
+      <tr><td>Opus 5.5</td><td>$4</td><td>$20</td></tr>
+      <tr><td>gpt-5.6-sol</td><td>$4</td><td>$20</td></tr>
+      <tr><td>gpt-5.5</td><td>$5</td><td>$30</td></tr>
+    </tbody>
+  </table>
+
+  <table class="precios">
+    <caption>Tope de gama · desde $10</caption>
+    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
+    <tbody>
+      <tr><td>Fable 5.1</td><td>$10</td><td>$50</td></tr>
+      <tr><td>gpt-6-astra</td><td>$10</td><td>$50</td></tr>
+      <tr><td>gpt-5.5-pro</td><td>$30</td><td>$180</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Cuándo bajar de modelo te ahorra de verdad</h4>
+  <p>Saltar a un modelo más barato parece el ahorro obvio, y muchas veces no lo es. Estas son las condiciones en las que sí sale a cuenta.</p>
+
+  <dl class="anat">
+    <dt>Donde no se decide nada</dt><dd>Sonnet resuelve bien la mayor parte del trabajo de código y cuesta menos que Opus; guarda Opus para las decisiones de arquitectura. Y en un subagente que solo recopila y resume, <code>model: haiku</code>.</dd>
+    <dt>Antes de bajar de modelo, baja el esfuerzo</dt><dd>El razonamiento se factura como salida, que es la parte cara. Prueba primero el mismo modelo con <code>/effort low</code>: cambia el gasto sin cambiar de capacidad, y es reversible en una tecla.</dd>
+    <dt>Cuando no vas a reutilizar el contexto</dt><dd>La caché es por modelo. Si repartes una conversación entre dos modelos, cada salto reprocesa el contexto a precio completo y se come el ahorro. Repartir solo compensa en tareas sueltas que no comparten nada.</dd>
+    <dt>Cuando acierta a la primera</dt><dd>Lo que cuenta es el coste por <em>tarea terminada</em>, no por petición. Un modelo barato que necesita tres intentos y una corrección sale más caro que uno que lo resuelve de una.</dd>
+  </dl>
+
+  <div class="note">
+    <p><b>Mídelo con tu código, no con la tabla.</b> La única forma de saber si un modelo más barato te sirve es darle una tarea real de tu proyecto y comparar el resultado, no el precio. <code>/model</code> cambia de modelo a mitad de sesión y <code>/usage</code> te dice qué llevas gastado. Lo que cuesta cada hábito está en la <a href="#contexto">sección 06</a>.</p>
+  </div>
+
+  <h4>El catálogo, proveedor por proveedor</h4>
+  <p>Precios de API en dólares por millón de tokens, <strong>consultados el 22 de octubre de 2026</strong> en la página oficial de cada proveedor, que va enlazada en cada tabla. Conviene decirlo claro: <strong>esto es lo primero que envejece de toda la guía</strong>. Si vas a decidir con estas cifras, compruébalas en la fuente.</p>
+
+  <table class="precios">
+    <caption>Anthropic<a href="https://platform.claude.com/docs/en/about-claude/pricing">platform.claude.com</a></caption>
+    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
+    <tbody>
+      <tr><td>Haiku 5.5</td><td>$0,10</td><td>$0,50</td></tr>
+      <tr><td>Sonnet 5.5</td><td>$2</td><td>$10</td></tr>
+      <tr><td>Opus 5.5</td><td>$4</td><td>$20</td></tr>
+      <tr><td>Fable 5.1</td><td>$10</td><td>$50</td></tr>
+    </tbody>
+  </table>
+  <p class="precios-nota">Los precios de Haiku son para prompts de hasta 100.000 tokens; por encima se multiplican por cinco.</p>
+
+  <table class="precios">
+    <caption>OpenAI<a href="https://developers.openai.com/api/docs/pricing">developers.openai.com</a></caption>
+    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
+    <tbody>
+      <tr><td>gpt-6-luna</td><td>$0,10</td><td>$0,50</td></tr>
+      <tr><td>gpt-5.6-luna</td><td>$0,20</td><td>$1,20</td></tr>
+      <tr><td>gpt-6-sol</td><td>$2</td><td>$10</td></tr>
+      <tr><td>gpt-6.1-sol</td><td>$2</td><td>$10</td></tr>
+      <tr><td>gpt-5.6-terra</td><td>$2</td><td>$12</td></tr>
+      <tr><td>gpt-5.6-sol</td><td>$4</td><td>$20</td></tr>
+      <tr><td>gpt-5.5</td><td>$5</td><td>$30</td></tr>
+      <tr><td>gpt-6-astra</td><td>$10</td><td>$50</td></tr>
+      <tr><td>gpt-5.5-pro</td><td>$30</td><td>$180</td></tr>
+    </tbody>
+  </table>
+  <p class="precios-nota">Solo la generación vigente. El catálogo completo incluye además modelos de generaciones anteriores.</p>
+
+  <table class="precios">
+    <caption>Google<a href="https://ai.google.dev/gemini-api/docs/pricing">ai.google.dev</a></caption>
+    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
+    <tbody>
+      <tr><td>Gemini 2.5 Flash-Lite</td><td>$0,10</td><td>$0,40</td></tr>
+      <tr><td>Gemini 3.1 Flash-Lite</td><td>$0,25</td><td>$1,50</td></tr>
+      <tr><td>Gemini 2.5 Flash</td><td>$0,30</td><td>$2,50</td></tr>
+      <tr><td>Gemini 3.5 Flash-Lite</td><td>$0,30</td><td>$2,50</td></tr>
+      <tr><td>Gemini 3 Flash</td><td>$0,50</td><td>$3</td></tr>
+      <tr><td>Gemini 3.6 Flash</td><td>$0,75</td><td>$3,75</td></tr>
+      <tr><td>Gemini 3.8 Flash</td><td>$0,75</td><td>$3,75</td></tr>
+      <tr><td>Gemini 2.5 Pro</td><td>$1,25</td><td>$10</td></tr>
+      <tr><td>Gemini 3.1 Pro</td><td>$2</td><td>$12</td></tr>
+    </tbody>
+  </table>
+  <p class="precios-nota">Los dos Flash llevan precio promocional: <strong>se duplican el 1 de enero de 2027</strong>. Gemini Pro sube de tramo por encima de 200.000 tokens.</p>
+
+  <table class="precios">
+    <caption>DeepSeek<a href="https://api-docs.deepseek.com/quick_start/pricing">api-docs.deepseek.com</a></caption>
+    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
+    <tbody>
+      <tr><td>deepseek-flash</td><td>$0,30</td><td>$1,20</td></tr>
+      <tr><td>deepseek-v4-pro</td><td>$1,32</td><td>$3,96</td></tr>
+    </tbody>
+  </table>
+  <p class="precios-nota">Estas son las tarifas en horas punta: DeepSeek cobra <strong>la mitad fuera de ellas</strong>, así que el mismo modelo puede salir por $0,15 de entrada.</p>
+
+  <table class="precios">
+    <caption>Mistral<a href="https://mistral.ai/pricing">mistral.ai</a></caption>
+    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
+    <tbody>
+      <tr><td>Mistral Large</td><td>$0,50</td><td>$1,50</td></tr>
+    </tbody>
+  </table>
+  <p class="precios-nota">Es el único precio que publican en las páginas consultadas. Del resto documentan la licencia pero no la tarifa: Small 4 y Large 3 son Apache 2.0, y Medium 3.5 es MIT modificada.</p>
+
+  <h4>Los modelos abiertos no tienen precio</h4>
+  <p>Llama, Qwen, DeepSeek o gpt-oss tienen los pesos descargables. Lo que cuestan depende de <em>quién los sirva</em>: correrlos tú no gasta tokens, gasta hardware y electricidad. Por eso las cifras de abajo son <strong>del proveedor, no del modelo</strong> — el mismo modelo en otro sitio vale otra cosa.</p>
+
+  <table class="precios">
+    <caption>Modelos abiertos servidos en Together.ai<a href="https://www.together.ai/pricing">together.ai</a></caption>
+    <thead><tr><th scope="col">Modelo</th><th scope="col">Entrada</th><th scope="col">Salida</th></tr></thead>
+    <tbody>
+      <tr><td>Llama 3 8B Lite</td><td>$0,14</td><td>$0,14</td></tr>
+      <tr><td>DeepSeek V4 Flash</td><td>$0,14</td><td>$0,28</td></tr>
+      <tr><td>gpt-oss-120B</td><td>$0,15</td><td>$0,60</td></tr>
+      <tr><td>Qwen3.5 9B</td><td>$0,17</td><td>$0,25</td></tr>
+      <tr><td>Qwen3 235B A22B</td><td>$0,20</td><td>$0,60</td></tr>
+      <tr><td>Llama 3.3 70B</td><td>$1,04</td><td>$1,04</td></tr>
+    </tbody>
+  </table>
+  <p class="precios-nota">Together.ai es solo uno de los sitios donde se sirven estos modelos; el mismo peso en otro proveedor tiene otra tarifa.</p>
+
+  <div class="callout">
+    <p><b>Una tabla de precios miente por omisión.</b> Comparar solo entrada y salida deja fuera casi todo lo que decide la factura:</p>
+    <p>La caché y el lote mueven la cuenta más que el modelo — leer de caché cuesta una fracción del precio de entrada, y el Batch API descuenta el 50% en ambos sentidos. El precio cambia por tamaño de prompt, por horario en el caso de DeepSeek, y lleva fecha de caducidad en las promociones de Google.</p>
+    <p>Y sobre todo: <strong>lo que importa es el coste por tarea terminada</strong>, no por millón de tokens. Un modelo barato que necesita tres intentos y una corrección sale más caro que uno que acierta a la primera.</p>
+  </div>
+</section>
+
+<!-- 12 -->
 <section id="comandos">
-  <div class="sec-head"><div class="sec-num">11</div><h2>Comandos del día a día</h2></div>
+  <div class="sec-head"><div class="sec-num">12</div><h2>Comandos del día a día</h2></div>
   <p class="sec-sub">Hay unos setenta comandos. Estos son los que se usan de verdad mientras programas. Filtra por texto o por categoría.</p>
 
   <div class="buscador">
@@ -1644,9 +1712,9 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   </div>
 </section>
 
-<!-- 10 -->
+<!-- 13 -->
 <section id="problemas">
-  <div class="sec-head"><div class="sec-num">12</div><h2>Problemas comunes</h2></div>
+  <div class="sec-head"><div class="sec-num">13</div><h2>Problemas comunes</h2></div>
   <p class="sec-sub">Lo que más desconcierta cuando llevas poco tiempo, y la solución que documenta Anthropic para cada caso.</p>
 
   <dl class="anat">
@@ -1663,9 +1731,9 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   </div>
 </section>
 
-<!-- 11 -->
+<!-- 14 -->
 <section id="recursos">
-  <div class="sec-head"><div class="sec-num">13</div><h2>Por dónde seguir</h2></div>
+  <div class="sec-head"><div class="sec-num">14</div><h2>Por dónde seguir</h2></div>
   <p class="sec-sub">Esta guía cubre lo mínimo para arrancar. A partir de ahí conviene saber adónde ir.</p>
 
   <dl class="anat">

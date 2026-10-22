@@ -430,6 +430,12 @@ pre .k{color:var(--code-key)}
 .precios td:first-child{color:var(--ink);padding-right:14px}
 .precios th:not(:first-child),.precios td:not(:first-child){padding-left:14px}
 .precios tr:last-child td{border-bottom:0}
+.escenarios td:not(:first-child),.escenarios th:not(:first-child){text-align:left;white-space:normal}
+.escenarios td:nth-child(2),.escenarios td:nth-child(3){color:var(--pine);font-weight:600}
+.escenarios td:first-child{padding-right:16px}
+.escenarios td:first-child b{font-weight:600}
+.escenarios td:first-child i{display:block;font-style:normal;font-family:var(--body);
+  font-size:.9rem;color:var(--ink-soft);margin-top:4px;line-height:1.4}
 .precios-nota{margin:0 0 4px;font-size:.88rem;color:var(--ink-soft);max-width:62ch}
 @media(max-width:640px){
   .precios{font-size:.86rem}
@@ -1528,6 +1534,29 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
       <tr><td>gpt-5.5-pro</td><td>$30</td><td>$180</td></tr>
     </tbody>
   </table>
+
+  <h4>Qué modelo usar en cada escenario</h4>
+  <p>Solo para los modelos de Anthropic, y referido a los escenarios que esta guía ya recorre. El esfuerzo se cambia con <code>/effort</code> y el modelo con <code>/model</code>; las dos cosas, a mitad de sesión.</p>
+
+  <table class="precios escenarios">
+    <thead><tr><th scope="col">Escenario</th><th scope="col">Modelo</th><th scope="col">Esfuerzo</th></tr></thead>
+    <tbody>
+      <tr><td><b>Explorar un repo desconocido</b><i>Es leer y resumir, y vas a revisar tú lo que salga — que es como la documentación describe <code>low</code>. <a href="#flujos">Flujo A</a>.</i></td><td>Sonnet</td><td>low</td></tr>
+      <tr><td><b>La entrevista de un proyecto nuevo</b><i>Ahí se toman las decisiones de diseño, que es para lo que está. <a href="#flujos">Flujo B</a>.</i></td><td>Opus</td><td>medium</td></tr>
+      <tr><td><b>Crear la estructura</b><i>Trabajo de código con el alcance ya acordado.</i></td><td>Sonnet</td><td>medium</td></tr>
+      <tr><td><b>Añadir una funcionalidad</b><i>El caso que la documentación pone como ejemplo de <code>medium</code>.</i></td><td>Sonnet</td><td>medium</td></tr>
+      <tr><td><b>Corregir un error</b><i>La documentación sube a <code>high</code> justo aquí: hay que verificar y hay casos borde.</i></td><td>Sonnet</td><td>high</td></tr>
+      <tr><td><b>Un bug que se resiste</b><i>Investigación de causa raíz. No es el modelo por defecto en ningún plan: hay que pedirlo.</i></td><td>Fable</td><td>high</td></tr>
+      <tr><td><b>Decidir arquitectura</b><i>Razonamiento complejo encadenado.</i></td><td>Opus</td><td>high</td></tr>
+      <tr><td><b>Revisar seguridad</b><i>El ejemplo que da la documentación para <code>max</code>.</i></td><td>Opus</td><td>max</td></tr>
+      <tr><td><b>Un subagente que solo recopila</b><i>Fija <code>model: haiku</code> en su archivo, o heredará el tuyo.</i></td><td>Haiku</td><td>low</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <p><b>Puede que no tengas que cambiar nada.</b> En Pro, Max, Team, Enterprise y la API, <strong>Opus 5.5 ya es el modelo por defecto</strong>, y arranca en esfuerzo <code>medium</code>. Anthropic midió que Opus 5.5 en <code>medium</code> iguala o supera a Opus 5 en <code>high</code>, así que no arrastres el nivel que usabas antes.</p>
+    <p>Dos cosas que sorprenden. <code>/model</code> <strong>también mueve a los subagentes</strong> que heredan el modelo de la conversación, así que si cambias a Opus antes de delegar, el subagente también corre en Opus — para evitarlo, fija su <code>model</code> en el archivo. Y <code>max</code> tiende a sobrepensar: pruébalo antes de dejarlo puesto.</p>
+  </div>
 
   <h4>Cuándo bajar de modelo te ahorra de verdad</h4>
   <p>Saltar a un modelo más barato parece el ahorro obvio, y muchas veces no lo es. Estas son las condiciones en las que sí sale a cuenta.</p>

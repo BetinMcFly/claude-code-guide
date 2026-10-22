@@ -991,6 +991,20 @@ Usa el formato de error estándar del proyecto.</pre>
     <p>Y Plan Mode te ahorra la factura más cara de todas: la de implementar en la dirección equivocada y tener que deshacerlo. Lo que cuesta cada hábito está en la <a href="#contexto">sección 06</a>.</p>
   </div>
 
+  <h4>Lo que ya no hace falta</h4>
+  <p>Mucha gente llega a Claude Code con los hábitos de 2023 puestos, cuando convenía envolver cada petición en un ritual. Aquello funcionaba, pero describía modelos que no razonaban solos y que apenas recordaban nada. Las dos cosas cambiaron, y hoy esas fórmulas no ayudan: estorban.</p>
+
+  <dl class="anat">
+    <dt>Preámbulos de rol</dt><dd>«Actúa como un desarrollador senior con veinte años de experiencia.» Claude ya sabe qué es revisar código. Lo que no sabe es cómo se revisa <em>en tu proyecto</em>, y eso va en el CLAUDE.md, no en el prompt.</dd>
+    <dt>«Piensa paso a paso»</dt><dd>En los modelos actuales el razonamiento extendido viene activado y <strong>ni siquiera se puede apagar</strong>. Pedirlo no añade nada; solo ocupa sitio.</dd>
+    <dt>Propinas y amenazas</dt><dd>Prometerle dinero o advertirle de consecuencias no tiene ningún efecto sobre lo que te devuelve.</dd>
+    <dt>Repetir lo que ya está escrito</dt><dd>Si cada mensaje empieza recordándole tus convenciones, esas convenciones le faltan al CLAUDE.md. Ahí se escriben una vez y se cargan solas en cada sesión.</dd>
+  </dl>
+
+  <div class="note">
+    <p><b>El prompt es la última capa, no la única.</b> Las plantillas de aquí abajo dan por hecho que ya hay contexto. Cuando todavía no lo hay, el primer mensaje <em>no tiene que ser preciso</em>: cuéntale tu intención en bruto, aunque te salga desordenada, y deja que Claude te devuelva opciones antes de concretar nada. La precisión llega al final, encima de lo que hayáis construido entre los dos. El <a href="#flujos">Flujo B de la sección 03</a> recorre ese orden entero.</p>
+  </div>
+
   <div class="callout">
     <p><b>En un proyecto nuevo el prompt lo carga todo.</b> No hay CLAUDE.md, ni código, ni convenciones: lo único que Claude sabe es lo que tú escribas. Por eso el primer prompt de un proyecto nuevo no pide código — pide una entrevista.</p>
     <p>En uno que ya existe pasa lo contrario: el CLAUDE.md y el propio código ya responden al punto de partida y a los límites, así que el prompt se acorta y se vuelve más concreto. <b>Si en un proyecto existente te sale un prompt larguísimo, no es que lo estés escribiendo mal: es que lo que repites cada vez le falta al CLAUDE.md.</b></p>

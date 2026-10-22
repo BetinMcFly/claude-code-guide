@@ -1158,7 +1158,12 @@ Usa el formato de error estándar del proyecto.</pre>
   </div>
 
   <h4>Qué revisar antes de aprobar un plan</h4>
-  <p>Tres verificaciones que evitan la mayoría de los problemas: que los archivos que va a tocar sean los que esperabas, que las dependencias estén completas, y que respete los gotchas del CLAUDE.md — sobre todo que los secretos no terminen en el repositorio.</p>
+  <p>Tres verificaciones evitan la mayoría de los problemas, y las tres van de <em>lo que Claude va a hacer</em>: que los archivos que va a tocar sean los que esperabas, que las dependencias estén completas, y que respete los gotchas del CLAUDE.md — sobre todo que los secretos no terminen en el repositorio.</p>
+
+  <div class="note">
+    <p><b>La cuarta va de cómo sabrás que funcionó.</b> Un plan que termina en «comprobar que todo funciona» no se puede verificar. Uno que termina en comandos, sí: los tests pasan, el archivo generado tiene las filas que esperabas, <code>git status</code> queda limpio. Si el plan no los trae, pídelos antes de aprobar.</p>
+    <p>Y léelos buscando dos cosas. Que <strong>ninguno pueda pasar por el motivo equivocado</strong>: un <code>pytest</code> que no recoge ningún test pasa igual que uno que los pasa todos. Y que <strong>no se contradigan entre sí</strong> — si una línea dice que todavía no hay lógica implementada y otra dice que los tests pasan, pregunta a qué fase se refiere cada una antes de dar el visto bueno.</p>
+  </div>
 </section>
 
 <!-- 06 -->

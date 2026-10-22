@@ -601,19 +601,20 @@ footer b{color:var(--ink);font-weight:600}
     <a href="#jerarquia"><span>01</span>Jerarquía</a>
     <a href="#planmode"><span>02</span>Plan Mode</a>
     <a href="#flujos"><span>03</span>Flujos</a>
-    <a href="#claudemd"><span>04</span>CLAUDE.md</a>
-    <a href="#prompts"><span>05</span>Prompts</a>
-    <a href="#contexto"><span>06</span>Contexto</a>
+    <a href="#git"><span>04</span>Git</a>
+    <a href="#claudemd"><span>05</span>CLAUDE.md</a>
+    <a href="#prompts"><span>06</span>Prompts</a>
+    <a href="#contexto"><span>07</span>Contexto</a>
     <p class="rail-grupo">Cuando duela</p>
-    <a href="#skills"><span>07</span>Skills</a>
-    <a href="#subagentes"><span>08</span>Subagentes</a>
-    <a href="#mcp"><span>09</span>MCP</a>
-    <a href="#senales"><span>10</span>Señales</a>
+    <a href="#skills"><span>08</span>Skills</a>
+    <a href="#subagentes"><span>09</span>Subagentes</a>
+    <a href="#mcp"><span>10</span>MCP</a>
+    <a href="#senales"><span>11</span>Señales</a>
     <p class="rail-grupo">Referencia</p>
-    <a href="#precios"><span>11</span>Precios</a>
-    <a href="#comandos"><span>12</span>Comandos</a>
-    <a href="#problemas"><span>13</span>Problemas</a>
-    <a href="#recursos"><span>14</span>Recursos</a>
+    <a href="#precios"><span>12</span>Precios</a>
+    <a href="#comandos"><span>13</span>Comandos</a>
+    <a href="#problemas"><span>14</span>Problemas</a>
+    <a href="#recursos"><span>15</span>Recursos</a>
   </div>
   <div class="tema" role="group" aria-label="Tema de color">
     <button type="button" data-tema-btn="sistema" aria-pressed="true">Auto</button>
@@ -853,7 +854,7 @@ está limpio, o detente tras 20 turnos</pre>
       <ol class="steps">
         <li><b>Abrir la sesión</b><i><code>cd ~/mi-proyecto && claude</code></i></li>
         <li><b>Activar Plan Mode</b><i><kbd>Shift+Tab</kbd> × 3. Antes de cualquier prompt.</i></li>
-        <li><b>Explorar</b><i>Que te describa qué hace el proyecto, su estructura, su stack y cómo se corren los tests, sin tocar nada. El prompt está en la <a href="#prompts">sección 05</a>.</i></li>
+        <li><b>Explorar</b><i>Que te describa qué hace el proyecto, su estructura, su stack y cómo se corren los tests, sin tocar nada. El prompt está en la <a href="#prompts">sección 06</a>.</i></li>
         <li><b>Generar contexto</b><i><code>/init</code> escanea el repo y genera el CLAUDE.md</i></li>
         <li><b>Editar CLAUDE.md</b><i>Agrega lo que el código no dice: convenciones del equipo, gotchas, decisiones tomadas.</i></li>
       </ol>
@@ -861,7 +862,7 @@ está limpio, o detente tras 20 turnos</pre>
     <div class="phase p-work">
       <div class="phase-head"><b>Ciclo de trabajo</b><span>Se repite por cada feature</span></div>
       <ol class="steps">
-        <li><b>Pedir el cambio</b><i>Di qué podrá hacer el usuario cuando esté listo, por dónde empezar y qué no debe tocar — <a href="#prompts">sección 05</a>.</i></li>
+        <li><b>Pedir el cambio</b><i>Di qué podrá hacer el usuario cuando esté listo, por dónde empezar y qué no debe tocar — <a href="#prompts">sección 06</a>.</i></li>
         <li><b>Revisar el plan</b><i>Verifica archivos tocados, dependencias, que respete tus gotchas.</i></li>
         <li><b>Aprobar y ejecutar</b><i>Al aprobar el plan, Claude sale de Plan Mode e implementa. La aprobación es el cambio de modo.</i></li>
         <li><b>Confirmar los cambios</b><i>Que haga el commit con un mensaje descriptivo.</i></li>
@@ -874,13 +875,13 @@ está limpio, o detente tras 20 turnos</pre>
         <li><b>Reproducir primero</b><i>Dale el síntoma exacto, no tu teoría: el error literal, los pasos para provocarlo y qué esperabas. Una hipótesis en el prompt sesga la búsqueda hacia donde tú ya miraste.</i></li>
         <li><b>Plan Mode para investigar</b><i><kbd>Shift+Tab</kbd> × 3. Que lea y diagnostique sin arreglar nada. <code>/debug</code> activa el logging si necesitas más rastro.</i></li>
         <li><b>Revisar el diagnóstico, no solo el arreglo</b><i>Si la causa raíz que describe no te convence, el parche tampoco servirá. Es el momento en el que más vale negarse a aprobar.</i></li>
-        <li><b>Pedir el test antes del arreglo</b><i>Primero un test que falle por el bug, y después el arreglo. Sin ese test no tienes prueba de que se haya corregido, ni nada que avise si vuelve más adelante. El prompt completo, en la <a href="#prompts">sección 05</a>.</i></li>
+        <li><b>Pedir el test antes del arreglo</b><i>Primero un test que falle por el bug, y después el arreglo. Sin ese test no tienes prueba de que se haya corregido, ni nada que avise si vuelve más adelante. El prompt completo, en la <a href="#prompts">sección 06</a>.</i></li>
         <li><b>Revisar antes del commit</b><i><code>/code-review</code> sobre el diff antes de dar nada por cerrado.</i></li>
-        <li><b>Limpiar el contexto</b><i><code>/clear</code>. Un debug largo deja intentos fallidos que contaminan lo siguiente — ver sección 06.</i></li>
+        <li><b>Limpiar el contexto</b><i><code>/clear</code>. Un debug largo deja intentos fallidos que contaminan lo siguiente — ver sección 07.</i></li>
       </ol>
     </div>
     <div class="phase p-opt">
-      <div class="phase-head"><b>Optimización</b><span>Solo cuando aparezca la señal — ver sección 10</span></div>
+      <div class="phase-head"><b>Optimización</b><span>Solo cuando aparezca la señal — ver sección 11</span></div>
       <ol class="steps">
         <li><b>Skills</b><i>Repites el mismo prompt tres o más veces.</i></li>
         <li><b>Subagents</b><i>Una tarea necesita contexto aislado y reglas propias.</i></li>
@@ -897,7 +898,7 @@ está limpio, o detente tras 20 turnos</pre>
       <ol class="steps">
         <li><b>Crear el directorio</b><i><code>mkdir mi-proyecto && cd mi-proyecto && claude</code></i></li>
         <li><b>Activar Plan Mode</b><i><kbd>Shift+Tab</kbd> × 3. Evita que Claude cree archivos a media conversación.</i></li>
-        <li><b>Pedir la entrevista</b><i>Que te pregunte por requisitos, stack, casos borde y decisiones de diseño antes de escribir una línea, y que cierre volcándolas en el CLAUDE.md. El prompt está en la <a href="#prompts">sección 05</a>.</i></li>
+        <li><b>Pedir la entrevista</b><i>Que te pregunte por requisitos, stack, casos borde y decisiones de diseño antes de escribir una línea, y que cierre volcándolas en el CLAUDE.md. El prompt está en la <a href="#prompts">sección 06</a>.</i></li>
         <li><b>Responder</b><i>Stack, requisitos, edge cases, restricciones. Aquí es donde salen las preguntas que no habías considerado.</i></li>
       </ol>
     </div>
@@ -905,21 +906,21 @@ está limpio, o detente tras 20 turnos</pre>
       <div class="phase-head"><b>Scaffolding</b><span>Aprobar el plan y ejecutar</span></div>
       <ol class="steps">
         <li><b>Revisar el CLAUDE.md</b><i>El que salió de la entrevista. Verifica que refleje las decisiones antes de construir nada sobre él.</i></li>
-        <li><b>Pedir la estructura</b><i>Directorios, un archivo por módulo, dependencias y README, siguiendo ese CLAUDE.md. Sin lógica todavía — <a href="#prompts">sección 05</a>.</i></li>
+        <li><b>Pedir la estructura</b><i>Directorios, un archivo por módulo, dependencias y README, siguiendo ese CLAUDE.md. Sin lógica todavía — <a href="#prompts">sección 06</a>.</i></li>
         <li><b>Primer commit</b><i>Un commit con la estructura base, antes de implementar nada.</i></li>
       </ol>
     </div>
     <div class="phase p-work">
       <div class="phase-head"><b>Ciclo de trabajo</b><span>Se repite por cada feature</span></div>
       <ol class="steps">
-        <li><b>Pedir el feature</b><i>De uno en uno, nombrando el archivo y según el CLAUDE.md — <a href="#prompts">sección 05</a>.</i></li>
+        <li><b>Pedir el feature</b><i>De uno en uno, nombrando el archivo y según el CLAUDE.md — <a href="#prompts">sección 06</a>.</i></li>
         <li><b>Revisar y aprobar</b><i>Un feature a la vez, siempre revisando el plan.</i></li>
         <li><b>Confirmar los cambios</b><i>Commit, y al siguiente.</i></li>
       </ol>
       <div class="loop">↺ Volver al paso 1 con el siguiente feature</div>
     </div>
     <div class="phase p-opt">
-      <div class="phase-head"><b>Optimización</b><span>Solo cuando aparezca la señal — ver sección 10</span></div>
+      <div class="phase-head"><b>Optimización</b><span>Solo cuando aparezca la señal — ver sección 11</span></div>
       <ol class="steps">
         <li><b>Skills</b><i>Repites el mismo prompt tres o más veces.</i></li>
         <li><b>Subagents</b><i>Una tarea necesita contexto aislado y reglas propias.</i></li>
@@ -931,8 +932,54 @@ está limpio, o detente tras 20 turnos</pre>
 </section>
 
 <!-- 04 -->
+<section id="git">
+  <div class="sec-head"><div class="sec-num">04</div><h2>Git, y por qué no basta con deshacer</h2></div>
+  <p class="sec-sub">Los dos flujos terminan en un commit. Esto es cómo pedirlo, qué mirar antes, y por qué <code>/rewind</code> no es la red de seguridad que parece.</p>
+
+  <h4>Pedir un commit</h4>
+  <p>Claude hace commits si se los pides, y el mensaje le sale mejor que a casi nadie porque acaba de hacer el cambio y sabe por qué. Lo que tienes que aportar tú es el criterio de <strong>cuándo</strong> y de <strong>cuánto entra en cada uno</strong>.</p>
+
+  <dl class="anat">
+    <dt>Uno por unidad reversible</dt><dd>Si dentro de un commit hay dos cambios que podrías querer deshacer por separado, son dos commits. El criterio no es el tiempo ni el tamaño: es si se puede revertir solo.</dd>
+    <dt>Antes de cerrar, mira el diff</dt><dd><code>/diff</code> abre el visor de lo que todavía no está en un commit, y <code>/code-review</code> revisa ese mismo diff. Mirarlo cuesta un minuto y es cuando más barato sale encontrar algo.</dd>
+    <dt>Lo que nunca debe entrar</dt><dd>Secretos, <code>.env</code>, archivos generados. Si están en los gotchas del <a href="#claudemd">CLAUDE.md</a>, Claude los respeta; si no están, escríbelos ahí antes de que se cuelen una vez.</dd>
+  </dl>
+
+  <p>El prompt copiable está en la <a href="#prompts">sección 06</a>, con los demás.</p>
+
+  <h4>/rewind no es git</h4>
+  <p>Claude Code guarda una instantánea de tus archivos antes de cada mensaje que envías, y <code>/rewind</code> te devuelve a cualquiera de ellas. Es rapidísimo y salva muchas tardes. Pero <strong>la propia documentación dice que no sustituye al control de versiones</strong>, y conviene saber exactamente dónde deja de cubrirte.</p>
+
+  <div class="callout">
+    <p><b>Tres huecos, y son justo los que hacen daño.</b></p>
+    <p><strong>No revierte lo que hagan los comandos de shell.</strong> Solo registra las ediciones que Claude hace con sus herramientas de archivos. Si ejecuta un <code>rm</code> o un <code>mv</code>, eso no vuelve con un rewind.</p>
+    <p><strong>No restaura casi ninguna edición de subagente.</strong> Un subagente edita en tu árbol de trabajo, pero sus cambios no suelen entrar en tus checkpoints — la documentación remite a git para deshacerlos. Es un motivo más para commitear antes de delegar.</p>
+    <p><strong>Caduca.</strong> Las instantáneas se borran en la limpieza periódica, unos treinta días después. Un commit no.</p>
+  </div>
+
+  <p>Dicho corto: <code>/rewind</code> es para equivocarte dentro de una sesión; git es para no perder trabajo. Commitea antes de empezar algo que pueda salir mal, y antes de mandar a un subagente.</p>
+
+  <h4>GitHub, cuando quieras</h4>
+  <p>Nada de lo anterior necesita GitHub. Esto es un escalón aparte, y encaja con la idea de agregarlo cuando haga falta y no antes.</p>
+
+  <div class="cmd">
+    <span class="cmd-label">Conectar el repositorio</span>
+    <pre>/install-github-app</pre>
+    <button class="copy">Copiar</button>
+  </div>
+
+  <p>Instala la app de Claude en el repositorio, guarda el secreto de autenticación y <strong>abre un pull request con los workflows</strong>, que tienes que fusionar tú para que quede activo. Pide tres cosas: que el repositorio esté en github.com, tener el CLI <code>gh</code> instalado y autenticado, y permiso de administrador.</p>
+
+  <p>A partir de ahí mencionas <strong><code>@claude</code></strong> en un issue o en un comentario de un pull request y responde ahí mismo, con acceso al repositorio. Aparte de eso existe la revisión automática de pull requests, que no necesita que mantengas ningún workflow.</p>
+
+  <div class="note">
+    <p><b>Esto sí tiene factura doble.</b> Cada ejecución consume minutos de GitHub Actions además de tokens. Lo que más la baja es escribir peticiones concretas, para que Claude necesite menos vueltas — lo mismo que vale en tu terminal, y está en la <a href="#prompts">sección 06</a>.</p>
+  </div>
+</section>
+
+<!-- 05 -->
 <section id="claudemd">
-  <div class="sec-head"><div class="sec-num">04</div><h2>El archivo que ancla todo</h2></div>
+  <div class="sec-head"><div class="sec-num">05</div><h2>El archivo que ancla todo</h2></div>
   <p class="sec-sub">Claude Code lee el CLAUDE.md al inicio de cada sesión. Sobrevive a /clear y se recarga desde disco. Es uno de los dos mecanismos que sobreviven de una sesión a la siguiente: este lo escribes tú, el auto memory lo escribe Claude solo.</p>
 
   <p>En Claude Code el contexto pesa más que el prompt. Un buen CLAUDE.md con Plan Mode activo produce mejores resultados que el prompt más ingenioso sin contexto.</p>
@@ -1008,9 +1055,9 @@ Usa el formato de error estándar del proyecto.</pre>
   <p>Esa regla no ocupa contexto mientras trabajas en el frontend. Una regla sin <code>paths</code> se carga siempre, igual que el CLAUDE.md. Si ya lo tienes grande, <code>/doctor</code> propone recortes: quita lo que Claude puede deducir del propio código y conserva las trampas y el porqué de las decisiones.</p>
 </section>
 
-<!-- 05 -->
+<!-- 06 -->
 <section id="prompts">
-  <div class="sec-head"><div class="sec-num">05</div><h2>Prompts que funcionan</h2></div>
+  <div class="sec-head"><div class="sec-num">06</div><h2>Prompts que funcionan</h2></div>
   <p class="sec-sub">De qué partes se compone uno, y los copiables de cada escenario. Todos asumen Plan Mode activo y CLAUDE.md en la raíz.</p>
 
   <h4>De qué se compone un prompt</h4>
@@ -1026,7 +1073,7 @@ Usa el formato de error estándar del proyecto.</pre>
 
   <div class="note">
     <p><b>Un prompt concreto no es solo más claro: es más barato.</b> Un encargo vago —«mejora este código»— obliga a Claude a rastrear medio repositorio para averiguar a qué te refieres, y cada archivo que abre se paga. Uno que nombra el archivo y el criterio de terminado se resuelve leyendo lo justo.</p>
-    <p>Y Plan Mode te ahorra la factura más cara de todas: la de implementar en la dirección equivocada y tener que deshacerlo. Lo que cuesta cada hábito está en la <a href="#contexto">sección 06</a>.</p>
+    <p>Y Plan Mode te ahorra la factura más cara de todas: la de implementar en la dirección equivocada y tener que deshacerlo. Lo que cuesta cada hábito está en la <a href="#contexto">sección 07</a>.</p>
   </div>
 
   <h4>Lo que ya no hace falta</h4>
@@ -1157,6 +1204,22 @@ Usa el formato de error estándar del proyecto.</pre>
     </div>
   </div>
 
+  <h4>En cualquiera de los dos</h4>
+
+  <div class="prompt">
+    <div class="prompt-cab">
+      <span class="prompt-n">1</span>
+      <span class="prompt-nombre">Confirmar los cambios</span>
+      <span class="prompt-que">se lo dices a Claude</span>
+      <button class="copy">Copiar</button>
+    </div>
+    <div class="prompt-texto">
+      <p>Haz un commit de estos cambios con un mensaje que explique por qué, no solo qué.</p>
+      <p>Si hay dos cambios independientes, haz dos commits: quiero poder revertir uno sin el otro.</p>
+      <p>Antes de confirmar, comprueba que no entra nada que no deba — claves, .env o archivos generados.</p>
+    </div>
+  </div>
+
   <h4>Qué revisar antes de aprobar un plan</h4>
   <p>Tres verificaciones evitan la mayoría de los problemas, y las tres van de <em>lo que Claude va a hacer</em>: que los archivos que va a tocar sean los que esperabas, que las dependencias estén completas, y que respete los gotchas del CLAUDE.md — sobre todo que los secretos no terminen en el repositorio.</p>
 
@@ -1166,9 +1229,9 @@ Usa el formato de error estándar del proyecto.</pre>
   </div>
 </section>
 
-<!-- 06 -->
+<!-- 07 -->
 <section id="contexto">
-  <div class="sec-head"><div class="sec-num">06</div><h2>Cuando Claude empieza a fallar</h2></div>
+  <div class="sec-head"><div class="sec-num">07</div><h2>Cuando Claude empieza a fallar</h2></div>
   <p class="sec-sub">Repite enfoques que ya descartaste. Olvida restricciones que mencionaste al inicio. Las respuestas se ponen vagas. Eso es saturación de contexto, y se arregla con dos comandos.</p>
 
   <p>Cada archivo leído, cada test corrido y cada intento fallido consume espacio. Conforme se llena, la atención del modelo se reparte entre más contenido y la información temprana pierde peso. No es que el modelo empeore — es que el contexto se ensució.</p>
@@ -1267,7 +1330,7 @@ Usa el formato de error estándar del proyecto.</pre>
     <dt>La caché caduca</dt><dd>Lo que ya se procesó se relee a precio de caché, pero esa caché dura una hora con suscripción y cinco minutos con clave de API o créditos de uso. Volver a una sesión larga después de comer reprocesa todo el contexto a precio completo.</dd>
     <dt>El razonamiento se paga como salida</dt><dd>El pensamiento extendido viene activado y su presupuesto puede ser de decenas de miles de tokens. Para tareas mecánicas, <code>/effort low</code> lo baja. En los modelos actuales se puede reducir, no apagar.</dd>
     <dt>El modelo, según la tarea</dt><dd>Sonnet resuelve bien la mayor parte del trabajo de código y cuesta menos que Opus. Guarda Opus para decisiones de arquitectura. En un subagente que solo recopila, <code>model: haiku</code>.</dd>
-    <dt>Herramientas antes que servidores</dt><dd>Un CLI que ya tienes —<code>gh</code>, <code>aws</code>, <code>gcloud</code>— no añade nada al contexto solo por estar instalado. Un servidor MCP carga los nombres de sus herramientas en todas las sesiones, como dice la <a href="#mcp">sección 09</a>.</dd>
+    <dt>Herramientas antes que servidores</dt><dd>Un CLI que ya tienes —<code>gh</code>, <code>aws</code>, <code>gcloud</code>— no añade nada al contexto solo por estar instalado. Un servidor MCP carga los nombres de sus herramientas en todas las sesiones, como dice la <a href="#mcp">sección 10</a>.</dd>
   </dl>
 
 
@@ -1277,9 +1340,9 @@ Usa el formato de error estándar del proyecto.</pre>
   </div>
 </section>
 
-<!-- 07 -->
+<!-- 08 -->
 <section id="skills">
-  <div class="sec-head"><div class="sec-num">07</div><h2>Skills: workflows que no vuelves a explicar</h2></div>
+  <div class="sec-head"><div class="sec-num">08</div><h2>Skills: workflows que no vuelves a explicar</h2></div>
   <p class="sec-sub">Una skill es una carpeta con un archivo SKILL.md dentro. Eso es toda la mecánica.</p>
 
   <p>Claude lee la descripción de cada skill al inicio de la sesión y activa la que coincida con tu petición. El resto del archivo solo se carga cuando se dispara — por eso puedes tener muchos sin saturar el contexto.</p>
@@ -1336,7 +1399,7 @@ por qué es explotable, y el fix concreto.
   <dl class="anat">
     <dt>Skill</dt><dd>Un workflow que quieres que Claude siga igual cada vez. Claude la activa sola cuando la descripción encaja, y tú con <code>/nombre</code> — ambas cosas van de fábrica, sin configurar nada.</dd>
     <dt>Hook</dt><dd>Un script que corre automáticamente antes o después de una acción. No es conversacional — es plomería.</dd>
-    <dt>Subagente</dt><dd>Un asistente con su propio contexto y herramientas limitadas. Úsalo cuando la tarea generaría mucho ruido en tu sesión principal. Es el tema de <a href="#subagentes">la sección 08</a>.</dd>
+    <dt>Subagente</dt><dd>Un asistente con su propio contexto y herramientas limitadas. Úsalo cuando la tarea generaría mucho ruido en tu sesión principal. Es el tema de <a href="#subagentes">la sección 09</a>.</dd>
   </dl>
 
   <div class="note">
@@ -1352,9 +1415,9 @@ por qué es explotable, y el fix concreto.
   <p>Con el tiempo acumularás skills que ya no usas, y cada una paga su descripción en contexto en cada sesión. <code>/skill-doctor</code> te dice cuánto cuesta cada una y con qué frecuencia se dispara, para apagar las que sobran.</p>
 </section>
 
-<!-- 08 -->
+<!-- 09 -->
 <section id="subagentes">
-  <div class="sec-head"><div class="sec-num">08</div><h2>Subagentes: delegar sin ensuciar tu sesión</h2></div>
+  <div class="sec-head"><div class="sec-num">09</div><h2>Subagentes: delegar sin ensuciar tu sesión</h2></div>
   <p class="sec-sub">Un ayudante con su propia ventana de contexto, su propio prompt y sus propias herramientas. Lo valioso no es que sea «otro Claude», es el aislamiento.</p>
 
   <p>Cuando una tarea va a producir mucha salida que no vas a releer —rastrear algo en veinte archivos, revisar un módulo entero, probar tres enfoques— esa salida se queda en tu conversación y te come el contexto. Un subagente hace ese trabajo aparte y te devuelve <strong>solo el resumen</strong>.</p>
@@ -1415,9 +1478,9 @@ No arregles nada: solo reporta.</pre>
   <p>Para trabajo genuinamente paralelo que además necesita hablarse entre sí existen los <strong>agent teams</strong>, varias sesiones coordinándose. Siguen siendo experimentales y vienen desactivados: no los necesitas para empezar.</p>
 </section>
 
-<!-- 09 -->
+<!-- 10 -->
 <section id="mcp">
-  <div class="sec-head"><div class="sec-num">09</div><h2>MCP: darle herramientas que no trae</h2></div>
+  <div class="sec-head"><div class="sec-num">10</div><h2>MCP: darle herramientas que no trae</h2></div>
   <p class="sec-sub">Claude Code trae lo suyo para leer, escribir, buscar y ejecutar. MCP es cómo le das acceso a todo lo demás: tus incidencias, tu base de datos, un navegador.</p>
 
   <p>Un servidor MCP expone herramientas que Claude puede usar como si fueran propias. Los hay alojados, a los que te conectas por una URL, y locales, que Claude Code arranca como un proceso en tu máquina.</p>
@@ -1452,14 +1515,14 @@ claude mcp list</pre>
   <p>Los servicios como Sentry, Linear o Notion piden iniciar sesión: los añades por su URL y luego <code>/mcp</code> → <em>Authenticate</em> abre el navegador. Los que usan un token lo reciben al añadirlos, con <code>--header</code>.</p>
 
   <div class="callout">
-    <p><b>Cada servidor conectado te cuesta contexto en todas las sesiones</b>, porque sus nombres de herramienta se cargan siempre, lo uses o no. Quita los que ya no utilices con <code>claude mcp remove</code>. Es la misma economía de contexto de la <a href="#contexto">sección 06</a>.</p>
+    <p><b>Cada servidor conectado te cuesta contexto en todas las sesiones</b>, porque sus nombres de herramienta se cargan siempre, lo uses o no. Quita los que ya no utilices con <code>claude mcp remove</code>. Es la misma economía de contexto de la <a href="#contexto">sección 07</a>.</p>
     <p><b>Y un servidor de ámbito <code>project</code> te pide aprobación la primera vez.</b> No es burocracia: evita que un repositorio que acabas de clonar lance procesos en tu máquina sin que lo autorices.</p>
   </div>
 </section>
 
-<!-- 10 -->
+<!-- 11 -->
 <section id="senales">
-  <div class="sec-head"><div class="sec-num">10</div><h2>Cuándo agregar cada pieza</h2></div>
+  <div class="sec-head"><div class="sec-num">11</div><h2>Cuándo agregar cada pieza</h2></div>
   <p class="sec-sub">No por calendario. Por síntoma.</p>
 
   <table class="signals">
@@ -1489,9 +1552,9 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   </div>
 </section>
 
-<!-- 11 -->
+<!-- 12 -->
 <section id="precios">
-  <div class="sec-head"><div class="sec-num">11</div><h2>Lo que cuesta cada modelo</h2></div>
+  <div class="sec-head"><div class="sec-num">12</div><h2>Lo que cuesta cada modelo</h2></div>
   <p class="sec-sub">Precios de API en dólares por millón de tokens, consultados el 22 de octubre de 2026 en la página oficial de cada proveedor. Es el contenido que antes envejece de toda la guía: si vas a decidir con estas cifras, compruébalas en la fuente.</p>
 
   <h4>Comparativa por tramos</h4>
@@ -1575,7 +1638,7 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   </dl>
 
   <div class="note">
-    <p><b>Mídelo con tu código, no con la tabla.</b> La única forma de saber si un modelo más barato te sirve es darle una tarea real de tu proyecto y comparar el resultado, no el precio. <code>/model</code> cambia de modelo a mitad de sesión y <code>/usage</code> te dice qué llevas gastado. Lo que cuesta cada hábito está en la <a href="#contexto">sección 06</a>.</p>
+    <p><b>Mídelo con tu código, no con la tabla.</b> La única forma de saber si un modelo más barato te sirve es darle una tarea real de tu proyecto y comparar el resultado, no el precio. <code>/model</code> cambia de modelo a mitad de sesión y <code>/usage</code> te dice qué llevas gastado. Lo que cuesta cada hábito está en la <a href="#contexto">sección 07</a>.</p>
   </div>
 
   <h4>El catálogo, proveedor por proveedor</h4>
@@ -1670,9 +1733,9 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   </div>
 </section>
 
-<!-- 12 -->
+<!-- 13 -->
 <section id="comandos">
-  <div class="sec-head"><div class="sec-num">12</div><h2>Comandos del día a día</h2></div>
+  <div class="sec-head"><div class="sec-num">13</div><h2>Comandos del día a día</h2></div>
   <p class="sec-sub">Hay unos setenta comandos. Estos son los que se usan de verdad mientras programas. Filtra por texto o por categoría.</p>
 
   <div class="buscador">
@@ -1743,13 +1806,13 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   </div>
 
   <div class="note">
-    <p><b>Los comandos son skills.</b> Una skill que escribas tú funciona igual que las de fábrica, así que aparece en este mismo menú <code>/</code> junto a todas las de arriba — ver la <a href="#skills">sección 07</a>.</p>
+    <p><b>Los comandos son skills.</b> Una skill que escribas tú funciona igual que las de fábrica, así que aparece en este mismo menú <code>/</code> junto a todas las de arriba — ver la <a href="#skills">sección 08</a>.</p>
   </div>
 </section>
 
-<!-- 13 -->
+<!-- 14 -->
 <section id="problemas">
-  <div class="sec-head"><div class="sec-num">13</div><h2>Problemas comunes</h2></div>
+  <div class="sec-head"><div class="sec-num">14</div><h2>Problemas comunes</h2></div>
   <p class="sec-sub">Lo que más desconcierta cuando llevas poco tiempo, y la solución que documenta Anthropic para cada caso.</p>
 
   <dl class="anat">
@@ -1766,9 +1829,9 @@ aprobar → ejecutar → commit → /clear → repetir</pre>
   </div>
 </section>
 
-<!-- 14 -->
+<!-- 15 -->
 <section id="recursos">
-  <div class="sec-head"><div class="sec-num">14</div><h2>Por dónde seguir</h2></div>
+  <div class="sec-head"><div class="sec-num">15</div><h2>Por dónde seguir</h2></div>
   <p class="sec-sub">Esta guía cubre lo mínimo para arrancar. A partir de ahí conviene saber adónde ir.</p>
 
   <dl class="anat">

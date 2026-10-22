@@ -92,13 +92,14 @@ Las dos reglas que hacen que `.prompt` funcione, y que es fácil romper sin dars
 - **Nada de cortes de línea a mano.** Un párrafo es un `<p>` y el navegador reparte. Los cortes que había antes estaban puestos a 58 caracteres para caber en el bloque oscuro y se iban con el texto al copiarlo.
 - **Los corchetes de los huecos no están en el marcado.** Los pone el manejador de copiar, mutando y restaurando en el mismo tick. Si añades un hueco, escribe solo el texto: los corchetes llegan al portapapeles solos.
 
-**El menú lateral y los ids de sección deben coincidir.** Las trece secciones, en orden: `jerarquia`, `planmode`, `flujos`, `claudemd`, `prompts`, `contexto`, `skills`, `subagentes`, `mcp`, `senales`, `comandos`, `problemas`, `recursos`. El scroll-spy deriva su lista del propio menú, así que una sección nueva entra sola en cuanto tiene su enlace; `validar.sh` detecta los enlaces sin sección.
+**El menú lateral y los ids de sección deben coincidir.** Las catorce secciones, en orden: `jerarquia`, `planmode`, `flujos`, `claudemd`, `prompts`, `contexto`, `skills`, `subagentes`, `mcp`, `senales`, `precios`, `comandos`, `problemas`, `recursos`. El scroll-spy deriva su lista del propio menú, así que una sección nueva entra sola en cuanto tiene su enlace; `validar.sh` detecta los enlaces sin sección.
 
-**Insertar una sección en medio renumera todas las de abajo, y cada número vive en dos sitios**: el `<span>NN</span>` del menú y el `<div class="sec-num">NN</div>` de la cabecera. Si cambias solo uno, el índice y el cuerpo discrepan y `validar.sh` no lo nota — comprueba que las dos listas dan la misma secuencia:
+**Insertar una sección en medio renumera todas las de abajo, y cada número vive en TRES sitios**: el `<span>NN</span>` del menú, el `<div class="sec-num">NN</div>` de la cabecera y el comentario `<!-- NN -->` que precede a cada `<section>`. Los dos primeros se ven; el tercero no, y por eso llevaba desincronizado desde un renumerado anterior — `comandos` arrastraba un `<!-- 09 -->` siendo la 11. No rompe nada al renderizar, pero despista a quien edite. Comprueba que las tres listas cuadran:
 
 ```bash
 grep -oE '<span>[0-9]+</span>' public/index.html
 grep -oE '<div class="sec-num">[0-9]+</div>' public/index.html
+grep -oE '<!-- [0-9]+ -->' public/index.html
 ```
 
 Renumera **en una sola pasada con un mapa completo**, nunca en cadena: sustituir `08→10` y después `10→12` vuelve a mover lo que acabas de mover. Y quedan las referencias cruzadas en la prosa, que ningún script valida: `grep -o 'sección [0-9]*'`.
@@ -151,6 +152,8 @@ Una revisión previa encontró cuatro errores factuales. Los que conviene no rep
 - **Agent teams es experimental y viene desactivado por defecto.** Cualquier mención debe decirlo.
 
 **Retocar la redacción de una frase no es revisar lo que afirma.** La fila de `/clear [nombre]` decía que el nombre etiqueta la sesión nueva; etiqueta la conversación que dejas atrás, para reconocerla en `/resume`. Le arreglé la gramática en una pasada de estilo sin mirar si era cierta, así que el error sobrevivió justo a la revisión que debía cazarlo. Si tocas una frase que hace una afirmación sobre el producto, contrástala, aunque la estés tocando por otro motivo.
+
+**La guía lleva ahora 94 cifras de precio de seis fuentes, y son lo más perecedero del sitio.** Están en la sección 11, que es solo para eso, fechadas en el propio texto, y cada tabla enlaza la página oficial de la que salió: Anthropic (`platform.claude.com`), OpenAI (`developers.openai.com`), Google (`ai.google.dev`), DeepSeek (`api-docs.deepseek.com`), Mistral (`mistral.ai`) y los modelos abiertos servidos en Together (`together.ai`). Se avisó de que una tabla de precios envejece sin decir nada y el propietario decidió incluirla igualmente; la mitigación es la fecha y los enlaces. **Si actualizas una cifra, actualiza también la fecha del bloque** — una tabla con fecha vieja al menos avisa, una con fecha nueva y cifras viejas miente.
 
 **Y una verificación caduca.** La guía decía `Shift+Tab × 2` para entrar en Plan Mode. Era correcto cuando se escribió y dejó de serlo dos días después, cuando el modo automático pasó a ser el arranque por defecto y se colocó por delante en el ciclo: ahora son tres pulsaciones. Que algo se contrastara una vez no lo mantiene cierto — si una afirmación lleva meses escrita, vuelve a comprobarla antes de apoyarte en ella.
 

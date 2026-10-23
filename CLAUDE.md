@@ -71,6 +71,16 @@ Captura a 320, 360, 390, 820 y 1280px en tema claro y oscuro, y reporta el desbo
 
 Para comprobar algo que las capturas no miden —si una tira de navegación desplaza dentro de sí misma, si un elemento desborda su contenedor— escribe un guion aparte, pero pásale `NODE_PATH=~/.local/share/capturas/node_modules`. `entorno.sh` no lo exporta, así que `require('playwright')` falla desde cualquier otra carpeta.
 
+**Si Playwright falla con «Executable doesn't exist», los navegadores están pero con otro número de build.** Pasó en octubre de 2026: el paquete npm esperaba el build 1234 y en `~/.cache/ms-playwright` estaba el 1243. No hace falta descargar nada — un enlace simbólico del nombre que busca al que existe arregla todos los guiones de golpe:
+
+```bash
+cd ~/.cache/ms-playwright
+ln -sfn chromium_headless_shell-<existente> chromium_headless_shell-<esperado>
+ln -sfn chromium-<existente> chromium-<esperado>
+```
+
+Comprueba primero que el binario arranca, con `chrome-headless-shell --version`. Importa porque sin capturas no hay verificación visual, y este proyecto se apoya en ella.
+
 **La página lleva `scroll-behavior:smooth`, así que desplazarse es una animación.** Un `scrollIntoView()` a una sección del final son 12.000px animados: si capturas o mides a los pocos cientos de milisegundos, te crees cosas que no pasan. A mí me dio dos falsos positivos en la misma tanda — una captura de escritorio completamente negra y un enlace del menú que parecía dejar su sección a 202px del borde, cuando la deja a 20px. Salta de golpe con `window.scrollTo({top, behavior:'instant'})` y espera a que `window.scrollY` se estabilice antes de disparar la captura.
 
 **Espera siempre a `document.fonts.ready` antes de medir nada.** Esta máquina no traía ninguna fuente; se instalaron 316 en `~/.local/share/fonts`. Antes de eso, una comprobación de desbordamiento pasaba en verde y era falsa: sin fuentes el texto no ocupa ancho, así que nada desbordaba. Un chequeo que pasa por el motivo equivocado es peor que no tenerlo.
@@ -93,7 +103,7 @@ Las dos reglas que hacen que `.prompt` funcione, y que es fácil romper sin dars
 - **Los corchetes de los huecos no están en el marcado.** Los pone el manejador de copiar, mutando y restaurando en el mismo tick. Si añades un hueco, escribe solo el texto: los corchetes llegan al portapapeles solos.
 - **Un hueco dice qué escribir, no enseña una forma.** `[qué va a poder hacer el usuario cuando esté listo]` se rellena solo; `[ruta/al/archivo]` obliga a ir a buscar el dato, y el propietario se quedó atascado justo ahí. Si para rellenar un hueco hay que salir del prompt, está mal planteado — y si ese dato lo sabe Claude, el prompt no debería pedirlo.
 
-**El menú lateral y los ids de sección deben coincidir.** Las catorce secciones, en orden: `jerarquia`, `planmode`, `flujos`, `claudemd`, `prompts`, `contexto`, `skills`, `subagentes`, `mcp`, `senales`, `precios`, `comandos`, `problemas`, `recursos`. El scroll-spy deriva su lista del propio menú, así que una sección nueva entra sola en cuanto tiene su enlace; `validar.sh` detecta los enlaces sin sección.
+**El menú lateral y los ids de sección deben coincidir.** Las quince secciones, en orden: `jerarquia`, `planmode`, `flujos`, `git`, `claudemd`, `prompts`, `contexto`, `skills`, `subagentes`, `mcp`, `senales`, `precios`, `comandos`, `problemas`, `recursos`. El scroll-spy deriva su lista del propio menú, así que una sección nueva entra sola en cuanto tiene su enlace; `validar.sh` detecta los enlaces sin sección.
 
 **Insertar una sección en medio renumera todas las de abajo, y cada número vive en TRES sitios**: el `<span>NN</span>` del menú, el `<div class="sec-num">NN</div>` de la cabecera y el comentario `<!-- NN -->` que precede a cada `<section>`. Los dos primeros se ven; el tercero no, y por eso llevaba desincronizado desde un renumerado anterior — `comandos` arrastraba un `<!-- 09 -->` siendo la 11. No rompe nada al renderizar, pero despista a quien edite. Comprueba que las tres listas cuadran:
 
